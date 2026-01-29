@@ -40,6 +40,7 @@ ENV/
 htmlcov/
 .tox/
 .nox/
+./Python
 
 # OS
 .DS_Store

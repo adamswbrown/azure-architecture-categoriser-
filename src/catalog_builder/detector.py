@@ -161,6 +161,11 @@ class ArchitectureDetector:
         if filters.excluded_topics and ms_topic in filters.excluded_topics:
             return f"Excluded topic: {ms_topic}"
 
+        # Check exclude_examples filter (example scenarios and solution ideas)
+        if filters.exclude_examples:
+            if ms_topic in ('example-scenario', 'solution-idea'):
+                return f"Excluded: {ms_topic} (exclude_examples=true)"
+
         # Check allowed topics (if specified)
         if filters.allowed_topics:
             if ms_topic and ms_topic not in filters.allowed_topics:

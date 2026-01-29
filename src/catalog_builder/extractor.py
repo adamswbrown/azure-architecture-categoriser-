@@ -18,6 +18,7 @@ from .schema import (
     TrinaryOption,
 )
 
+
 # Services that are typically supporting (observability, security, operations)
 SUPPORTING_SERVICE_PATTERNS = [
     'monitor', 'log analytics', 'application insights', 'sentinel',
@@ -75,7 +76,8 @@ class MetadataExtractor:
         core_services, supporting_services = self._classify_services(all_services)
 
         # Infer pattern name from title and services
-        pattern_name = self._infer_pattern_name(raw_title, core_services, doc)
+        pattern_name_raw = self._infer_pattern_name(raw_title, core_services, doc)
+        pattern_name = self._truncate_name(pattern_name_raw)
 
         # Name should use pattern_name (never raw "Architecture" titles)
         name = self._derive_display_name(pattern_name, raw_title)
@@ -128,6 +130,11 @@ class MetadataExtractor:
         # Add extraction warnings
         if not name or name == "Architecture":
             entry.extraction_warnings.append("Could not extract meaningful name")
+        if self._is_junk_name(name):
+            entry.extraction_warnings.append(f"Junk pattern name detected: '{name}'")
+            # Downgrade quality for junk names - they're not useful for scoring
+            if entry.catalog_quality != CatalogQuality.EXAMPLE_ONLY:
+                entry.catalog_quality = CatalogQuality.EXAMPLE_ONLY
         if not description:
             entry.extraction_warnings.append("Could not extract description")
         if not core_services:
@@ -139,27 +146,131 @@ class MetadataExtractor:
 
         return entry
 
+    def _get_classification_config(self):
+        """Get classification config."""
+        from .config import get_config
+        return get_config().classification
+
+    def _is_junk_name(self, name: str) -> bool:
+        """Check if a name is or contains a junk pattern.
+
+        Catches both exact matches and embedded junk patterns like
+        'Zone-redundant Potential Use Cases With Ingress'.
+
+        Uses configurable lists from classification config.
+        """
+        if not name:
+            return True
+        name_lower = name.lower().strip()
+
+        config = self._get_classification_config()
+
+        # Exact match against junk_pattern_names
+        junk_names = {n.lower() for n in config.junk_pattern_names}
+        if name_lower in junk_names:
+            return True
+
+        # Contains junk pattern phrase
+        for phrase in config.junk_pattern_phrases:
+            if phrase.lower() in name_lower:
+                return True
+
+        return False
+
     def _derive_display_name(self, pattern_name: str, raw_title: str) -> str:
         """Derive a human-readable display name.
 
         The name should never be just 'Architecture' - use pattern_name
         or enhance the raw title to be meaningful.
-        """
-        # If pattern_name is good, use it
-        if pattern_name and pattern_name.lower() not in ['architecture', 'overview', 'introduction']:
-            return pattern_name
 
-        # If raw_title is meaningful, clean it up
-        if raw_title and raw_title.lower() not in ['architecture', 'overview', 'introduction']:
+        Post-processing rules:
+        - If name is in junk blacklist → try alternatives
+        - If name contains 'that', 'which', 'to' (clause markers) → truncate before
+        - If name has more than 8 words → truncate to primary identifier
+        """
+        # If pattern_name is good and not junk, use it
+        if pattern_name and not self._is_junk_name(pattern_name):
+            name = self._truncate_name(pattern_name)
+            if name and not self._is_junk_name(name):
+                return name
+
+        # If raw_title is meaningful and not junk, clean it up
+        if raw_title and not self._is_junk_name(raw_title):
             # Remove generic suffixes
             name = raw_title
             for suffix in [' Architecture', ' - Azure Architecture Center', ' on Azure']:
                 if name.endswith(suffix):
                     name = name[:-len(suffix)]
-            return name.strip()
+            name = self._truncate_name(name.strip())
+            if name and not self._is_junk_name(name):
+                return name
 
-        # Last resort: return pattern_name even if not ideal
-        return pattern_name or raw_title or "Unnamed Architecture"
+        # Last resort: return truncated pattern_name even if not ideal
+        # But mark it clearly if it's junk
+        result = self._truncate_name(pattern_name) or self._truncate_name(raw_title) or "Unnamed Architecture"
+        return result
+
+    def _truncate_name(self, name: str) -> str:
+        """Truncate a name that contains prose or is too long.
+
+        Rules:
+        1. Truncate before clause markers ('that', 'which', 'to', 'for')
+           but only when they appear as connectors, not as part of service names
+        2. Truncate if more than 8 words
+        3. Remove trailing punctuation and incomplete phrases
+        """
+        if not name:
+            return ""
+
+        # Rule 1: Truncate before clause markers (word boundary match)
+        # Be careful with 'to' - it's part of "back to" which is fine in names
+        clause_markers = [
+            ' that ', ' which ', ' where ', ' when ',
+            ' so that ', ' in order to ', ' designed to ',
+            ' used to ', ' intended to ',
+        ]
+        name_lower = name.lower()
+        for marker in clause_markers:
+            if marker in name_lower:
+                idx = name_lower.find(marker)
+                name = name[:idx].strip()
+                name_lower = name.lower()
+
+        # Special handling for standalone 'to' - only truncate if followed by verb-like word
+        # e.g., "Web App to handle traffic" → "Web App"
+        # but keep "API Management with Path to Production" → keep as is
+        to_pattern = re.compile(r'\s+to\s+(?:handle|manage|process|support|enable|provide|create|deploy|run|scale|host|serve)\b', re.IGNORECASE)
+        match = to_pattern.search(name)
+        if match:
+            name = name[:match.start()].strip()
+
+        # Rule 2: Truncate if more than 8 words - be aggressive
+        words = name.split()
+        if len(words) > 8:
+            # Try to find a natural break point (prepositions that indicate secondary clause)
+            # Look for break words starting from position 3 (0-indexed)
+            break_words = ['and', 'or', 'for', 'using', 'through', 'across', 'with']
+            best_break = None
+            for i, word in enumerate(words):
+                if i >= 3 and word.lower() in break_words:
+                    # Only break if result would be 4-8 words
+                    if 4 <= i <= 8:
+                        best_break = i
+                        # Prefer breaks at positions 6-8 for more descriptive names
+                        if i >= 6:
+                            break
+
+            if best_break:
+                name = ' '.join(words[:best_break])
+            else:
+                # No natural break, just truncate to 8 words
+                name = ' '.join(words[:8])
+
+        # Rule 3: Clean up trailing punctuation and incomplete phrases
+        name = re.sub(r'[.,;:\-–—]+$', '', name).strip()
+        name = re.sub(r'\s+(with|and|or|for|using)$', '', name, flags=re.IGNORECASE).strip()
+
+        return name
 
     def _extract_browse_tags(self, doc: ParsedDocument) -> list[str]:
         """Extract browse tags from YML products metadata.
@@ -259,9 +370,30 @@ class MetadataExtractor:
         return categories
 
     def _determine_catalog_quality(self, doc: ParsedDocument) -> CatalogQuality:
-        """Determine the catalog quality level based on metadata source."""
+        """Determine the catalog quality level based on metadata source.
+
+        Quality levels (highest to lowest):
+        - curated: Reference architectures with authoritative YML metadata
+        - ai_enriched: Has YML but incomplete metadata
+        - ai_suggested: No YML, purely AI-extracted
+        - example_only: Example scenarios (not reference architectures)
+
+        Example scenarios are marked as 'example_only' because they are
+        illustrative implementations, not prescriptive reference patterns.
+        """
+        ms_topic = doc.arch_metadata.ms_topic or doc.frontmatter.get('ms.topic', '')
+
+        # Example scenarios get their own quality level
+        # They are illustrative, not prescriptive reference architectures
+        if ms_topic == 'example-scenario':
+            return CatalogQuality.EXAMPLE_ONLY
+
+        # Solution ideas are also example-level (not reference architectures)
+        if ms_topic == 'solution-idea':
+            return CatalogQuality.EXAMPLE_ONLY
+
         if doc.arch_metadata.is_architecture_yml:
-            # Has authoritative YML metadata
+            # Reference architectures with authoritative YML metadata
             if doc.arch_metadata.azure_categories and doc.arch_metadata.products:
                 return CatalogQuality.CURATED
             else:

@@ -2,6 +2,8 @@
 
 All settings are now managed through a single YAML configuration file.
 
+For the complete design specification, see [prompts/catalog-builder-prompt-v1.md](prompts/catalog-builder-prompt-v1.md).
+
 ---
 
 ## Quick Start
@@ -220,6 +222,29 @@ classification:
 ---
 
 ## Service Settings
+
+### Azure Services Whitelist
+
+The catalog uses a **known Azure services whitelist** to ensure only clean, validated service names are included. This prevents prose, sentences, and unrecognized text from polluting the `core_services` and `supporting_services` fields.
+
+**Sanitization Rules:**
+1. **Strip prose**: Everything after newlines, clause markers (`that`, `which`, `to`, `for`, `and`, `with`) is removed
+2. **Word limit**: Entries with more than 6 words are dropped
+3. **Whitelist validation**: Only services matching the known Azure services list are included
+4. **Clean over complete**: It's better to lose services than include dirty data
+
+**Included Service Categories:**
+- Compute: App Service, Functions, AKS, Container Apps, VMs, Batch, Service Fabric
+- Databases: SQL Database, Cosmos DB, PostgreSQL, MySQL, Redis
+- Storage: Blob, Files, Queue, Data Lake, NetApp Files
+- Networking: Virtual Network, Load Balancer, Application Gateway, Front Door, Firewall, ExpressRoute, VPN Gateway, Bastion, Private Link
+- Integration: API Management, Logic Apps, Service Bus, Event Hubs, Event Grid
+- Security: Key Vault, DDoS Protection, Defender, Sentinel
+- Monitoring: Monitor, Application Insights, Log Analytics
+- Analytics: Synapse, Databricks, Data Factory, Data Explorer, Stream Analytics
+- AI/ML: OpenAI Service, Machine Learning, Cognitive Services, Bot Service
+- IoT: IoT Hub, IoT Central, Digital Twins
+- DevOps: Azure DevOps, GitHub, GitHub Actions
 
 ### Azure Service Normalizations
 
@@ -540,6 +565,10 @@ filters:
   # If true, only include documents with YamlMime:Architecture
   require_architecture_yml: false
 
+  # If true, exclude example scenarios and solution ideas
+  # (keep only reference architectures with catalog_quality="curated")
+  exclude_examples: false
+
   # Exclude documents with these ms.topic values
   excluded_topics:
     - concept-article
@@ -646,3 +675,397 @@ Output includes:
 - **Azure Products**: Specific services with document counts
 - **Product Prefixes**: Hierarchical groupings for prefix matching
 - **Topics**: ms.topic values (reference-architecture, example-scenario, etc.)
+
+---
+
+## Browse Metadata
+
+The catalog extracts authoritative browse metadata from YamlMime:Architecture files.
+
+### Browse Tags (`browse_tags`)
+
+Browse tags are derived from the `products` field in YML files and mapped to human-readable categories.
+
+| Product ID | Browse Tag |
+|------------|------------|
+| `azure-kubernetes-service` | Containers |
+| `azure-container-apps` | Containers |
+| `azure-app-service` | Web |
+| `azure-functions` | Serverless |
+| `azure-virtual-machines` | Compute |
+| `azure-sql-database` | Databases |
+| `azure-cosmos-db` | Databases |
+| `azure-openai` | AI |
+| `azure-machine-learning` | AI |
+| `azure-event-hubs` | Messaging |
+| `azure-service-bus` | Messaging |
+| `azure-api-management` | Integration |
+| `azure-key-vault` | Security |
+| `azure-firewall` | Security |
+| `azure-virtual-network` | Networking |
+| `azure-front-door` | Networking |
+
+All entries with products get an "Azure" base tag automatically.
+
+### Browse Categories (`browse_categories`)
+
+Browse categories are derived from `azureCategories` and `ms.topic` fields:
+
+**From ms.topic**:
+| Topic | Category |
+|-------|----------|
+| `reference-architecture` | Reference |
+| `example-scenario` | Example Scenario |
+| `solution-idea` | Solution Idea |
+
+**From azureCategories**: Mapped to display names (e.g., `ai-machine-learning` → `AI + Machine Learning`).
+
+All entries get an "Architecture" base category automatically.
+
+---
+
+## Catalog Quality
+
+The `catalog_quality` field indicates the reliability of the entry's metadata:
+
+| Quality Level | Description | Criteria |
+|---------------|-------------|----------|
+| `curated` | From authoritative YML metadata | Reference architectures with YamlMime:Architecture having both `azureCategories` and `products` |
+| `ai_enriched` | Partial authoritative data | Has YamlMime:Architecture but missing categories or products |
+| `ai_suggested` | Purely AI-extracted | No YamlMime:Architecture file found |
+| `example_only` | Example scenarios | ms.topic is `example-scenario` or `solution-idea` - illustrative implementations, not prescriptive reference patterns |
+
+### Filtering Example Scenarios
+
+Example scenarios and solution ideas are marked as `example_only` because they demonstrate specific implementations rather than prescriptive architectural patterns. To exclude them:
+
+**CLI Flag:**
+```bash
+# Exclude example scenarios and solution ideas (keep only reference architectures)
+catalog-builder build-catalog --repo-path ./repo --exclude-examples
+```
+
+**Config File:**
+```yaml
+filters:
+  exclude_examples: true  # Only include reference architectures
+```
+
+**Use cases for excluding examples:**
+- Building a catalog of prescriptive reference patterns
+- When you need authoritative architectural guidance only
+- For enterprise architecture decision frameworks
+
+---
+
+## Expected Characteristics
+
+The `expected_characteristics` field now includes boolean flags for operational requirements:
+
+### Fields
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `containers` | true/false/optional | Whether containerization is expected |
+| `stateless` | true/false/optional | Whether statelessness is expected |
+| `devops_required` | boolean | DevOps practices are required |
+| `ci_cd_required` | boolean | CI/CD pipeline is required |
+| `private_networking_required` | boolean | Private networking is required |
+
+### Detection Rules
+
+**`devops_required` = true** when:
+- Content mentions containers, AKS, or Kubernetes
+- Content contains DevOps keywords: "ci/cd", "pipeline", "github actions", "azure devops", "gitops", "terraform"
+
+**`ci_cd_required` = true** when:
+- `devops_required` is true
+- Services include: Functions, App Service, Container Apps, Logic Apps
+- Content mentions deployment automation
+
+**`private_networking_required` = true** when:
+- Content mentions: "private endpoint", "private link", "vnet integration", "private network", "no public"
+
+**`containers` = true** when:
+- Services include: Kubernetes, AKS, Container Apps, Container Instances
+
+**`stateless` = true** when:
+- Content mentions: "stateless", "scale out", "horizontal scaling"
+- And does NOT mention: "stateful", "session affinity", "sticky session"
+
+---
+
+## Pattern Name Inference
+
+Pattern names are inferred to describe **architectural intent**, not just services.
+
+### Format
+
+```
+[Quality/Tier] [Workload Type] with [Key Features]
+```
+
+### Quality Prefixes (Priority Order)
+
+| Keyword in Content | Prefix |
+|-------------------|--------|
+| mission-critical | Mission-critical |
+| enterprise-grade | Enterprise-grade |
+| production-ready | Production-ready |
+| highly available | Highly available |
+| multi-region | Multi-region |
+| zone-redundant | Zone-redundant |
+| baseline | Baseline |
+
+### Workload Type Inference
+
+If the title is too generic, workload type is inferred from services:
+
+| Service Pattern | Workload Type |
+|-----------------|---------------|
+| kubernetes, aks | AKS cluster |
+| container apps | Container Apps deployment |
+| app service | App Service web application |
+| functions | Serverless application |
+| virtual machine | VM-based workload |
+| data factory, synapse | Data pipeline |
+| openai, machine learning | AI/ML workload |
+| event hub, service bus | Event-driven system |
+
+### Key Features
+
+| Keyword in Content | Feature |
+|-------------------|---------|
+| private endpoint, private link | private networking |
+| zero trust | zero trust |
+| waf | WAF |
+| ingress controller, nginx | ingress |
+| traffic manager, front door | global load balancing |
+| active-active | active-active |
+| active-passive | active-passive failover |
+| geo-replication, geo-redundant | geo-redundancy |
+| caching, redis | caching |
+| gitops | GitOps |
+
+### Name Post-Processing (Truncation Rules)
+
+Pattern names are automatically cleaned to remove prose and keep them concise:
+
+**Rule 1: Truncate before clause markers**
+- `that`, `which`, `where`, `when`, `so that`, `in order to`, `designed to`, `used to`
+- Example: "Web application that handles user requests" → "Web Application"
+
+**Rule 2: Truncate before action verbs with 'to'**
+- `to handle`, `to manage`, `to process`, `to support`, `to enable`, `to provide`
+- Example: "API gateway to manage traffic" → "API Gateway"
+
+**Rule 3: Word limit (max 8 words)**
+- Natural break at prepositions (`and`, `or`, `using`, `through`) after 4 words
+- Otherwise, truncate at 8 words
+- Example: "Enterprise grade AKS cluster with private networking and GitOps and monitoring" → "Enterprise Grade AKS Cluster With Private Networking"
+
+**Rule 4: Clean trailing artifacts**
+- Remove trailing punctuation: `. , ; : - –`
+- Remove trailing prepositions: `with`, `and`, `or`, `for`, `using`
+
+### Examples
+
+| Raw Title | Inferred Pattern Name |
+|-----------|----------------------|
+| "Baseline AKS architecture" | "Baseline AKS Cluster With Ingress And GitOps" |
+| "Web app reference" | "Highly Available App Service Web Application With Caching" |
+| "Architecture" | "Enterprise-grade AKS Cluster With Private Networking" |
+| "API gateway to handle traffic from multiple regions" | "API Gateway" |
+| "Container platform that provides enterprise..." | "Container Platform" |
+
+### Junk Pattern Name Detection
+
+Pattern names that are semantically meaningless are flagged and downgraded to `example_only` quality. This prevents generic names from polluting the scoring catalog.
+
+**Configurable via:**
+```yaml
+classification:
+  # Exact matches (case-insensitive) - flagged as junk
+  junk_pattern_names:
+    - potential use case
+    - potential use cases
+    - solution idea
+    - solution ideas
+    - use case
+    - use cases
+    - scenario
+    - example
+    - overview
+    - introduction
+    - architecture
+    - diagram
+    - reference
+
+  # Substring matches (case-insensitive) - flagged if name contains phrase
+  junk_pattern_phrases:
+    - potential use case
+    - potential use cases
+    - solution idea
+```
+
+**Behavior:**
+- Entries with junk names receive extraction warning: `Junk pattern name detected: 'X'`
+- Catalog quality is automatically downgraded to `example_only`
+- Junk entries are still included but should be deprioritized in scoring
+
+**Examples of detected junk:**
+- `Potential Use Case` (exact match)
+- `Zone-redundant Potential Use Cases With Ingress` (contains phrase)
+- `Solution Idea` (exact match)
+
+---
+
+## Non-Architecture Filtering
+
+The detector automatically excludes documents that are not architecture content.
+
+### Excluded ms.topic Values
+
+- `article` - Generic articles
+- `concept-article` - Conceptual articles
+- `hub-page` - Landing/hub pages
+- `landing-page` - Landing pages
+- `include` - Include fragments
+- `contributor-guide` - Contributor documentation
+- `quickstart` - Quickstarts
+- `tutorial` - Tutorials
+- `how-to-guide` - How-to guides
+- `overview` - Overview pages
+
+### Excluded Layouts
+
+- `LandingPage`
+- `HubPage`
+- `ContentPage`
+
+### Excluded Title Patterns
+
+Documents starting with:
+- "What is "
+- "About "
+- "Introduction to "
+- "Getting started"
+- "Quickstart:"
+- "Tutorial:"
+- "How to:"
+- "Browse all"
+- "Index of"
+- "Table of contents"
+
+### Content-Based Exclusions
+
+- **Very short content**: Less than 500 characters with no images
+- **High link density**: More than 10 links per 1000 characters (likely navigation pages)
+
+---
+
+## Output Schema Reference
+
+### Complete Entry Structure
+
+```json
+{
+  "architecture_id": "string",
+  "name": "string",
+  "pattern_name": "string",
+  "pattern_name_confidence": {
+    "confidence": "curated|high|medium|ai_suggested|low|manual_required",
+    "source": "string"
+  },
+  "description": "string",
+  "source_repo_path": "string",
+  "learn_url": "string",
+
+  "browse_tags": ["string"],
+  "browse_categories": ["string"],
+  "catalog_quality": "curated|ai_enriched|ai_suggested|example_only",
+
+  "family": "foundation|iaas|paas|cloud_native|data|integration|specialized",
+  "family_confidence": { "confidence": "string", "source": "string" },
+  "workload_domain": "web|data|integration|security|ai|infrastructure|general",
+  "workload_domain_confidence": { "confidence": "string", "source": "string" },
+
+  "expected_runtime_models": ["monolith|n_tier|api|microservices|event_driven|batch|mixed"],
+  "runtime_models_confidence": { "confidence": "string", "source": "string" },
+
+  "expected_characteristics": {
+    "containers": "true|false|optional",
+    "stateless": "true|false|optional",
+    "devops_required": true|false,
+    "ci_cd_required": true|false,
+    "private_networking_required": true|false
+  },
+
+  "supported_treatments": ["retire|tolerate|rehost|replatform|refactor|replace|rebuild|retain"],
+  "treatments_confidence": { "confidence": "string", "source": "string" },
+  "supported_time_categories": ["tolerate|migrate|invest|eliminate"],
+  "time_categories_confidence": { "confidence": "string", "source": "string" },
+
+  "availability_models": ["single_region|zone_redundant|multi_region_active_passive|multi_region_active_active"],
+  "availability_confidence": { "confidence": "string", "source": "string" },
+  "security_level": "basic|enterprise|regulated|highly_regulated",
+  "security_level_confidence": { "confidence": "string", "source": "string" },
+  "operating_model_required": "traditional_it|transitional|devops|sre",
+  "operating_model_confidence": { "confidence": "string", "source": "string" },
+
+  "cost_profile": "cost_minimized|balanced|scale_optimized|innovation_first",
+  "cost_profile_confidence": { "confidence": "string", "source": "string" },
+  "complexity": {
+    "implementation": "low|medium|high",
+    "operations": "low|medium|high"
+  },
+  "complexity_confidence": { "confidence": "string", "source": "string" },
+
+  "not_suitable_for": ["exclusion_reason"],
+
+  "core_services": ["string"],
+  "supporting_services": ["string"],
+  "services_confidence": { "confidence": "string", "source": "string" },
+
+  "diagram_assets": ["string"],
+  "last_repo_update": "datetime",
+  "extraction_warnings": ["string"]
+}
+```
+
+### Confidence Levels
+
+| Level | Description |
+|-------|-------------|
+| `curated` | From authoritative source (YML metadata) |
+| `high` | High confidence from content analysis |
+| `medium` | Reasonable inference |
+| `ai_suggested` | AI-assisted, needs human review |
+| `low` | Heuristic fallback |
+| `manual_required` | Cannot be determined automatically |
+
+---
+
+## Prompt Documentation
+
+The complete design specification for catalog generation is documented in the `prompts/` folder:
+
+| Version | File | Description |
+|---------|------|-------------|
+| v1.0 | [catalog-builder-prompt-v1.md](prompts/catalog-builder-prompt-v1.md) | Initial release specification |
+
+The prompt documentation includes:
+- Core principles and design philosophy
+- Service extraction rules (allow-list, prose filtering)
+- Pattern name inference and truncation rules
+- Quality level determination criteria
+- Classification keyword scoring methods
+- Expected output metrics
+
+---
+
+## Version History
+
+| Version | Date | Changes |
+|---------|------|---------|
+| 1.0 | 2026-01-29 | Initial release with clean services, junk name detection, enhanced classifications |

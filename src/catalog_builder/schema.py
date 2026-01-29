@@ -140,10 +140,18 @@ class ExtractionConfidence(str, Enum):
 
 
 class CatalogQuality(str, Enum):
-    """Quality level of the catalog entry."""
+    """Quality level of the catalog entry.
+
+    Levels from highest to lowest quality:
+    - curated: From authoritative browse metadata (YamlMime:Architecture)
+    - ai_enriched: AI-enhanced with high confidence
+    - ai_suggested: Primarily AI-generated, needs human review
+    - example_only: Example scenarios (not reference architectures) - use with caution
+    """
     CURATED = "curated"  # From authoritative browse metadata
     AI_ENRICHED = "ai_enriched"  # AI-enhanced with confidence
     AI_SUGGESTED = "ai_suggested"  # Primarily AI-generated, needs review
+    EXAMPLE_ONLY = "example_only"  # Example scenarios, not reference architectures
 
 
 class ExpectedCharacteristics(BaseModel):

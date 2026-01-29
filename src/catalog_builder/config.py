@@ -366,6 +366,32 @@ class ClassificationConfig(BaseModel):
         r"(?:not|isn't)\s+(?:a good fit|appropriate)\s+for[:\s]+([^.]+)",
     ])
 
+    # Junk pattern names - exact matches (case-insensitive)
+    # Names matching these exactly are flagged as junk and downgraded to example_only
+    junk_pattern_names: list[str] = Field(default_factory=lambda: [
+        'potential use case',
+        'potential use cases',
+        'solution idea',
+        'solution ideas',
+        'use case',
+        'use cases',
+        'scenario',
+        'example',
+        'overview',
+        'introduction',
+        'architecture',
+        'diagram',
+        'reference',
+    ])
+
+    # Junk pattern phrases - substring matches (case-insensitive)
+    # Names containing any of these phrases are flagged as junk
+    junk_pattern_phrases: list[str] = Field(default_factory=lambda: [
+        'potential use case',
+        'potential use cases',
+        'solution idea',
+    ])
+
     # Scoring thresholds for classification selection
     treatment_threshold: float = 1.5       # Min score for treatment selection
     time_category_threshold: float = 1.5   # Min score for TIME category selection
@@ -473,6 +499,11 @@ class FilterConfig(BaseModel):
     # If true, only include documents that have a YamlMime:Architecture yml file
     # This filters out most non-architecture content
     require_architecture_yml: bool = False
+
+    # If true, exclude example scenarios and solution ideas (keep only reference architectures)
+    # Example scenarios are marked as catalog_quality="example_only" and are
+    # illustrative implementations rather than prescriptive reference patterns
+    exclude_examples: bool = False
 
     # Exclude documents with these ms.topic values
     # Applied after allowed_topics filter

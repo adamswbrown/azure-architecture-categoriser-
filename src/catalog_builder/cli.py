@@ -66,6 +66,11 @@ def main():
     help='Only include documents with YamlMime:Architecture metadata files'
 )
 @click.option(
+    '--exclude-examples',
+    is_flag=True,
+    help='Exclude example scenarios and solution ideas (keep only reference architectures)'
+)
+@click.option(
     '--verbose', '-v',
     is_flag=True,
     help='Show detailed progress information'
@@ -83,6 +88,7 @@ def build_catalog_cmd(
     product: tuple,
     topic: tuple,
     require_yml: bool,
+    exclude_examples: bool,
     verbose: bool,
     validate_only: bool
 ):
@@ -121,6 +127,8 @@ def build_catalog_cmd(
         cfg.filters.allowed_topics = list(topic)
     if require_yml:
         cfg.filters.require_architecture_yml = True
+    if exclude_examples:
+        cfg.filters.exclude_examples = True
 
     console.print(f"\n[bold blue]Azure Architecture Catalog Builder[/bold blue]")
     console.print(f"Repository: {repo_path}")
@@ -138,6 +146,8 @@ def build_catalog_cmd(
         active_filters.append(f"topics: {', '.join(cfg.filters.allowed_topics)}")
     if cfg.filters.require_architecture_yml:
         active_filters.append("require YamlMime:Architecture")
+    if cfg.filters.exclude_examples:
+        active_filters.append("exclude examples (reference architectures only)")
 
     if active_filters:
         console.print(f"Filters: {'; '.join(active_filters)}")

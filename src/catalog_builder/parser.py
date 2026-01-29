@@ -10,6 +10,180 @@ import yaml
 from .config import get_config
 
 
+# Canonical Azure service names (whitelist)
+# Only services in this list will be included in the catalog
+KNOWN_AZURE_SERVICES = {
+    # Compute
+    'Azure App Service',
+    'Azure Functions',
+    'Azure Kubernetes Service',
+    'Azure Container Apps',
+    'Azure Container Instances',
+    'Azure Virtual Machines',
+    'Azure Batch',
+    'Azure Service Fabric',
+    'Azure Spring Apps',
+    'Azure Static Web Apps',
+    'Azure VM Scale Sets',
+    'Azure Dedicated Host',
+    'Azure VMware Solution',
+
+    # Containers
+    'Azure Container Registry',
+
+    # Databases
+    'Azure SQL Database',
+    'Azure SQL Managed Instance',
+    'Azure Cosmos DB',
+    'Azure Database for PostgreSQL',
+    'Azure Database for MySQL',
+    'Azure Database for MariaDB',
+    'Azure Cache for Redis',
+    'Azure SQL Server',
+    'Azure Table Storage',
+
+    # Storage
+    'Azure Storage',
+    'Azure Blob Storage',
+    'Azure Files',
+    'Azure Queue Storage',
+    'Azure Data Lake Storage',
+    'Azure NetApp Files',
+    'Azure Managed Disks',
+    'Azure HPC Cache',
+
+    # Networking
+    'Azure Virtual Network',
+    'Azure Load Balancer',
+    'Azure Application Gateway',
+    'Azure Front Door',
+    'Azure Traffic Manager',
+    'Azure CDN',
+    'Azure DNS',
+    'Azure Firewall',
+    'Azure DDoS Protection',
+    'Azure ExpressRoute',
+    'Azure VPN Gateway',
+    'Azure Bastion',
+    'Azure Private Link',
+    'Azure Private Endpoint',
+    'Azure NAT Gateway',
+    'Azure Route Server',
+    'Azure Virtual WAN',
+    'Azure Peering Service',
+    'Azure Network Watcher',
+
+    # Integration
+    'Azure API Management',
+    'Azure Logic Apps',
+    'Azure Service Bus',
+    'Azure Event Hubs',
+    'Azure Event Grid',
+    'Azure Relay',
+
+    # Identity
+    'Microsoft Entra ID',
+    'Azure Active Directory',
+    'Azure Active Directory B2C',
+    'Azure Active Directory Domain Services',
+
+    # Security
+    'Azure Key Vault',
+    'Azure Firewall',
+    'Azure DDoS Protection',
+    'Microsoft Defender for Cloud',
+    'Microsoft Sentinel',
+    'Azure Information Protection',
+    'Azure Confidential Computing',
+
+    # Management & Monitoring
+    'Azure Monitor',
+    'Application Insights',
+    'Azure Log Analytics',
+    'Azure Advisor',
+    'Azure Policy',
+    'Azure Automation',
+    'Azure Backup',
+    'Azure Site Recovery',
+    'Azure Cost Management',
+    'Azure Resource Manager',
+    'Azure Arc',
+    'Azure Lighthouse',
+    'Azure Managed Grafana',
+
+    # Analytics & Data
+    'Azure Synapse Analytics',
+    'Azure Databricks',
+    'Azure Data Factory',
+    'Azure Data Explorer',
+    'Azure Stream Analytics',
+    'Azure HDInsight',
+    'Azure Analysis Services',
+    'Azure Purview',
+    'Microsoft Fabric',
+    'Power BI Embedded',
+
+    # AI & ML
+    'Azure OpenAI Service',
+    'Azure Machine Learning',
+    'Azure Cognitive Services',
+    'Azure AI Services',
+    'Azure Bot Service',
+    'Azure Cognitive Search',
+    'Azure AI Search',
+    'Azure Form Recognizer',
+    'Azure Computer Vision',
+    'Azure Speech Services',
+    'Azure Translator',
+    'Azure Personalizer',
+    'Azure Content Moderator',
+    'Azure Anomaly Detector',
+    'Azure Metrics Advisor',
+
+    # IoT
+    'Azure IoT Hub',
+    'Azure IoT Central',
+    'Azure IoT Edge',
+    'Azure Digital Twins',
+    'Azure Time Series Insights',
+    'Azure Sphere',
+
+    # DevOps & Developer Tools
+    'Azure DevOps',
+    'Azure Repos',
+    'Azure Pipelines',
+    'Azure Boards',
+    'Azure Artifacts',
+    'Azure Test Plans',
+    'Azure DevTest Labs',
+    'GitHub',
+    'GitHub Actions',
+
+    # Media
+    'Azure Media Services',
+    'Azure Content Delivery Network',
+
+    # Migration
+    'Azure Migrate',
+    'Azure Database Migration Service',
+
+    # Messaging
+    'Azure SignalR Service',
+    'Azure Notification Hubs',
+    'Azure Communication Services',
+
+    # Blockchain
+    'Azure Confidential Ledger',
+
+    # SAP & Specialized
+    'Azure SAP HANA',
+    'Azure Large Instances',
+}
+
+# Lowercase lookup for matching
+_KNOWN_SERVICES_LOWER = {s.lower(): s for s in KNOWN_AZURE_SERVICES}
+
+
 @dataclass
 class ArchitectureMetadata:
     """Metadata from YamlMime:Architecture files."""
@@ -294,41 +468,141 @@ class MarkdownParser:
         return sections
 
     def extract_azure_services(self, doc: ParsedDocument) -> list[str]:
-        """Extract Azure service names from document content."""
-        config = self._get_config()
+        """Extract Azure service names from document content.
 
+        Returns only clean, validated Azure service names from the known services list.
+        Uses hard allow-list matching - anything that doesn't exactly match is dropped.
+        """
         services = set()
-        content = doc.content + ' ' + doc.description
 
-        for pattern in config.detection_patterns:
-            for match in re.finditer(pattern, content, re.IGNORECASE):
-                service = match.group(1) if match.lastindex else match.group(0)
-                # Normalize service name
-                normalized = self._normalize_service_name(service)
-                if normalized:
-                    services.add(normalized)
+        # Priority 1: Products from architecture metadata (most reliable - from YML)
+        for product in doc.arch_metadata.products:
+            normalized = self._normalize_product_id(product)
+            if normalized and normalized in KNOWN_AZURE_SERVICES:
+                services.add(normalized)
 
-        # Also check frontmatter for products/services
+        # Priority 2: Products from frontmatter
         products = doc.frontmatter.get('ms.products', [])
         if isinstance(products, list):
             for product in products:
-                if 'azure' in product.lower():
-                    services.add(product)
+                normalized = self._normalize_product_id(product)
+                if normalized and normalized in KNOWN_AZURE_SERVICES:
+                    services.add(normalized)
 
-        # Add products from architecture metadata
-        for product in doc.arch_metadata.products:
-            normalized = self._normalize_product_id(product)
-            if normalized:
-                services.add(normalized)
+        # Priority 3: Content extraction (most risky - apply strict filtering)
+        content_services = self._extract_services_from_content(doc.content + ' ' + doc.description)
+        services.update(content_services)
 
         return sorted(services)
 
+    def _extract_services_from_content(self, content: str) -> set[str]:
+        """Extract services from content with strict allow-list matching.
+
+        Only returns services that EXACTLY match the known services list.
+        Any prose, sentences, or unrecognized text is dropped.
+        """
+        config = self._get_config()
+        services = set()
+
+        for pattern in config.detection_patterns:
+            for match in re.finditer(pattern, content, re.IGNORECASE):
+                raw = match.group(1) if match.lastindex else match.group(0)
+                normalized = self._strict_service_match(raw)
+                if normalized:
+                    services.add(normalized)
+
+        return services
+
+    def _strict_service_match(self, raw: str) -> Optional[str]:
+        """Strict matching against known Azure services.
+
+        Rules:
+        1. Must not contain verbs or sentence patterns
+        2. Must exactly match a known service (after normalization)
+        3. Drop anything with more than 5 words
+        4. Drop anything that looks like a sentence
+        """
+        if not raw:
+            return None
+
+        # Quick rejection: contains obvious sentence patterns
+        sentence_indicators = [
+            ' is ', ' are ', ' was ', ' were ', ' has ', ' have ', ' does ', ' do ',
+            ' can ', ' will ', ' should ', ' would ', ' could ', ' might ',
+            ' automatically ', ' executes ', ' removes ', ' provides ', ' supports ',
+            ' enables ', ' allows ', ' handles ', ' processes ', ' manages ',
+            ' creates ', ' deploys ', ' runs ', ' scales ', ' hosts ', ' serves ',
+            ' based on ', ' before ', ' after ', ' when ', ' while ', ' during ',
+        ]
+        raw_lower = raw.lower()
+        for indicator in sentence_indicators:
+            if indicator in raw_lower:
+                return None
+
+        # Strip everything after first newline
+        text = raw.split('\n')[0].strip()
+
+        # Strip everything after common clause starters
+        for marker in [' that ', ' which ', ' where ', ' when ', ' and ', ' or ', ' to ', ' for ', ' with ']:
+            if marker in text.lower():
+                idx = text.lower().find(marker)
+                text = text[:idx].strip()
+
+        # Reject if still too long (> 5 words)
+        if len(text.split()) > 5:
+            return None
+
+        # Reject if ends with common non-service words
+        if text.lower().endswith((' it', ' them', ' this', ' that', ' data', ' based')):
+            return None
+
+        # Try to match against known services
+        return self._match_known_service(text)
+
+    def _match_known_service(self, text: str) -> Optional[str]:
+        """Match text against known Azure services with exact matching.
+
+        Returns the canonical service name or None.
+        """
+        if not text:
+            return None
+
+        text_lower = text.lower().strip()
+        config = self._get_config()
+
+        # Direct match in known services
+        if text_lower in _KNOWN_SERVICES_LOWER:
+            return _KNOWN_SERVICES_LOWER[text_lower]
+
+        # Try with Azure prefix
+        azure_prefixed = f"azure {text_lower}"
+        if azure_prefixed in _KNOWN_SERVICES_LOWER:
+            return _KNOWN_SERVICES_LOWER[azure_prefixed]
+
+        # Check config normalizations
+        if text_lower in config.normalizations:
+            canonical = config.normalizations[text_lower]
+            if canonical in KNOWN_AZURE_SERVICES:
+                return canonical
+
+        # No match - drop it
+        return None
+
+
     def _normalize_product_id(self, product_id: str) -> Optional[str]:
-        """Normalize a product ID like 'azure-app-service' to a display name."""
+        """Normalize a product ID like 'azure-app-service' to a canonical service name.
+
+        Returns None if the product ID doesn't map to a known Azure service.
+        Always returns the exact canonical name from KNOWN_AZURE_SERVICES.
+        """
         if not product_id:
             return None
 
-        # Common product ID mappings
+        # Skip generic entries
+        if product_id.lower() in ('azure', 'microsoft'):
+            return None
+
+        # Product ID to canonical name mappings (must match KNOWN_AZURE_SERVICES exactly)
         product_mappings = {
             'azure-app-service': 'Azure App Service',
             'azure-kubernetes-service': 'Azure Kubernetes Service',
@@ -348,6 +622,7 @@ class MarkdownParser:
             'azure-key-vault': 'Azure Key Vault',
             'azure-event-hubs': 'Azure Event Hubs',
             'azure-service-bus': 'Azure Service Bus',
+            'azure-event-grid': 'Azure Event Grid',
             'azure-logic-apps': 'Azure Logic Apps',
             'azure-data-factory': 'Azure Data Factory',
             'azure-databricks': 'Azure Databricks',
@@ -355,41 +630,78 @@ class MarkdownParser:
             'azure-api-management': 'Azure API Management',
             'azure-container-apps': 'Azure Container Apps',
             'azure-container-instances': 'Azure Container Instances',
+            'azure-container-registry': 'Azure Container Registry',
             'azure-private-link': 'Azure Private Link',
             'azure-vpn-gateway': 'Azure VPN Gateway',
             'azure-files': 'Azure Files',
             'azure-netapp-files': 'Azure NetApp Files',
-            'entra-id': 'Microsoft Entra ID',
-            'ai-services': 'Azure AI Services',
-            'azure-openai': 'Azure OpenAI Service',
+            'azure-cache-redis': 'Azure Cache for Redis',
+            'azure-redis-cache': 'Azure Cache for Redis',
+            'azure-sql-managed-instance': 'Azure SQL Managed Instance',
+            'azure-database-postgresql': 'Azure Database for PostgreSQL',
+            'azure-database-mysql': 'Azure Database for MySQL',
+            'azure-iot-hub': 'Azure IoT Hub',
+            'azure-iot-central': 'Azure IoT Central',
+            'azure-digital-twins': 'Azure Digital Twins',
+            'azure-stream-analytics': 'Azure Stream Analytics',
+            'azure-hdinsight': 'Azure HDInsight',
+            'azure-data-explorer': 'Azure Data Explorer',
+            'azure-data-lake-storage': 'Azure Data Lake Storage',
+            'azure-signalr-service': 'Azure SignalR Service',
+            'azure-notification-hubs': 'Azure Notification Hubs',
+            'azure-cognitive-search': 'Azure Cognitive Search',
+            'azure-ai-search': 'Azure AI Search',
+            'azure-bot-service': 'Azure Bot Service',
+            'azure-devops': 'Azure DevOps',
+            'azure-backup': 'Azure Backup',
+            'azure-site-recovery': 'Azure Site Recovery',
+            'azure-bastion': 'Azure Bastion',
+            'azure-ddos-protection': 'Azure DDoS Protection',
+            'azure-dns': 'Azure DNS',
+            'azure-traffic-manager': 'Azure Traffic Manager',
+            'azure-cdn': 'Azure CDN',
+            'azure-nat-gateway': 'Azure NAT Gateway',
+            'azure-batch': 'Azure Batch',
+            'azure-service-fabric': 'Azure Service Fabric',
+            'azure-spring-apps': 'Azure Spring Apps',
+            'azure-static-web-apps': 'Azure Static Web Apps',
+            'azure-devtest-labs': 'Azure DevTest Labs',
+            'azure-automation': 'Azure Automation',
+            'azure-policy': 'Azure Policy',
+            'azure-advisor': 'Azure Advisor',
+            'azure-arc': 'Azure Arc',
+            'azure-migrate': 'Azure Migrate',
             'azure-machine-learning': 'Azure Machine Learning',
+            'azure-cognitive-services': 'Azure Cognitive Services',
+            'azure-openai': 'Azure OpenAI Service',
+            'entra-id': 'Microsoft Entra ID',
+            'entra': 'Microsoft Entra ID',
+            'ai-services': 'Azure AI Services',
             'fabric': 'Microsoft Fabric',
-            'azure': 'Azure',
+            'power-bi-embedded': 'Power BI Embedded',
+            'microsoft-sentinel': 'Microsoft Sentinel',
+            'microsoft-defender-cloud': 'Microsoft Defender for Cloud',
+            'application-insights': 'Application Insights',
+            'log-analytics': 'Azure Log Analytics',
+            'github': 'GitHub',
+            'github-actions': 'GitHub Actions',
         }
 
+        # Direct lookup
         if product_id in product_mappings:
-            return product_mappings[product_id]
-
-        # Convert kebab-case to Title Case and prepend Azure
-        if product_id.startswith('azure-'):
-            name = product_id[6:].replace('-', ' ').title()
-            return f"Azure {name}"
-
-        return product_id.replace('-', ' ').title()
-
-    def _normalize_service_name(self, name: str) -> Optional[str]:
-        """Normalize Azure service name."""
-        if not name:
+            canonical = product_mappings[product_id]
+            # Verify it exists in KNOWN_AZURE_SERVICES
+            if canonical in KNOWN_AZURE_SERVICES:
+                return canonical
             return None
 
-        config = self._get_config()
-        lower_name = name.lower().strip()
+        # Try kebab-case conversion for azure-* products
+        if product_id.startswith('azure-'):
+            name = product_id[6:].replace('-', ' ').title()
+            candidate = f"Azure {name}"
+            if candidate in KNOWN_AZURE_SERVICES:
+                return candidate
 
-        if lower_name in config.normalizations:
-            return config.normalizations[lower_name]
+        # No match - drop it
+        return None
 
-        # If starts with Azure, keep as is
-        if name.lower().startswith('azure'):
-            return name.strip()
-
-        return f"Azure {name.strip()}"
