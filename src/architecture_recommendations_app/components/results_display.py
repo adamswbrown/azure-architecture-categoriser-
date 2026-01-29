@@ -199,6 +199,13 @@ def _render_recommendation_card(rec: ArchitectureRecommendation, is_primary: boo
                 unsafe_allow_html=True
             )
 
+            # Small thumbnail image (constrained height)
+            if rec.diagram_url:
+                try:
+                    st.image(rec.diagram_url, width=280)
+                except Exception:
+                    pass  # Silently skip if unavailable
+
             # Brief description
             if rec.description:
                 desc = rec.description[:150] + "..." if len(rec.description) > 150 else rec.description
@@ -214,14 +221,6 @@ def _render_recommendation_card(rec: ArchitectureRecommendation, is_primary: boo
                 if len(rec.core_services) > 4:
                     services += f" +{len(rec.core_services) - 4} more"
                 st.caption(f"Services: {services}")
-
-            # Diagram in collapsed expander (doesn't dominate visual hierarchy)
-            if rec.diagram_url:
-                with st.expander("View diagram"):
-                    try:
-                        st.image(rec.diagram_url, use_container_width=True)
-                    except Exception:
-                        st.caption("_Diagram unavailable_")
 
             # Learn more link
             if rec.learn_url:
