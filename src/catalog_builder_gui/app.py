@@ -116,7 +116,8 @@ def render_sidebar() -> None:
                 success, message = clone_repository(repo_url, clone_dir)
                 if success:
                     st.sidebar.success(message)
-                    set_state('repo_path', clone_dir)
+                    # Resolve symlinks for consistent paths
+                    set_state('repo_path', str(Path(clone_dir).resolve()))
                     st.rerun()
                 else:
                     st.sidebar.error(message)
@@ -150,7 +151,8 @@ def render_sidebar() -> None:
                     success, message = clone_repository(repo_url, clone_dir)
                     if success:
                         st.success(message)
-                        set_state('repo_path', clone_dir)
+                        # Resolve symlinks for consistent paths
+                        set_state('repo_path', str(Path(clone_dir).resolve()))
                         st.rerun()
                     else:
                         st.error(message)
@@ -226,9 +228,11 @@ def main() -> None:
         ### Quick Start
 
         1. **Clone the Repository** (sidebar) - Get the Azure Architecture Center content
-        2. **Preview Build** (tab 3) - See what architectures will be included
-        3. **Adjust Filters** (tab 2) - Customize which architectures to include
-        4. **Export Config** (tab 4) - Save your configuration for CLI use
+        2. **Generate Catalog** (tab 1) - Build `architecture-catalog.json` with defaults (~170 architectures)
+
+        **Optional customization:**
+        - **Preview** - See what will be included before generating
+        - **Adjust Filters** (tab 2) - Customize which architectures to include
 
         ### Default Settings
 
@@ -263,20 +267,20 @@ def main() -> None:
     st.markdown("Configure the catalog builder settings through the tabs below.")
 
     tab1, tab2, tab3, tab4 = st.tabs([
-        "📚 Keyword Dictionaries",
+        "🔨 Build Catalog",
         "🎛️ Filter Presets",
-        "👁️ Preview Build",
+        "📚 Keyword Dictionaries",
         "⚙️ Config Editor"
     ])
 
     with tab1:
-        render_keywords_editor()
+        render_preview_panel()
 
     with tab2:
         render_filter_presets()
 
     with tab3:
-        render_preview_panel()
+        render_keywords_editor()
 
     with tab4:
         render_config_editor()

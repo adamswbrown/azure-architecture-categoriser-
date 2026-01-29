@@ -10,7 +10,37 @@ from catalog_builder_gui.state import get_state
 
 def render_preview_panel() -> None:
     """Render the preview build tab."""
-    st.header("Preview Catalog Build")
+    st.header("Build Catalog")
+
+    repo_path = get_state('repo_path', '')
+
+    # Quick generate section at top
+    if repo_path and Path(repo_path).exists():
+        st.subheader("Quick Generate")
+        st.markdown("""
+        Generate the catalog using current settings. With defaults, this produces ~170 architectures
+        including reference architectures, example scenarios, and solution ideas.
+        """)
+
+        col1, col2 = st.columns([2, 1])
+        with col1:
+            quick_output = st.text_input(
+                "Output File",
+                value="architecture-catalog.json",
+                key="quick_output",
+                help="Path to save the catalog JSON"
+            )
+        with col2:
+            st.write("")  # Spacer
+            st.write("")
+            if st.button("Generate Catalog", type="primary", use_container_width=True, key="quick_generate"):
+                _generate_catalog(repo_path, quick_output)
+
+        st.markdown("---")
+
+    # Preview section
+    st.subheader("Preview (Optional)")
+    st.markdown("Preview what will be included before generating, or customize filters first.")
 
     # Explanation section
     with st.expander("ℹ️ How Preview Works", expanded=False):
@@ -147,17 +177,42 @@ def _run_preview_scan(repo_path: Path, max_files: int) -> None:
             categories: Counter = Counter()
             topics: Counter = Counter()
 
+            # Track unique errors for debugging
+            error_samples: dict[str, str] = {}
+
             for i, md_file in enumerate(md_files):
                 progress_bar.progress((i + 1) / total)
                 status_text.text(f"Scanning {md_file.name}...")
 
-                try:
-                    # Parse the document
-                    doc = parser.parse(md_file)
+                # Resolve file path to match repo_path
+                md_file = md_file.resolve()
 
-                    # Run detection
-                    detection = detector.detect(doc, repo_path)
-                    rel_path = md_file.relative_to(repo_path)
+                try:
+                    # Get relative path first
+                    try:
+                        rel_path = md_file.relative_to(repo_path)
+                    except ValueError as ve:
+                        if 'relative_to' not in error_samples:
+                            error_samples['relative_to'] = f"{md_file} not relative to {repo_path}"
+                        raise ve
+
+                    # Parse the document
+                    try:
+                        doc = parser.parse_file(md_file)
+                        if doc is None:
+                            raise ValueError("Parser returned None (encoding or IO error)")
+                    except Exception as pe:
+                        if 'parse' not in error_samples:
+                            error_samples['parse'] = f"{md_file.name}: {str(pe)[:200]}"
+                        raise pe
+
+                    # Run detection - pass string path
+                    try:
+                        detection = detector.detect(doc, str(repo_path))
+                    except Exception as de:
+                        if 'detect' not in error_samples:
+                            error_samples['detect'] = f"{md_file.name}: {str(de)[:200]}"
+                        raise de
 
                     if detection.is_architecture:
                         included.append({
@@ -183,9 +238,23 @@ def _run_preview_scan(repo_path: Path, max_files: int) -> None:
                         exclusion_reasons[reason] += 1
 
                 except Exception as e:
+                    error_type = type(e).__name__
+                    error_msg = str(e)[:100]
+                    reason = f'{error_type}: {error_msg[:40]}'
+
+                    # Track sample errors for debugging
+                    if error_type not in error_samples:
+                        error_samples[error_type] = f"{md_file.name}: {error_msg}"
+
+                    # Use filename if relative_to fails
+                    try:
+                        path_str = str(md_file.relative_to(repo_path))
+                    except ValueError:
+                        path_str = md_file.name
+
                     excluded.append({
-                        'path': str(md_file.relative_to(repo_path)),
-                        'reason': f'Error: {str(e)[:50]}',
+                        'path': path_str,
+                        'reason': reason,
                     })
                     exclusion_reasons[f'Parse error'] += 1
 
@@ -200,6 +269,7 @@ def _run_preview_scan(repo_path: Path, max_files: int) -> None:
                 exclusion_reasons=exclusion_reasons,
                 categories=categories,
                 topics=topics,
+                error_samples=error_samples,
             )
 
         except Exception as e:
@@ -215,6 +285,7 @@ def _display_results(
     exclusion_reasons: Counter,
     categories: Counter,
     topics: Counter,
+    error_samples: dict[str, str] | None = None,
 ) -> None:
     """Display the preview scan results."""
     # Metrics row
@@ -273,3 +344,114 @@ def _display_results(
             st.write(f"- **{reason}**: {count}")
     else:
         st.info("No exclusions")
+
+    # Show error samples for debugging
+    if error_samples:
+        with st.expander("🔍 Error Details (for debugging)", expanded=True):
+            st.warning(f"Found {len(error_samples)} unique error types")
+            for error_type, sample in error_samples.items():
+                st.code(f"{error_type}: {sample}", language="text")
+
+    # Generate catalog section (only show if we have results)
+    if len(included) > 0:
+        st.markdown("---")
+        _render_generate_section(len(included))
+
+
+def _render_generate_section(preview_count: int) -> None:
+    """Render the generate catalog section after preview."""
+    st.subheader("Generate Full Catalog")
+    st.markdown(f"""
+    The preview found **{preview_count} architectures**. Generate the full catalog now.
+    """)
+
+    col1, col2 = st.columns([2, 1])
+
+    with col1:
+        output_path = st.text_input(
+            "Output Path",
+            value="architecture-catalog.json",
+            key="preview_output",
+            help="Path to save the generated catalog JSON file"
+        )
+
+    with col2:
+        st.write("")  # Spacer
+        st.write("")  # Align with input
+        if st.button("Generate Catalog", type="primary", use_container_width=True, key="preview_generate"):
+            repo_path = get_state('repo_path', '')
+            _generate_catalog(repo_path, output_path)
+
+
+def _generate_catalog(repo_path: str, output_path: str) -> None:
+    """Generate the full catalog and display results."""
+    import json
+    from catalog_builder.catalog import CatalogBuilder
+
+    config = get_state('config')
+
+    if not repo_path:
+        st.error("Repository path not set")
+        return
+
+    # Apply config to global state
+    import catalog_builder.config as config_module
+    config_module._config = config
+
+    with st.spinner("Building full catalog (this may take a minute)..."):
+        progress_bar = st.progress(0)
+        status_text = st.empty()
+
+        try:
+            status_text.text("Initializing catalog builder...")
+            progress_bar.progress(10)
+
+            builder = CatalogBuilder(repo_path)
+
+            status_text.text("Scanning repository...")
+            progress_bar.progress(30)
+
+            catalog = builder.build()
+
+            status_text.text("Writing catalog file...")
+            progress_bar.progress(80)
+
+            # Write to file
+            catalog_dict = catalog.model_dump(mode='json')
+            with open(output_path, 'w', encoding='utf-8') as f:
+                json.dump(catalog_dict, f, indent=2, default=str)
+
+            progress_bar.progress(100)
+            status_text.empty()
+            progress_bar.empty()
+
+            # Success message with stats
+            st.success(f"Catalog generated successfully!")
+
+            col1, col2, col3 = st.columns(3)
+            col1.metric("Architectures", len(catalog.architectures))
+            col2.metric("Output File", output_path)
+            col3.metric("File Size", f"{Path(output_path).stat().st_size / 1024:.1f} KB")
+
+            # Download button
+            st.download_button(
+                "Download Catalog JSON",
+                data=json.dumps(catalog_dict, indent=2, default=str),
+                file_name="architecture-catalog.json",
+                mime="application/json",
+                use_container_width=True
+            )
+
+            # Show CLI command for reference
+            with st.expander("CLI Command (for automation)"):
+                st.code(f"""catalog-builder build-catalog \\
+    --repo-path {repo_path} \\
+    --out {output_path}""", language="bash")
+
+        except Exception as e:
+            progress_bar.empty()
+            status_text.empty()
+            st.error(f"Error generating catalog: {e}")
+            import traceback
+            with st.expander("Error Details"):
+                st.code(traceback.format_exc())

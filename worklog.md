@@ -2,6 +2,18 @@
 
 ## 2026-01-29
 
+### Session: Preview Panel Bug Fix
+
+**Bug:** Preview showing "Parse error: 500" for all files.
+
+**Root Cause:** In `preview_panel.py`, the code called `parser.parse(md_file)` but `MarkdownParser` doesn't have a `parse()` method - it has `parse_file()`. This caused an AttributeError for every file.
+
+**Fix:** Changed `parser.parse(md_file)` to `parser.parse_file(md_file)` and added null check.
+
+**Also improved:** Added detailed error tracking with `error_samples` dict to show which step (relative_to, parse, detect) fails, making future debugging easier.
+
+---
+
 ### Session: GUI, Network Exposure & URL Fixes - COMPLETE
 
 **Goals Achieved:**

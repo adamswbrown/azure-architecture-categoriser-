@@ -15,38 +15,39 @@ DEFAULT_CLONE_DIR = str(Path.home() / "architecture-center")
 def find_local_repo() -> str | None:
     """Search for the architecture-center repo in common locations.
 
-    Checks:
+    Checks (in priority order - permanent locations first):
+    - Home directory (preferred)
     - Current working directory
-    - Parent directory
-    - Child directories (one level)
-    - Sibling directories
-    - Home directory
+    - Parent/sibling directories
+    - Temp directory (last resort)
 
-    Returns the path if found, None otherwise.
+    Returns the resolved path if found, None otherwise.
     """
-    cwd = Path.cwd()
+    cwd = Path.cwd().resolve()
 
-    # Locations to search
+    # Locations to search - permanent locations first, temp last
     search_paths = [
+        Path.home() / "architecture-center",            # Home: ~/architecture-center (PREFERRED)
         cwd / "architecture-center",                    # Child: ./architecture-center
         cwd.parent / "architecture-center",             # Sibling: ../architecture-center
         cwd,                                            # Current dir (if it IS the repo)
         cwd.parent,                                     # Parent (if parent IS the repo)
-        Path.home() / "architecture-center",            # Home: ~/architecture-center
-        Path("/tmp") / "architecture-center",           # Temp: /tmp/architecture-center
+        Path("/tmp") / "architecture-center",           # Temp: /tmp/architecture-center (LAST RESORT)
     ]
 
     # Also check immediate children of cwd
     if cwd.is_dir():
         for child in cwd.iterdir():
             if child.is_dir() and child.name == "architecture-center":
-                search_paths.insert(0, child)
+                search_paths.insert(1, child)  # After home, before others
 
     for path in search_paths:
-        if path.exists() and (path / 'docs').exists():
+        # Resolve symlinks for consistent paths (e.g., /tmp -> /private/tmp on macOS)
+        resolved = path.resolve()
+        if resolved.exists() and (resolved / 'docs').exists():
             # Verify it looks like the architecture-center repo
-            if (path / '.git').exists() or (path / 'docs' / 'example-scenario').exists():
-                return str(path)
+            if (resolved / '.git').exists() or (resolved / 'docs' / 'example-scenario').exists():
+                return str(resolved)
 
     return None
 
@@ -65,11 +66,11 @@ def initialize_state() -> None:
             'topics': [],
         }
 
-        # Auto-detect local repo
+        # Auto-detect local repo for repo_path only
+        # (clone_dir stays as DEFAULT_CLONE_DIR for new clones)
         local_repo = find_local_repo()
         if local_repo:
             st.session_state.repo_path = local_repo
-            st.session_state.clone_dir = local_repo
         else:
             st.session_state.repo_path = ""
 
