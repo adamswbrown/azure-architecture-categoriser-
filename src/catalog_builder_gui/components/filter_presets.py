@@ -242,10 +242,13 @@ def render_filter_presets() -> None:
     # Clear all filters button (prominent)
     if st.button("Clear All Filters (Show All)", type="primary", use_container_width=True):
         set_state('active_filters', {'products': [], 'categories': [], 'topics': []})
-        config.filters.allowed_products = []
-        config.filters.allowed_categories = []
+        config.filters.allowed_products = None
+        config.filters.allowed_categories = None
         config.filters.require_architecture_yml = False
         set_state('config', config)
+        # Also clear the text input widget states in the Build tab
+        st.session_state['product_filter'] = ""
+        st.session_state['category_filter'] = ""
         st.success("All filters cleared!")
         st.rerun()
 
@@ -266,9 +269,11 @@ def render_filter_presets() -> None:
                 use_container_width=True
             ):
                 active_filters['products'] = preset['products']
-                config.filters.allowed_products = preset['products']
+                config.filters.allowed_products = preset['products'] if preset['products'] else None
                 set_state('active_filters', active_filters)
                 set_state('config', config)
+                # Also update the text input widget state in the Build tab
+                st.session_state['product_filter'] = ", ".join(preset['products'])
                 st.rerun()
 
     st.markdown("---")
@@ -288,9 +293,11 @@ def render_filter_presets() -> None:
                 use_container_width=True
             ):
                 active_filters['categories'] = preset['categories']
-                config.filters.allowed_categories = preset['categories']
+                config.filters.allowed_categories = preset['categories'] if preset['categories'] else None
                 set_state('active_filters', active_filters)
                 set_state('config', config)
+                # Also update the text input widget state in the Build tab
+                st.session_state['category_filter'] = ", ".join(preset['categories'])
                 st.rerun()
 
     st.markdown("---")
@@ -330,12 +337,17 @@ def render_filter_presets() -> None:
                 st.write(f"**{preset_name}**")
             with col2:
                 if st.button("Load", key=f"load_{preset_name}"):
-                    active_filters['products'] = preset_data.get('products', [])
-                    active_filters['categories'] = preset_data.get('categories', [])
-                    config.filters.allowed_products = preset_data.get('products', [])
-                    config.filters.allowed_categories = preset_data.get('categories', [])
+                    products = preset_data.get('products', [])
+                    categories = preset_data.get('categories', [])
+                    active_filters['products'] = products
+                    active_filters['categories'] = categories
+                    config.filters.allowed_products = products if products else None
+                    config.filters.allowed_categories = categories if categories else None
                     set_state('active_filters', active_filters)
                     set_state('config', config)
+                    # Also update the text input widget states in the Build tab
+                    st.session_state['product_filter'] = ", ".join(products)
+                    st.session_state['category_filter'] = ", ".join(categories)
                     st.rerun()
             with col3:
                 if st.button("Delete", key=f"delete_{preset_name}"):

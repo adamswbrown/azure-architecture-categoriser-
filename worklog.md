@@ -2,15 +2,27 @@
 
 ## 2026-01-29
 
-### Session: Preview Panel Bug Fix
+### Session: Preview Panel Bug Fix & UI Restructure
 
-**Bug:** Preview showing "Parse error: 500" for all files.
+**Bug Fix:** Preview showing "Parse error: 500" for all files.
+- **Root Cause:** Code called `parser.parse(md_file)` but `MarkdownParser` has `parse_file()`, not `parse()`
+- **Fix:** Changed to `parser.parse_file(md_file)` and added null check
 
-**Root Cause:** In `preview_panel.py`, the code called `parser.parse(md_file)` but `MarkdownParser` doesn't have a `parse()` method - it has `parse_file()`. This caused an AttributeError for every file.
+**UI Restructure:** Clear separation between Quick Generate and Custom Build
 
-**Fix:** Changed `parser.parse(md_file)` to `parser.parse_file(md_file)` and added null check.
+The Build Catalog tab now has two distinct workflows:
 
-**Also improved:** Added detailed error tracking with `error_samples` dict to show which step (relative_to, parse, detect) fails, making future debugging easier.
+**Option 1: Quick Generate**
+- Uses default settings (no configuration needed)
+- One-click "Generate with Defaults" button
+- Expandable section showing what defaults include
+
+**Option 2: Custom Build** (3-step workflow)
+- Step 1: Configure (shows current settings status, directs to Filter Presets/Config Editor tabs)
+- Step 2: Preview (optional - scan to see what matches current settings)
+- Step 3: Generate with Current Settings
+
+Both options are visually contained in bordered boxes for clear separation.
 
 ---
 

@@ -5,22 +5,42 @@ from collections import Counter
 
 import streamlit as st
 
-from catalog_builder_gui.state import get_state
+from catalog_builder_gui.state import get_state, set_state
 
 
 def render_preview_panel() -> None:
     """Render the preview build tab."""
-    st.header("Build Catalog")
-
     repo_path = get_state('repo_path', '')
 
-    # Quick generate section at top
-    if repo_path and Path(repo_path).exists():
-        st.subheader("Quick Generate")
+    # Check repo status first
+    if not repo_path:
+        st.warning("Please set the repository path in the sidebar first.")
+        return
+
+    repo = Path(repo_path)
+    if not repo.exists() or not (repo / 'docs').exists():
+        st.error("Invalid repository path. Please check the path in the sidebar.")
+        return
+
+    # =========================================================================
+    # MODE 1: QUICK GENERATE (DEFAULTS)
+    # =========================================================================
+    st.header("Option 1: Quick Generate")
+
+    with st.container(border=True):
         st.markdown("""
-        Generate the catalog using current settings. With defaults, this produces ~170 architectures
-        including reference architectures, example scenarios, and solution ideas.
+        **Use default settings** to generate a catalog immediately. No configuration needed.
         """)
+
+        with st.expander("What defaults include", expanded=False):
+            st.markdown("""
+            | Setting | Default Value | Result |
+            |---------|---------------|--------|
+            | **Topics** | reference-architecture, example-scenario, solution-idea | ~170 architectures |
+            | **Products** | All | No product filtering |
+            | **Categories** | All | No category filtering |
+            | **Require YML** | No | Include detected architectures |
+            """)
 
         col1, col2 = st.columns([2, 1])
         with col1:
@@ -33,74 +53,172 @@ def render_preview_panel() -> None:
         with col2:
             st.write("")  # Spacer
             st.write("")
-            if st.button("Generate Catalog", type="primary", use_container_width=True, key="quick_generate"):
+            if st.button("Generate with Defaults", type="primary", use_container_width=True, key="quick_generate"):
+                # Reset to defaults before generating
+                from catalog_builder.config import CatalogConfig
+                import catalog_builder.config as config_module
+                config_module._config = CatalogConfig()
                 _generate_catalog(repo_path, quick_output)
+
+    # =========================================================================
+    # MODE 2: CUSTOM BUILD (CONFIGURE → PREVIEW → GENERATE)
+    # =========================================================================
+    st.markdown("")  # Spacer
+    st.header("Option 2: Custom Build")
+
+    with st.container(border=True):
+        st.markdown("""
+        **Configure filters**, preview what matches, then generate.
+        """)
+
+        # Step 1: Configure filters inline
+        st.subheader("Step 1: Configure Filters")
+
+        config = get_state('config')
+        active_filters = get_state('active_filters', {'products': [], 'categories': [], 'topics': []})
+
+        # Topic filter
+        st.markdown("**Document Types (ms.topic)**")
+        all_topics = ['reference-architecture', 'example-scenario', 'solution-idea']
+        current_topics = config.filters.allowed_topics or []
+
+        selected_topics = []
+        topic_cols = st.columns(3)
+        for i, topic in enumerate(all_topics):
+            with topic_cols[i]:
+                checked = st.checkbox(
+                    topic.replace('-', ' ').title(),
+                    value=topic in current_topics,
+                    key=f"topic_{topic}"
+                )
+                if checked:
+                    selected_topics.append(topic)
+
+        # Update config if topics changed
+        if set(selected_topics) != set(current_topics):
+            config.filters.allowed_topics = selected_topics
+            set_state('config', config)
+
+        st.markdown("")  # Spacer
+
+        # Product filter
+        st.markdown("**Product Filter** (leave empty for all)")
+
+        # Initialize widget state from config if not already set
+        if 'product_filter' not in st.session_state:
+            st.session_state['product_filter'] = ", ".join(config.filters.allowed_products or [])
+
+        product_input = st.text_input(
+            "Products (comma-separated)",
+            key="product_filter",
+            help="e.g., azure-kubernetes-service, azure-app-service",
+            placeholder="azure-kubernetes-service, azure-sql-database"
+        )
+
+        # Parse and sync to config
+        product_list = [p.strip() for p in product_input.split(",") if p.strip()]
+        config.filters.allowed_products = product_list if product_list else None
+        active_filters['products'] = product_list
+
+        # Category filter
+        st.markdown("**Category Filter** (leave empty for all)")
+
+        # Initialize widget state from config if not already set
+        if 'category_filter' not in st.session_state:
+            st.session_state['category_filter'] = ", ".join(config.filters.allowed_categories or [])
+
+        category_input = st.text_input(
+            "Categories (comma-separated)",
+            key="category_filter",
+            help="e.g., web, containers, ai-machine-learning",
+            placeholder="web, containers, databases"
+        )
+
+        # Parse and sync to config
+        category_list = [c.strip() for c in category_input.split(",") if c.strip()]
+        config.filters.allowed_categories = category_list if category_list else None
+        active_filters['categories'] = category_list
+
+        # Save state
+        set_state('config', config)
+        set_state('active_filters', active_filters)
+
+        # Show current filter summary
+        st.markdown("---")
+        summary_parts = []
+        if selected_topics:
+            summary_parts.append(f"**Topics:** {', '.join(selected_topics)}")
+        else:
+            summary_parts.append("**Topics:** All")
+        if product_list:
+            summary_parts.append(f"**Products:** {', '.join(product_list)}")
+        else:
+            summary_parts.append("**Products:** All")
+        if category_list:
+            summary_parts.append(f"**Categories:** {', '.join(category_list)}")
+        else:
+            summary_parts.append("**Categories:** All")
+
+        st.caption(" | ".join(summary_parts))
+
+        with st.expander("Advanced options (other tabs)"):
+            st.markdown("""
+            For more options, use these tabs:
+            - **Filter Presets** - Quick preset buttons for common filters
+            - **Keyword Dictionaries** - Customize classification keywords
+            - **Config Editor** - Full YAML configuration
+            """)
 
         st.markdown("---")
 
-    # Preview section
-    st.subheader("Preview (Optional)")
-    st.markdown("Preview what will be included before generating, or customize filters first.")
+        # Step 2: Preview
+        st.subheader("Step 2: Preview (optional)")
 
-    # Explanation section
-    with st.expander("ℹ️ How Preview Works", expanded=False):
-        st.markdown("""
-        ### What This Does
-        The preview scans the Azure Architecture Center repository to find architecture documents
-        and shows which ones would be included in the catalog based on your current settings.
+        with st.expander("How preview works", expanded=False):
+            st.markdown("""
+            The preview scans the repository and shows which architectures match your current settings:
+            - Scans architecture folders first (example-scenario, reference-architectures, etc.)
+            - Applies your topic, product, and category filters
+            - Shows inclusion/exclusion breakdown
 
-        ### Detection Process
-        1. **Folder Scanning**: Prioritizes architecture folders (example-scenario, reference-architectures, etc.)
-        2. **Document Parsing**: Extracts frontmatter metadata (ms.topic, products, categories)
-        3. **Architecture Detection**: Applies heuristics to identify architecture content
-        4. **Filter Application**: Applies your topic/product/category filters
+            This helps you verify your configuration before generating the full catalog.
+            """)
 
-        ### Key Metadata Fields
-        - **ms.topic**: Document type (reference-architecture, example-scenario, solution-idea)
-        - **azureCategories**: Categories like web, containers, databases, ai-machine-learning
-        - **products**: Azure products like azure-kubernetes-service, azure-app-service
+        col1, col2 = st.columns([2, 1])
+        with col1:
+            max_files = st.slider(
+                "Max files to scan",
+                min_value=10,
+                max_value=500,
+                value=100,
+                step=10,
+                help="Limit the number of files to scan for faster preview"
+            )
+        with col2:
+            st.write("")  # Spacer
+            run_preview = st.button("Run Preview", type="secondary", use_container_width=True)
 
-        ### Default Behavior
-        By default, the catalog includes documents with ms.topic values:
-        - `reference-architecture` - Curated reference architectures
-        - `example-scenario` - Real-world implementation examples
-        - `solution-idea` - Conceptual solution designs
+        if run_preview:
+            _run_preview_scan(repo, max_files)
 
-        Documents without these topic values (tutorials, guides, landing pages) are excluded.
-        """)
+        st.markdown("---")
 
-    st.markdown("""
-    Preview what architectures would be included in the catalog with current settings.
-    The scan prioritizes architecture folders to show relevant results quickly.
-    """)
+        # Generate section
+        st.subheader("Step 3: Generate with Current Settings")
 
-    repo_path = get_state('repo_path', '')
-
-    if not repo_path:
-        st.warning("Please set the repository path in the sidebar first.")
-        return
-
-    repo = Path(repo_path)
-    if not repo.exists() or not (repo / 'docs').exists():
-        st.error("Invalid repository path. Please check the path in the sidebar.")
-        return
-
-    # Preview controls
-    col1, col2 = st.columns([2, 1])
-    with col1:
-        max_files = st.slider(
-            "Max files to scan",
-            min_value=10,
-            max_value=500,
-            value=100,
-            step=10,
-            help="Limit the number of files to scan for faster preview"
-        )
-    with col2:
-        run_preview = st.button("Run Preview", type="primary", use_container_width=True)
-
-    if run_preview:
-        _run_preview_scan(repo, max_files)
+        col1, col2 = st.columns([2, 1])
+        with col1:
+            custom_output = st.text_input(
+                "Output File",
+                value="architecture-catalog.json",
+                key="custom_output",
+                help="Path to save the catalog JSON"
+            )
+        with col2:
+            st.write("")  # Spacer
+            st.write("")
+            if st.button("Generate Catalog", type="primary", use_container_width=True, key="custom_generate"):
+                _generate_catalog(repo_path, custom_output)
 
 
 def _run_preview_scan(repo_path: Path, max_files: int) -> None:
@@ -352,35 +470,9 @@ def _display_results(
             for error_type, sample in error_samples.items():
                 st.code(f"{error_type}: {sample}", language="text")
 
-    # Generate catalog section (only show if we have results)
+    # Show preview summary - user can proceed to Step 3 to generate
     if len(included) > 0:
-        st.markdown("---")
-        _render_generate_section(len(included))
-
-
-def _render_generate_section(preview_count: int) -> None:
-    """Render the generate catalog section after preview."""
-    st.subheader("Generate Full Catalog")
-    st.markdown(f"""
-    The preview found **{preview_count} architectures**. Generate the full catalog now.
-    """)
-
-    col1, col2 = st.columns([2, 1])
-
-    with col1:
-        output_path = st.text_input(
-            "Output Path",
-            value="architecture-catalog.json",
-            key="preview_output",
-            help="Path to save the generated catalog JSON file"
-        )
-
-    with col2:
-        st.write("")  # Spacer
-        st.write("")  # Align with input
-        if st.button("Generate Catalog", type="primary", use_container_width=True, key="preview_generate"):
-            repo_path = get_state('repo_path', '')
-            _generate_catalog(repo_path, output_path)
+        st.success(f"Preview complete. Found **{len(included)} architectures** matching your current settings. Proceed to **Step 3** below to generate the catalog.")
 
 
 def _generate_catalog(repo_path: str, output_path: str) -> None:
@@ -406,7 +498,7 @@ def _generate_catalog(repo_path: str, output_path: str) -> None:
             status_text.text("Initializing catalog builder...")
             progress_bar.progress(10)
 
-            builder = CatalogBuilder(repo_path)
+            builder = CatalogBuilder(Path(repo_path))
 
             status_text.text("Scanning repository...")
             progress_bar.progress(30)
