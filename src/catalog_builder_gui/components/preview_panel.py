@@ -37,13 +37,13 @@ def render_preview_panel() -> None:
             | Setting | Default Value | Result |
             |---------|---------------|--------|
             | **Topics** | reference-architecture, example-scenario, solution-idea | All topic types |
-            | **Exclude Examples** | Yes | Only curated, ai_enriched, ai_suggested (~50 architectures) |
+            | **Exclude Examples** | No | All ~170 architectures (curated + examples) |
             | **Products** | All | No product filtering |
             | **Categories** | All | No category filtering |
             | **Require YML** | No | Include detected architectures |
 
-            **Note:** Example scenarios are excluded by default because they are illustrative implementations,
-            not reproducible reference patterns. Uncheck "Exclude Examples" in Filters to include them.
+            **Note:** Example scenarios are included by default. These are learning/POC architectures
+            (not production-ready patterns). Check "Exclude Examples" in Filters for production catalogs.
             """)
 
         col1, col2 = st.columns([2, 1])

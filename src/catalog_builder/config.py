@@ -505,10 +505,10 @@ class FilterConfig(BaseModel):
 
     # Exclude example scenarios and solution ideas (keep only reference architectures)
     # Example scenarios are marked as catalog_quality="example_only" and are
-    # illustrative implementations rather than reproducible reference patterns.
-    # Default is True because examples are not prescriptive patterns.
-    # Set to False to include all architectures including examples.
-    exclude_examples: bool = True
+    # illustrative implementations for learning/POC, not production-ready patterns.
+    # Default is False to include all 171 architectures.
+    # Set to True to include only curated/ai_enriched/ai_suggested (~50 architectures).
+    exclude_examples: bool = False
 
     # Exclude documents with these ms.topic values
     # Applied after allowed_topics filter

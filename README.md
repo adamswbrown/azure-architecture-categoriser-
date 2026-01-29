@@ -138,8 +138,8 @@ pip install -e ".[dev]"
 │  ┌──────────────────┐         └──────────────────────────────────────┘  │
 │  │ architecture-    │                          │                        │
 │  │ catalog.json     │                          ▼                        │
-│  │ (~50 reference   │         ┌──────────────────────────────────────┐  │
-│  │  architectures)  │         │  PDF Report / JSON Export            │  │
+│  │ (~170 patterns:  │         ┌──────────────────────────────────────┐  │
+│  │  curated+examples)│         │  PDF Report / JSON Export            │  │
 │  └──────────────────┘         └──────────────────────────────────────┘  │
 │                                                                          │
 │  ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─   │
@@ -152,7 +152,7 @@ pip install -e ".[dev]"
 1. **One-Time Setup: Build Catalog**
    - Launch Catalog Builder GUI
    - Clone Azure Architecture Center repository
-   - Generate `architecture-catalog.json` (~50 reference architectures)
+   - Generate `architecture-catalog.json` (~170 architectures: curated + examples)
 
 2. **Assess Application** (in Dr. Migrate)
    - Use Dr. Migrate to assess your application with AppCat
@@ -174,7 +174,8 @@ pip install -e ".[dev]"
 
 ## Key Features
 
-- **~50 Reference Architectures** from official Azure Architecture Center (curated patterns, not examples)
+- **~170 Azure Architectures** from official Azure Architecture Center (curated patterns + examples)
+- **Quality Indicators** - Each architecture marked as curated, AI-enriched, or example (learning/POC)
 - **Explainable Recommendations** - See why each architecture fits or struggles
 - **Confidence Levels** - Know how certain the recommendations are
 - **Interactive Questions** - Improve accuracy by answering clarifying questions

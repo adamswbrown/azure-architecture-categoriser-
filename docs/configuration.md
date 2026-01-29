@@ -693,10 +693,10 @@ filters:
   # If true, only include documents with YamlMime:Architecture
   require_architecture_yml: false
 
-  # Exclude example scenarios and solution ideas (default: true)
-  # Keeps only reference architectures (curated, ai_enriched, ai_suggested)
-  # Set to false to include example_only architectures
-  exclude_examples: true
+  # Exclude example scenarios and solution ideas (default: false)
+  # Examples are learning/POC architectures, not production-ready patterns
+  # Set to true for production catalogs (keeps ~50 curated architectures)
+  exclude_examples: false
 
   # Exclude documents with these ms.topic values
   excluded_topics:
@@ -864,34 +864,36 @@ The `catalog_quality` field indicates the reliability of the entry's metadata:
 | `ai_suggested` | Purely AI-extracted | No YamlMime:Architecture file found |
 | `example_only` | Example scenarios | ms.topic is `example-scenario` or `solution-idea` - illustrative implementations, not prescriptive reference patterns |
 
-### Filtering Example Scenarios
+### Understanding Example Scenarios
 
-Example scenarios and solution ideas are marked as `example_only` because they demonstrate specific implementations rather than prescriptive architectural patterns. **By default, they are excluded** from the catalog.
+Example scenarios and solution ideas are marked as `example_only` because they are **learning/POC architectures**, not production-ready patterns. Microsoft's documentation often notes these are "not meant for production applications" and serve as "introductory setup for learning and proof of concept."
 
 **Default Behavior:**
-The catalog includes only reproducible reference patterns:
-- `curated` - Human-reviewed reference architectures
-- `ai_enriched` - Curated architectures enhanced with AI classifications
-- `ai_suggested` - AI-generated classifications
+The catalog includes **all ~170 architectures** by default (curated + examples). Each architecture's quality level helps users understand what they're looking at.
 
-**To include example scenarios:**
+**To exclude example scenarios (production catalogs only):**
 
 **CLI Flag:**
 ```bash
-# Include example scenarios and solution ideas
-catalog-builder build-catalog --repo-path ./repo --include-examples
+# Exclude examples - keep only curated/ai_enriched/ai_suggested (~50 architectures)
+catalog-builder build-catalog --repo-path ./repo --exclude-examples
 ```
 
 **Config File:**
 ```yaml
 filters:
-  exclude_examples: false  # Include example_only architectures
+  exclude_examples: true  # Exclude example_only architectures
 ```
 
-**Use cases for including examples:**
+**When to exclude examples:**
+- Building production-ready recommendation catalogs
+- When you only want validated, reproducible patterns
+- Enterprise architecture decision frameworks
+
+**When to include examples (default):**
 - Exploring the full breadth of Azure architecture patterns
+- Learning and proof-of-concept work
 - Finding inspiration from real-world implementations
-- Learning from diverse implementation approaches
 
 ---
 

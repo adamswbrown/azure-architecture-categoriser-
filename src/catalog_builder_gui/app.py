@@ -228,7 +228,7 @@ def main() -> None:
         ### Quick Start
 
         1. **Clone the Repository** (sidebar) - Get the Azure Architecture Center content
-        2. **Generate Catalog** (tab 1) - Build `architecture-catalog.json` with defaults (~50 reference architectures)
+        2. **Generate Catalog** (tab 1) - Build `architecture-catalog.json` with defaults (~170 architectures)
 
         **Optional customization:**
         - **Preview** - See what will be included before generating
@@ -241,13 +241,13 @@ def main() -> None:
         | Setting | Default | Effect |
         |---------|---------|--------|
         | **Topic Filter** | reference-architecture, example-scenario, solution-idea | All topic types |
-        | **Exclude Examples** | Yes | Only curated/ai_enriched/ai_suggested (~50 architectures) |
+        | **Exclude Examples** | No | All ~170 architectures (curated + examples) |
         | **Product Filter** | None (all) | No product restrictions |
         | **Category Filter** | None (all) | No category restrictions |
         | **Require YML** | No | Includes both YML-tagged and detected architectures |
 
-        **Note:** Example scenarios are excluded by default. They are illustrative implementations,
-        not reproducible reference patterns. Uncheck "Exclude Examples" in Filters to include them.
+        **Note:** Example scenarios (marked `example_only`) are learning/POC architectures, not
+        production-ready patterns. Check "Exclude Examples" in Filters for production catalogs only.
 
         ### Workflow
 
