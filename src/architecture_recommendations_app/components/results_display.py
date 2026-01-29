@@ -141,13 +141,16 @@ def _render_recommendation_card(rec: ArchitectureRecommendation, is_primary: boo
                     unsafe_allow_html=True
                 )
 
-            # Architecture diagram (if available)
+            # Architecture diagram (if available) - 50% width for primary
             if rec.diagram_url:
                 st.markdown("")  # Spacer
                 try:
-                    st.image(rec.diagram_url, use_container_width=True)
-                except Exception as e:
-                    st.caption(f"_Architecture diagram unavailable_")
+                    # Center the image at 50% width using columns
+                    img_col1, img_col2, img_col3 = st.columns([1, 2, 1])
+                    with img_col2:
+                        st.image(rec.diagram_url, use_container_width=True)
+                except Exception:
+                    st.caption("_Architecture diagram unavailable_")
 
             # Description
             if rec.description:
@@ -196,6 +199,13 @@ def _render_recommendation_card(rec: ArchitectureRecommendation, is_primary: boo
                 f'</div>',
                 unsafe_allow_html=True
             )
+
+            # Thumbnail diagram (if available)
+            if rec.diagram_url:
+                try:
+                    st.image(rec.diagram_url, use_container_width=True)
+                except Exception:
+                    pass  # Silently skip if image unavailable
 
             # Brief description
             if rec.description:
