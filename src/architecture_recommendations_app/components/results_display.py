@@ -141,14 +141,13 @@ def _render_recommendation_card(rec: ArchitectureRecommendation, is_primary: boo
                     unsafe_allow_html=True
                 )
 
-            # Architecture diagram (if available) - 50% width for primary
+            # Architecture diagram (if available) - constrained width for primary
             if rec.diagram_url:
                 st.markdown("")  # Spacer
                 try:
-                    # Center the image at 50% width using columns
-                    img_col1, img_col2, img_col3 = st.columns([1, 2, 1])
-                    with img_col2:
-                        st.image(rec.diagram_url, use_container_width=True)
+                    # Use expander to keep diagram accessible but not dominating
+                    with st.expander("View Architecture Diagram", expanded=True):
+                        st.image(rec.diagram_url, width=500)
                 except Exception:
                     st.caption("_Architecture diagram unavailable_")
 
@@ -200,13 +199,6 @@ def _render_recommendation_card(rec: ArchitectureRecommendation, is_primary: boo
                 unsafe_allow_html=True
             )
 
-            # Thumbnail diagram (if available)
-            if rec.diagram_url:
-                try:
-                    st.image(rec.diagram_url, use_container_width=True)
-                except Exception:
-                    pass  # Silently skip if image unavailable
-
             # Brief description
             if rec.description:
                 desc = rec.description[:150] + "..." if len(rec.description) > 150 else rec.description
@@ -222,6 +214,14 @@ def _render_recommendation_card(rec: ArchitectureRecommendation, is_primary: boo
                 if len(rec.core_services) > 4:
                     services += f" +{len(rec.core_services) - 4} more"
                 st.caption(f"Services: {services}")
+
+            # Diagram in collapsed expander (doesn't dominate visual hierarchy)
+            if rec.diagram_url:
+                with st.expander("View diagram"):
+                    try:
+                        st.image(rec.diagram_url, use_container_width=True)
+                    except Exception:
+                        st.caption("_Diagram unavailable_")
 
             # Learn more link
             if rec.learn_url:
