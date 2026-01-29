@@ -21,5 +21,5 @@ try {
     exit 1
 }
 
-# Start the app
-streamlit run src/catalog_builder_gui/app.py $args
+# Start the app on port 8502 (to avoid conflict with recommendations app on 8501)
+streamlit run src/catalog_builder_gui/app.py --server.port 8502 $args

@@ -36,10 +36,14 @@ def render_preview_panel() -> None:
             st.markdown("""
             | Setting | Default Value | Result |
             |---------|---------------|--------|
-            | **Topics** | reference-architecture, example-scenario, solution-idea | ~170 architectures |
+            | **Topics** | reference-architecture, example-scenario, solution-idea | All topic types |
+            | **Exclude Examples** | Yes | Only curated, ai_enriched, ai_suggested (~50 architectures) |
             | **Products** | All | No product filtering |
             | **Categories** | All | No category filtering |
             | **Require YML** | No | Include detected architectures |
+
+            **Note:** Example scenarios are excluded by default because they are illustrative implementations,
+            not reproducible reference patterns. Uncheck "Exclude Examples" in Filters to include them.
             """)
 
         col1, col2 = st.columns([2, 1])
@@ -521,17 +525,19 @@ def _generate_catalog(repo_path: str, output_path: str) -> None:
             st.success(f"Catalog generated successfully!")
 
             # Calculate useful stats from the catalog
-            all_products = set()
+            all_services = set()
             all_categories = set()
             for arch in catalog.architectures:
-                if arch.azure_products:
-                    all_products.update(arch.azure_products)
-                if arch.azure_categories:
-                    all_categories.update(arch.azure_categories)
+                if arch.core_services:
+                    all_services.update(arch.core_services)
+                if arch.supporting_services:
+                    all_services.update(arch.supporting_services)
+                if arch.browse_categories:
+                    all_categories.update(arch.browse_categories)
 
             col1, col2, col3, col4 = st.columns(4)
             col1.metric("Architectures", len(catalog.architectures))
-            col2.metric("Products", len(all_products))
+            col2.metric("Services", len(all_services))
             col3.metric("Categories", len(all_categories))
             col4.metric("File Size", f"{Path(output_path).stat().st_size / 1024:.1f} KB")
 

@@ -62,6 +62,7 @@ def get_catalog_info(catalog_path: str) -> dict:
         'filename': Path(catalog_path).name,
         'size_kb': 0,
         'last_modified': None,
+        'age_days': None,
         'architecture_count': 0,
         'source': get_state('catalog_source') or 'unknown'
     }
@@ -71,8 +72,12 @@ def get_catalog_info(catalog_path: str) -> dict:
         stat = path.stat()
         info['size_kb'] = round(stat.st_size / 1024, 1)
 
-        from datetime import datetime
-        info['last_modified'] = datetime.fromtimestamp(stat.st_mtime).strftime("%Y-%m-%d %H:%M")
+        modified_dt = datetime.fromtimestamp(stat.st_mtime)
+        info['last_modified'] = modified_dt.strftime("%d/%m/%Y")
+
+        # Calculate age in days
+        age = datetime.now() - modified_dt
+        info['age_days'] = age.days
 
         # Count architectures
         with open(catalog_path, 'r', encoding='utf-8') as f:
@@ -263,6 +268,17 @@ def _render_sidebar() -> None:
     with st.sidebar:
         st.title("Configuration")
 
+        # Handle deferred refresh request (to avoid button rerun issues)
+        if get_state('refresh_catalog_requested'):
+            set_state('refresh_catalog_requested', False)
+            _refresh_catalog()
+            return
+
+        # Handle deferred catalog builder launch
+        if get_state('launch_catalog_builder_requested'):
+            set_state('launch_catalog_builder_requested', False)
+            _do_launch_catalog_builder()
+
         # Catalog section
         st.subheader("Architecture Catalog")
 
@@ -288,28 +304,46 @@ def _render_sidebar() -> None:
                 source = info.get('source', 'unknown')
                 st.markdown(f"**Source:** {source_labels.get(source, source)}")
 
-                st.markdown(f"**Last Updated:** {info['last_modified'] or 'Unknown'}")
+                # Show date with age
+                age_days = info.get('age_days')
+                if info['last_modified']:
+                    if age_days is not None:
+                        if age_days == 0:
+                            age_str = "(today)"
+                        elif age_days == 1:
+                            age_str = "(1 day ago)"
+                        else:
+                            age_str = f"({age_days} days ago)"
+                        st.markdown(f"**Last Updated:** {info['last_modified']} {age_str}")
+                    else:
+                        st.markdown(f"**Last Updated:** {info['last_modified']}")
+                else:
+                    st.markdown("**Last Updated:** Unknown")
+
                 st.markdown(f"**Size:** {info['size_kb']} KB")
 
                 # Show full path in a copyable format
                 st.code(info['path'], language=None)
 
-            # Check catalog freshness and show warning if stale
-            age_days = get_catalog_age_days(catalog_path)
-            if age_days is not None and age_days > 30:
-                st.warning(f"**Catalog is {age_days} days old.** Azure architectures may have been updated.")
+                # Stale warning if applicable
+                if age_days is not None and age_days > 30:
+                    st.warning(f"Catalog is {age_days} days old. Azure architectures may have been updated.")
 
+                # Always show refresh button
                 if st.button("Refresh Catalog", type="primary", use_container_width=True,
-                           help="Update from Azure Architecture Center"):
-                    _refresh_catalog()
+                           help="Update from Azure Architecture Center", key="refresh_catalog_btn"):
+                    set_state('refresh_catalog_requested', True)
+                    st.rerun()
 
         else:
             st.warning("No catalog found")
 
             # Offer to generate a catalog when none exists
             st.info("Click below to generate a catalog from the Azure Architecture Center.")
-            if st.button("Generate Catalog", type="primary", use_container_width=True):
-                _refresh_catalog()
+            if st.button("Generate Catalog", type="primary", use_container_width=True,
+                        key="generate_catalog_btn"):
+                set_state('refresh_catalog_requested', True)
+                st.rerun()
 
         st.markdown("---")
 
@@ -394,8 +428,10 @@ def _render_sidebar() -> None:
         st.caption("Create a filtered catalog with specific products, categories, or topics.")
 
         if st.button("Open Catalog Builder", use_container_width=True,
-                    help="Launch the Catalog Builder GUI for advanced filtering"):
-            _launch_catalog_builder()
+                    help="Launch the Catalog Builder GUI for advanced filtering",
+                    key="launch_catalog_builder_btn"):
+            set_state('launch_catalog_builder_requested', True)
+            st.rerun()
 
         st.markdown("---")
 
@@ -497,7 +533,7 @@ def _refresh_catalog() -> None:
             st.rerun()
 
 
-def _launch_catalog_builder() -> None:
+def _do_launch_catalog_builder() -> None:
     """Launch the Catalog Builder GUI in a new process."""
     project_root = Path(__file__).parent.parent.parent
 
@@ -505,12 +541,8 @@ def _launch_catalog_builder() -> None:
     launch_script = project_root / "bin" / "start-catalog-builder-gui.sh"
     launch_script_ps = project_root / "bin" / "start-catalog-builder-gui.ps1"
 
-    st.info("**Launching Catalog Builder GUI...**")
-    st.caption("The Catalog Builder will open in a new browser tab at http://localhost:8502")
-
     try:
         import platform
-        import subprocess
 
         if platform.system() == "Windows":
             if launch_script_ps.exists():
@@ -542,19 +574,15 @@ def _launch_catalog_builder() -> None:
                     start_new_session=True
                 )
 
-        st.success("Catalog Builder launched! Check your browser for a new tab at http://localhost:8502")
-        st.markdown("[Open Catalog Builder](http://localhost:8502)")
+        # Show success message in sidebar
+        st.sidebar.success("Catalog Builder launched!")
+        st.sidebar.markdown("[Open Catalog Builder at localhost:8502](http://localhost:8502)")
 
     except FileNotFoundError:
-        st.error("Could not launch Catalog Builder. Streamlit may not be installed correctly.")
-        st.markdown("""
-        **Try launching manually:**
-        ```bash
-        ./bin/start-catalog-builder-gui.sh
-        ```
-        """)
+        st.sidebar.error("Could not launch Catalog Builder. Streamlit may not be installed.")
+        st.sidebar.code("./bin/start-catalog-builder-gui.sh")
     except Exception as e:
-        st.error(f"Error launching Catalog Builder: {e}")
+        st.sidebar.error(f"Error launching: {e}")
 
 
 def _apply_custom_styles() -> None:
