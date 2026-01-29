@@ -520,10 +520,22 @@ def _generate_catalog(repo_path: str, output_path: str) -> None:
             # Success message with stats
             st.success(f"Catalog generated successfully!")
 
-            col1, col2, col3 = st.columns(3)
+            # Calculate useful stats from the catalog
+            all_products = set()
+            all_categories = set()
+            for arch in catalog.architectures:
+                if arch.azure_products:
+                    all_products.update(arch.azure_products)
+                if arch.azure_categories:
+                    all_categories.update(arch.azure_categories)
+
+            col1, col2, col3, col4 = st.columns(4)
             col1.metric("Architectures", len(catalog.architectures))
-            col2.metric("Output File", output_path)
-            col3.metric("File Size", f"{Path(output_path).stat().st_size / 1024:.1f} KB")
+            col2.metric("Products", len(all_products))
+            col3.metric("Categories", len(all_categories))
+            col4.metric("File Size", f"{Path(output_path).stat().st_size / 1024:.1f} KB")
+
+            st.caption(f"📁 Saved to: `{output_path}`")
 
             # Download button
             st.download_button(

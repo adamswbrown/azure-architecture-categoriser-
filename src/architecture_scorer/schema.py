@@ -569,6 +569,10 @@ class ArchitectureRecommendation(BaseModel):
     core_services: list[str] = Field(default_factory=list)
     supporting_services: list[str] = Field(default_factory=list)
     learn_url: Optional[str] = None
+    diagram_url: Optional[str] = Field(
+        None,
+        description="URL to the primary architecture diagram image"
+    )
     browse_tags: list[str] = Field(default_factory=list)
 
     # Confidence adjustment

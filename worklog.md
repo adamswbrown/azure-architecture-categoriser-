@@ -2,6 +2,60 @@
 
 ## 2026-01-29
 
+### Session: Customer-Facing Recommendations App
+
+**Goal:** Build a simple Streamlit app for customers to upload Dr. Migrate context and receive architecture recommendations.
+
+**Features Implemented:**
+1. **File Upload** - Validates JSON context files with user-friendly error messages
+2. **Auto-Processing** - Automatically analyzes uploaded files
+3. **Results Display** - Shows recommendations as cards with:
+   - Architecture diagram images (from GitHub raw URLs)
+   - Match score badges (color-coded)
+   - Quality badges (Curated, AI Enriched, etc.)
+   - Why it fits / Potential challenges
+   - Azure services and Learn links
+4. **Interactive Q&A** - Clarification questions with re-scoring
+5. **PDF Export** - Professional report with embedded diagrams
+6. **JSON Export** - Raw recommendation data
+
+**Files Created:**
+```
+src/architecture_recommendations_app/
+├── __init__.py
+├── app.py                      # Main Streamlit app
+├── components/
+│   ├── upload_section.py       # File upload
+│   ├── results_display.py      # Recommendation cards
+│   ├── questions_section.py    # Interactive Q&A
+│   └── pdf_generator.py        # PDF report
+├── state/session_state.py      # Session management
+└── utils/validation.py         # File validation
+```
+
+**Schema Changes:**
+- Added `diagram_url` field to `ArchitectureRecommendation`
+- Populated from catalog's `diagram_assets` via GitHub raw URLs
+
+**Run with:** `streamlit run src/architecture_recommendations_app/app.py`
+
+**Tests:** All 173 tests passing
+
+---
+
+### Session: Success Metrics Display Improvement
+
+**Issue:** After catalog generation, the "Output File" metric was truncated and unreadable.
+
+**Fix:** Replaced truncated filename metric with useful catalog statistics:
+- Architectures (kept)
+- Products (unique count across all architectures)
+- Categories (unique count)
+- File Size (kept)
+- File path now shown as readable caption below metrics
+
+---
+
 ### Session: Preview Panel Bug Fix & UI Restructure
 
 **Bug Fix:** Preview showing "Parse error: 500" for all files.

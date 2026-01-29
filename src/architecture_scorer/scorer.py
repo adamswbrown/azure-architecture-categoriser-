@@ -148,6 +148,12 @@ class ArchitectureScorer:
         fit_summary = self._generate_fit_summary(matched)
         struggle_summary = self._generate_struggle_summary(mismatched)
 
+        # Construct diagram URL from first diagram asset
+        diagram_url = None
+        if arch.diagram_assets:
+            first_diagram = arch.diagram_assets[0]
+            diagram_url = f"https://raw.githubusercontent.com/MicrosoftDocs/architecture-center/main/{first_diagram}"
+
         return ArchitectureRecommendation(
             architecture_id=arch.architecture_id,
             name=arch.name,
@@ -164,6 +170,7 @@ class ArchitectureScorer:
             core_services=arch.core_services,
             supporting_services=arch.supporting_services,
             learn_url=arch.learn_url,
+            diagram_url=diagram_url,
             browse_tags=arch.browse_tags,
             confidence_penalty=confidence_penalty,
         )

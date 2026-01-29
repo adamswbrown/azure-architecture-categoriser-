@@ -28,14 +28,20 @@ dev = [
 gui = [
     "streamlit>=1.30.0",
 ]
+recommendations-app = [
+    "streamlit>=1.30.0",
+    "reportlab>=4.0.0",
+    "requests>=2.28.0",
+]
 
 [project.scripts]
 catalog-builder = "catalog_builder.cli:main"
 architecture-scorer = "architecture_scorer.cli:main"
 catalog-builder-gui = "catalog_builder_gui.app:main"
+architecture-recommendations = "architecture_recommendations_app.app:main"
 
 [tool.hatch.build.targets.wheel]
-packages = ["src/catalog_builder", "src/architecture_scorer", "src/catalog_builder_gui"]
+packages = ["src/catalog_builder", "src/architecture_scorer", "src/catalog_builder_gui", "src/architecture_recommendations_app"]
 
 [tool.hatch.build.targets.sdist]
 include = [
