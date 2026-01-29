@@ -3,8 +3,8 @@
 import re
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Optional
 
+from .config import get_config
 from .parser import ParsedDocument
 
 
@@ -20,101 +20,31 @@ class DetectionResult:
 class ArchitectureDetector:
     """Detects architecture candidates using heuristics."""
 
-    # Folders to include
-    INCLUDE_FOLDERS = [
-        'docs/example-scenario',
-        'docs/web-apps',
-        'docs/data',
-        'docs/integration',
-        'docs/ai-ml',
-        'docs/databases',
-        'docs/iot',
-        'docs/microservices',
-        'docs/mobile',
-        'docs/networking',
-        'docs/security',
-        'docs/solution-ideas',
-        'docs/reference-architectures',
-        'docs/hybrid',
-        'docs/aws-professional',
-        'docs/gcp-professional',
-        'docs/oracle-azure',
-        'docs/sap',
-        'docs/high-availability',
-        'docs/serverless',
-    ]
-
-    # Folders to exclude
-    EXCLUDE_FOLDERS = [
-        'docs/guide',
-        'docs/best-practices',
-        'docs/patterns',
-        'docs/antipatterns',
-        'docs/framework',
-        'docs/icons',
-        'docs/includes',
-        'docs/resources',
-        'docs/browse',
-        '_themes',
-        '_shared',
-    ]
-
-    # Files to exclude
-    EXCLUDE_FILES = [
-        'index.md',
-        'toc.yml',
-        'toc.md',
-        'readme.md',
-        'changelog.md',
-    ]
-
-    # Section names that indicate architecture content
-    ARCHITECTURE_SECTIONS = [
-        'architecture',
-        'components',
-        'diagram',
-        'solution architecture',
-        'reference architecture',
-        'architectural approach',
-        'design',
-        'workflow',
-        'data flow',
-        'dataflow',
-    ]
-
-    # Keywords indicating architecture content
-    ARCHITECTURE_KEYWORDS = [
-        r'reference\s+architecture',
-        r'baseline\s+architecture',
-        r'solution\s+idea',
-        r'architecture\s+pattern',
-        r'architectural\s+design',
-        r'this\s+architecture',
-        r'the\s+architecture',
-        r'architecture\s+diagram',
-        r'components\s+of\s+this',
-        r'azure\s+architecture',
-    ]
-
-    # Diagram file patterns
-    DIAGRAM_PATTERNS = [
-        r'.*architecture.*\.(svg|png)$',
-        r'.*diagram.*\.(svg|png)$',
-        r'.*flow.*\.(svg|png)$',
-        r'.*-arch\.(svg|png)$',
-        r'.*\.svg$',  # Most SVGs in architecture docs are diagrams
-    ]
-
     def __init__(self):
-        self._keyword_patterns = [
-            re.compile(kw, re.IGNORECASE) for kw in self.ARCHITECTURE_KEYWORDS
-        ]
-        self._diagram_patterns = [
-            re.compile(p, re.IGNORECASE) for p in self.DIAGRAM_PATTERNS
-        ]
+        self._keyword_patterns = None
+        self._diagram_patterns = None
+
+    def _get_config(self):
+        """Get detection config."""
+        return get_config().detection
+
+    def _compile_patterns(self):
+        """Compile regex patterns from config."""
+        config = self._get_config()
+        if self._keyword_patterns is None:
+            self._keyword_patterns = [
+                re.compile(kw, re.IGNORECASE) for kw in config.architecture_keywords
+            ]
+        if self._diagram_patterns is None:
+            self._diagram_patterns = [
+                re.compile(p, re.IGNORECASE) for p in config.diagram_patterns
+            ]
 
     def detect(self, doc: ParsedDocument, repo_root: Path) -> DetectionResult:
         """Detect if a document is an architecture candidate."""
+        self._compile_patterns()
+        config = self._get_config()
+
         reasons = []
         exclusion_reasons = []
         score = 0.0
@@ -122,12 +52,12 @@ class ArchitectureDetector:
         rel_path = str(doc.path.relative_to(repo_root)).replace('\\', '/')
 
         # Check folder exclusions first
-        for exclude in self.EXCLUDE_FOLDERS:
+        for exclude in config.exclude_folders:
             if rel_path.startswith(exclude):
                 exclusion_reasons.append(f"In excluded folder: {exclude}")
 
         # Check file exclusions
-        if doc.path.name.lower() in self.EXCLUDE_FILES:
+        if doc.path.name.lower() in config.exclude_files:
             exclusion_reasons.append(f"Excluded file type: {doc.path.name}")
 
         # If excluded, return early
@@ -141,37 +71,37 @@ class ArchitectureDetector:
 
         # Check if in included folder
         in_included_folder = any(
-            rel_path.startswith(folder) for folder in self.INCLUDE_FOLDERS
+            rel_path.startswith(folder) for folder in config.include_folders
         )
         if in_included_folder:
             reasons.append("In architecture folder")
-            score += 0.3
+            score += config.folder_score
 
         # Check for architecture diagrams
         diagrams = self._find_diagrams(doc)
         if diagrams:
             reasons.append(f"Contains {len(diagrams)} architecture diagram(s)")
-            score += 0.3
+            score += config.diagram_score
 
         # Check for architecture sections
         arch_sections = self._find_architecture_sections(doc)
         if arch_sections:
             reasons.append(f"Has architecture sections: {', '.join(arch_sections[:3])}")
-            score += 0.2
+            score += config.section_score
 
         # Check for architecture keywords
         keywords_found = self._find_keywords(doc)
         if keywords_found:
             reasons.append(f"Contains architecture keywords")
-            score += 0.2
+            score += config.keyword_score
 
         # Check frontmatter for architecture indicators
         if self._check_frontmatter(doc):
             reasons.append("Frontmatter indicates architecture content")
-            score += 0.1
+            score += config.frontmatter_score
 
         # Determine if it's an architecture
-        is_architecture = score >= 0.4 and len(reasons) >= 2
+        is_architecture = score >= config.min_confidence and len(reasons) >= config.min_signals
 
         return DetectionResult(
             is_architecture=is_architecture,
@@ -192,9 +122,10 @@ class ArchitectureDetector:
 
     def _find_architecture_sections(self, doc: ParsedDocument) -> list[str]:
         """Find architecture-related sections in the document."""
+        config = self._get_config()
         found = []
         for section_name in doc.sections.keys():
-            for arch_section in self.ARCHITECTURE_SECTIONS:
+            for arch_section in config.architecture_sections:
                 if arch_section in section_name.lower():
                     found.append(section_name)
                     break
@@ -229,13 +160,15 @@ class ArchitectureDetector:
 
     def should_scan_directory(self, dir_path: Path, repo_root: Path) -> bool:
         """Determine if a directory should be scanned."""
+        config = self._get_config()
+
         try:
             rel_path = str(dir_path.relative_to(repo_root)).replace('\\', '/')
         except ValueError:
             return False
 
         # Check exclusions
-        for exclude in self.EXCLUDE_FOLDERS:
+        for exclude in config.exclude_folders:
             if rel_path.startswith(exclude) or rel_path == exclude.rstrip('/'):
                 return False
 

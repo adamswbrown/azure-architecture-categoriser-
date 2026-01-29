@@ -7,14 +7,13 @@ from pathlib import Path
 from typing import Optional
 from urllib.parse import quote
 
+from .config import get_config
 from .parser import MarkdownParser, ParsedDocument
 from .schema import ArchitectureEntry, ClassificationMeta, ExtractionConfidence
 
 
 class MetadataExtractor:
     """Extracts metadata from architecture documents."""
-
-    LEARN_BASE_URL = "https://learn.microsoft.com/en-us/azure/architecture"
 
     def __init__(self, parser: MarkdownParser):
         self.parser = parser
@@ -131,6 +130,8 @@ class MetadataExtractor:
 
     def _build_learn_url(self, rel_path: str) -> Optional[str]:
         """Build the Microsoft Learn URL for the document."""
+        config = get_config().urls
+
         # Remove docs/ prefix and .md extension
         path = rel_path
         if path.startswith('docs/'):
@@ -143,7 +144,7 @@ class MetadataExtractor:
         # URL encode the path
         path = quote(path, safe='/')
 
-        return f"{self.LEARN_BASE_URL}/{path}"
+        return f"{config.learn_base_url}/{path}"
 
     def _extract_diagrams(self, doc: ParsedDocument, rel_path: str) -> list[str]:
         """Extract diagram asset paths."""

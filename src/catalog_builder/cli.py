@@ -9,6 +9,7 @@ from rich.table import Table
 from rich.progress import Progress, SpinnerColumn, TextColumn
 
 from .catalog import build_catalog, CatalogBuilder, CatalogValidator
+from .config import load_config, save_default_config, find_config_file, reset_config
 from .schema import ArchitectureCatalog, ExtractionConfidence
 
 
@@ -40,6 +41,11 @@ def main():
     help='Output path for the catalog JSON file'
 )
 @click.option(
+    '--config', '-c',
+    type=click.Path(exists=True, path_type=Path),
+    help='Path to configuration YAML file'
+)
+@click.option(
     '--verbose', '-v',
     is_flag=True,
     help='Show detailed progress information'
@@ -49,7 +55,7 @@ def main():
     is_flag=True,
     help='Only validate an existing catalog, do not build'
 )
-def build_catalog_cmd(repo_path: Path, out: Path, verbose: bool, validate_only: bool):
+def build_catalog_cmd(repo_path: Path, out: Path, config: Path, verbose: bool, validate_only: bool):
     """Build the architecture catalog from source documentation.
 
     This command scans the Azure Architecture Center repository and
@@ -62,9 +68,25 @@ def build_catalog_cmd(repo_path: Path, out: Path, verbose: bool, validate_only: 
         _validate_existing(out)
         return
 
+    # Load config if specified, otherwise try to find one
+    config_path = config or find_config_file()
+    if config_path:
+        try:
+            load_config(config_path)
+            if verbose:
+                console.print(f"Loaded config from: {config_path}")
+        except Exception as e:
+            console.print(f"[yellow]Warning:[/yellow] Could not load config: {e}")
+            reset_config()
+    else:
+        reset_config()
+
     console.print(f"\n[bold blue]Azure Architecture Catalog Builder[/bold blue]")
     console.print(f"Repository: {repo_path}")
-    console.print(f"Output: {out}\n")
+    console.print(f"Output: {out}")
+    if config_path:
+        console.print(f"Config: {config_path}")
+    console.print()
 
     def progress_callback(message: str):
         if verbose:
@@ -101,6 +123,48 @@ def build_catalog_cmd(repo_path: Path, out: Path, verbose: bool, validate_only: 
             console.print(f"  ... and {len(issues) - 20} more")
 
     console.print(f"\n[green]✓[/green] Catalog saved to: {out}")
+
+
+@main.command(name='init-config')
+@click.option(
+    '--out', '-o',
+    type=click.Path(path_type=Path),
+    default='catalog-config.yaml',
+    help='Output path for the configuration file'
+)
+@click.option(
+    '--force', '-f',
+    is_flag=True,
+    help='Overwrite existing config file'
+)
+def init_config(out: Path, force: bool):
+    """Generate a default configuration file.
+
+    Creates a YAML configuration file with all available settings.
+    Edit this file to customize detection, classification, and service normalization.
+
+    Example:
+        catalog-builder init-config --out my-config.yaml
+    """
+    if out.exists() and not force:
+        console.print(f"[red]Error:[/red] Config file already exists: {out}")
+        console.print("Use --force to overwrite")
+        sys.exit(1)
+
+    try:
+        save_default_config(out)
+        console.print(f"[green]✓[/green] Config file created: {out}")
+        console.print("\nEdit this file to customize:")
+        console.print("  • detection.include_folders - Folders to scan")
+        console.print("  • detection.exclude_folders - Folders to skip")
+        console.print("  • detection.architecture_keywords - Keywords for detection")
+        console.print("  • classification.domain_keywords - Workload domain keywords")
+        console.print("  • classification.family_keywords - Architecture family keywords")
+        console.print("  • services.normalizations - Service name mappings")
+        console.print("\nThen use with: catalog-builder build-catalog --config", str(out))
+    except Exception as e:
+        console.print(f"[red]Error creating config:[/red] {e}")
+        sys.exit(1)
 
 
 def _print_summary(catalog: ArchitectureCatalog):
