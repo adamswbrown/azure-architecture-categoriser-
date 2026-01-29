@@ -366,6 +366,19 @@ class ClassificationConfig(BaseModel):
         r"(?:not|isn't)\s+(?:a good fit|appropriate)\s+for[:\s]+([^.]+)",
     ])
 
+    # Scoring thresholds for classification selection
+    treatment_threshold: float = 1.5       # Min score for treatment selection
+    time_category_threshold: float = 1.5   # Min score for TIME category selection
+    security_score_threshold: float = 2.0  # Min keywords for regulated levels
+    operating_model_threshold: float = 0.0 # Use highest score (0 = disabled)
+    cost_profile_threshold: float = 0.0    # Use highest score (0 = disabled)
+
+    # Service-to-treatment boost values
+    vm_rehost_boost: float = 2.0           # Boost for rehost when VMs present
+    container_refactor_boost: float = 2.0  # Boost for refactor when containers present
+    managed_replatform_boost: float = 2.0  # Boost for replatform with managed services
+    hybrid_retain_boost: float = 2.0       # Boost for retain with ExpressRoute/Arc
+
 
 class ServiceConfig(BaseModel):
     """Azure service extraction configuration."""

@@ -428,26 +428,26 @@ class ArchitectureClassifier:
             if score > 0:
                 scores[treatment] = score
 
-        # Boost based on Azure services
+        # Boost based on Azure services (using configurable boost values)
         services_lower = ' '.join(s.lower() for s in entry.azure_services_used)
 
         # VM presence suggests rehost capability
         if 'virtual machine' in services_lower:
-            scores['rehost'] = scores.get('rehost', 0) + 2
+            scores['rehost'] = scores.get('rehost', 0) + config.vm_rehost_boost
             scores['retain'] = scores.get('retain', 0) + 1
 
         # AKS/Containers suggest refactor
         if any(s in services_lower for s in ['kubernetes', 'container apps', 'container instance']):
-            scores['refactor'] = scores.get('refactor', 0) + 2
+            scores['refactor'] = scores.get('refactor', 0) + config.container_refactor_boost
             scores['rebuild'] = scores.get('rebuild', 0) + 1
 
         # Managed services suggest replatform
         if any(s in services_lower for s in ['managed instance', 'sql database', 'cosmos']):
-            scores['replatform'] = scores.get('replatform', 0) + 2
+            scores['replatform'] = scores.get('replatform', 0) + config.managed_replatform_boost
 
         # ExpressRoute/Arc suggest retain/hybrid
         if any(s in services_lower for s in ['expressroute', 'arc', 'vpn gateway']):
-            scores['retain'] = scores.get('retain', 0) + 2
+            scores['retain'] = scores.get('retain', 0) + config.hybrid_retain_boost
 
         # App Service, Functions suggest replatform
         if any(s in services_lower for s in ['app service', 'functions']):
@@ -466,8 +466,8 @@ class ArchitectureClassifier:
         for t in family_treatments:
             scores[t] = scores.get(t, 0) + 0.5
 
-        # Select treatments above threshold
-        threshold = 1.5
+        # Select treatments above threshold (configurable)
+        threshold = config.treatment_threshold
         treatments = []
         for t, score in scores.items():
             if score >= threshold:
@@ -534,8 +534,8 @@ class ArchitectureClassifier:
         if entry.complexity.implementation == ComplexityLevel.LOW:
             scores['migrate'] = scores.get('migrate', 0) + 0.5
 
-        # Select categories above threshold
-        threshold = 1.5
+        # Select categories above threshold (configurable)
+        threshold = config.time_category_threshold
         categories = []
         for c, score in scores.items():
             if score >= threshold:
@@ -618,9 +618,10 @@ class ArchitectureClassifier:
             scores['enterprise'] = scores.get('enterprise', 0) + 1
 
         # Determine level with priority ordering (most restrictive wins)
+        # Uses configurable threshold for regulated levels
         priority_order = ['highly_regulated', 'regulated', 'enterprise', 'basic']
         for level in priority_order:
-            if scores.get(level, 0) >= 2:
+            if scores.get(level, 0) >= config.security_score_threshold:
                 try:
                     return SecurityLevel(level)
                 except ValueError:
