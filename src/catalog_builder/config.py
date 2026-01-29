@@ -278,6 +278,46 @@ class UrlConfig(BaseModel):
     learn_base_url: str = "https://learn.microsoft.com/en-us/azure/architecture"
 
 
+class FilterConfig(BaseModel):
+    """Filters to narrow down which architectures are included."""
+
+    # Only include documents with these ms.topic values
+    # Set to empty list to allow all
+    allowed_topics: list[str] = Field(default_factory=lambda: [
+        'reference-architecture',
+        'example-scenario',
+        'solution-idea',
+    ])
+
+    # Only include documents with these azureCategories
+    # Set to empty list to allow all categories
+    # Valid values: web, ai-machine-learning, analytics, compute, containers,
+    #               databases, devops, hybrid, identity, integration, iot,
+    #               management-and-governance, media, migration, networking,
+    #               security, storage, developer-tools
+    allowed_categories: list[str] = Field(default_factory=list)
+
+    # Only include documents that use these products
+    # Set to empty list to allow all products
+    # Examples: azure-app-service, azure-kubernetes-service, azure-functions
+    allowed_products: list[str] = Field(default_factory=list)
+
+    # If true, only include documents that have a YamlMime:Architecture yml file
+    # This filters out most non-architecture content
+    require_architecture_yml: bool = False
+
+    # Exclude documents with these ms.topic values
+    # Applied after allowed_topics filter
+    excluded_topics: list[str] = Field(default_factory=lambda: [
+        'concept-article',
+        'best-practice',
+        'include',
+        'hub-page',
+        'browse-hub',
+        'whats-new',
+    ])
+
+
 class CatalogConfig(BaseModel):
     """Complete catalog builder configuration."""
 
@@ -285,6 +325,7 @@ class CatalogConfig(BaseModel):
     classification: ClassificationConfig = Field(default_factory=ClassificationConfig)
     services: ServiceConfig = Field(default_factory=ServiceConfig)
     urls: UrlConfig = Field(default_factory=UrlConfig)
+    filters: FilterConfig = Field(default_factory=FilterConfig)
 
 
 # Global config instance

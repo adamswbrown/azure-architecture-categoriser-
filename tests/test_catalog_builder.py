@@ -210,7 +210,15 @@ class TestArchitectureClassifier:
 
         content = "kubernetes microservices container"
         services = ["Azure Kubernetes Service", "Azure Container Registry"]
-        family = classifier._suggest_family(content, services)
+        # Create a mock parsed doc with empty metadata
+        from catalog_builder.parser import ParsedDocument, ArchitectureMetadata
+        mock_doc = ParsedDocument(
+            path=Path("/test.md"),
+            title="Test",
+            description="Test",
+            arch_metadata=ArchitectureMetadata(products=[])
+        )
+        family = classifier._suggest_family(content, services, mock_doc)
 
         assert family == ArchitectureFamily.CLOUD_NATIVE
 

@@ -15,6 +15,7 @@ class DetectionResult:
     confidence: float  # 0.0 to 1.0
     reasons: list[str]
     exclusion_reasons: list[str]
+    filtered_out: bool = False  # True if excluded by filters (not detection)
 
 
 class ArchitectureDetector:
@@ -27,6 +28,10 @@ class ArchitectureDetector:
     def _get_config(self):
         """Get detection config."""
         return get_config().detection
+
+    def _get_filters(self):
+        """Get filter config."""
+        return get_config().filters
 
     def _compile_patterns(self):
         """Compile regex patterns from config."""
@@ -44,6 +49,7 @@ class ArchitectureDetector:
         """Detect if a document is an architecture candidate."""
         self._compile_patterns()
         config = self._get_config()
+        filters = self._get_filters()
 
         reasons = []
         exclusion_reasons = []
@@ -60,7 +66,7 @@ class ArchitectureDetector:
         if doc.path.name.lower() in config.exclude_files:
             exclusion_reasons.append(f"Excluded file type: {doc.path.name}")
 
-        # If excluded, return early
+        # If excluded by folder/file, return early
         if exclusion_reasons:
             return DetectionResult(
                 is_architecture=False,
@@ -68,6 +74,27 @@ class ArchitectureDetector:
                 reasons=reasons,
                 exclusion_reasons=exclusion_reasons,
             )
+
+        # Check filters (ms.topic, categories, products)
+        filter_result = self._check_filters(doc)
+        if filter_result:
+            return DetectionResult(
+                is_architecture=False,
+                confidence=0.0,
+                reasons=reasons,
+                exclusion_reasons=[filter_result],
+                filtered_out=True,
+            )
+
+        # HIGH CONFIDENCE: Has YamlMime:Architecture metadata
+        if doc.arch_metadata.is_architecture_yml:
+            reasons.append("Has YamlMime:Architecture metadata")
+            score += 0.5  # Strong signal
+
+            # Even higher if it's a reference architecture
+            if doc.arch_metadata.ms_topic == 'reference-architecture':
+                reasons.append("Is a reference architecture")
+                score += 0.3
 
         # Check if in included folder
         in_included_folder = any(
@@ -92,7 +119,7 @@ class ArchitectureDetector:
         # Check for architecture keywords
         keywords_found = self._find_keywords(doc)
         if keywords_found:
-            reasons.append(f"Contains architecture keywords")
+            reasons.append("Contains architecture keywords")
             score += config.keyword_score
 
         # Check frontmatter for architecture indicators
@@ -101,6 +128,16 @@ class ArchitectureDetector:
             score += config.frontmatter_score
 
         # Determine if it's an architecture
+        # If require_architecture_yml is set, we MUST have the yml file
+        if filters.require_architecture_yml and not doc.arch_metadata.is_architecture_yml:
+            return DetectionResult(
+                is_architecture=False,
+                confidence=score,
+                reasons=reasons,
+                exclusion_reasons=["No YamlMime:Architecture file (required by filter)"],
+                filtered_out=True,
+            )
+
         is_architecture = score >= config.min_confidence and len(reasons) >= config.min_signals
 
         return DetectionResult(
@@ -109,6 +146,36 @@ class ArchitectureDetector:
             reasons=reasons,
             exclusion_reasons=exclusion_reasons,
         )
+
+    def _check_filters(self, doc: ParsedDocument) -> str | None:
+        """Check if document passes filters. Returns exclusion reason or None."""
+        filters = self._get_filters()
+        ms_topic = doc.arch_metadata.ms_topic or doc.frontmatter.get('ms.topic', '')
+
+        # Check excluded topics first
+        if filters.excluded_topics and ms_topic in filters.excluded_topics:
+            return f"Excluded topic: {ms_topic}"
+
+        # Check allowed topics (if specified)
+        if filters.allowed_topics:
+            if ms_topic and ms_topic not in filters.allowed_topics:
+                return f"Topic '{ms_topic}' not in allowed list"
+
+        # Check allowed categories (if specified)
+        if filters.allowed_categories:
+            doc_categories = doc.arch_metadata.azure_categories
+            if doc_categories:
+                if not any(cat in filters.allowed_categories for cat in doc_categories):
+                    return f"Categories {doc_categories} not in allowed list"
+
+        # Check allowed products (if specified)
+        if filters.allowed_products:
+            doc_products = doc.arch_metadata.products
+            if doc_products:
+                if not any(prod in filters.allowed_products for prod in doc_products):
+                    return f"Products not in allowed list"
+
+        return None
 
     def _find_diagrams(self, doc: ParsedDocument) -> list[str]:
         """Find architecture diagrams in the document."""

@@ -9,7 +9,7 @@ from rich.table import Table
 from rich.progress import Progress, SpinnerColumn, TextColumn
 
 from .catalog import build_catalog, CatalogBuilder, CatalogValidator
-from .config import load_config, save_default_config, find_config_file, reset_config
+from .config import load_config, save_default_config, find_config_file, reset_config, get_config
 from .schema import ArchitectureCatalog, ExtractionConfidence
 
 
@@ -46,6 +46,26 @@ def main():
     help='Path to configuration YAML file'
 )
 @click.option(
+    '--category',
+    multiple=True,
+    help='Filter by Azure category (can specify multiple). E.g., --category web --category ai-machine-learning'
+)
+@click.option(
+    '--product',
+    multiple=True,
+    help='Filter by Azure product (can specify multiple). E.g., --product azure-app-service'
+)
+@click.option(
+    '--topic',
+    multiple=True,
+    help='Filter by ms.topic (can specify multiple). E.g., --topic reference-architecture'
+)
+@click.option(
+    '--require-yml',
+    is_flag=True,
+    help='Only include documents with YamlMime:Architecture metadata files'
+)
+@click.option(
     '--verbose', '-v',
     is_flag=True,
     help='Show detailed progress information'
@@ -55,7 +75,17 @@ def main():
     is_flag=True,
     help='Only validate an existing catalog, do not build'
 )
-def build_catalog_cmd(repo_path: Path, out: Path, config: Path, verbose: bool, validate_only: bool):
+def build_catalog_cmd(
+    repo_path: Path,
+    out: Path,
+    config: Path,
+    category: tuple,
+    product: tuple,
+    topic: tuple,
+    require_yml: bool,
+    verbose: bool,
+    validate_only: bool
+):
     """Build the architecture catalog from source documentation.
 
     This command scans the Azure Architecture Center repository and
@@ -81,11 +111,36 @@ def build_catalog_cmd(repo_path: Path, out: Path, config: Path, verbose: bool, v
     else:
         reset_config()
 
+    # Apply CLI filter overrides
+    cfg = get_config()
+    if category:
+        cfg.filters.allowed_categories = list(category)
+    if product:
+        cfg.filters.allowed_products = list(product)
+    if topic:
+        cfg.filters.allowed_topics = list(topic)
+    if require_yml:
+        cfg.filters.require_architecture_yml = True
+
     console.print(f"\n[bold blue]Azure Architecture Catalog Builder[/bold blue]")
     console.print(f"Repository: {repo_path}")
     console.print(f"Output: {out}")
     if config_path:
         console.print(f"Config: {config_path}")
+
+    # Show active filters
+    active_filters = []
+    if cfg.filters.allowed_categories:
+        active_filters.append(f"categories: {', '.join(cfg.filters.allowed_categories)}")
+    if cfg.filters.allowed_products:
+        active_filters.append(f"products: {', '.join(cfg.filters.allowed_products)}")
+    if cfg.filters.allowed_topics:
+        active_filters.append(f"topics: {', '.join(cfg.filters.allowed_topics)}")
+    if cfg.filters.require_architecture_yml:
+        active_filters.append("require YamlMime:Architecture")
+
+    if active_filters:
+        console.print(f"Filters: {'; '.join(active_filters)}")
     console.print()
 
     def progress_callback(message: str):
