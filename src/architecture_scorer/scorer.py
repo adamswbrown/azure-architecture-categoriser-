@@ -18,6 +18,7 @@ from catalog_builder.schema import (
     SecurityLevel,
 )
 
+from .config import get_config
 from .schema import (
     ApplicationContext,
     ArchitectureRecommendation,
@@ -36,17 +37,34 @@ from .schema import (
 
 @dataclass
 class ScoringWeights:
-    """Weights for scoring dimensions."""
-    treatment_alignment: float = 0.20  # Hard gate + weight
+    """Weights for scoring dimensions. Loaded from config."""
+    treatment_alignment: float = 0.20
     runtime_model_compatibility: float = 0.10
-    platform_compatibility: float = 0.15  # App Mod boost
-    app_mod_recommended: float = 0.10  # Boost if recommended
-    service_overlap: float = 0.10  # Core service match
+    platform_compatibility: float = 0.15
+    app_mod_recommended: float = 0.10
+    service_overlap: float = 0.10
     browse_tag_overlap: float = 0.05
     availability_alignment: float = 0.10
     operating_model_fit: float = 0.08
     complexity_tolerance: float = 0.07
     cost_posture_alignment: float = 0.05
+
+    @classmethod
+    def from_config(cls) -> 'ScoringWeights':
+        """Create ScoringWeights from configuration."""
+        cfg = get_config().scoring_weights
+        return cls(
+            treatment_alignment=cfg.treatment_alignment,
+            runtime_model_compatibility=cfg.runtime_model_compatibility,
+            platform_compatibility=cfg.platform_compatibility,
+            app_mod_recommended=cfg.app_mod_recommended,
+            service_overlap=cfg.service_overlap,
+            browse_tag_overlap=cfg.browse_tag_overlap,
+            availability_alignment=cfg.availability_alignment,
+            operating_model_fit=cfg.operating_model_fit,
+            complexity_tolerance=cfg.complexity_tolerance,
+            cost_posture_alignment=cfg.cost_posture_alignment,
+        )
 
 
 class ArchitectureScorer:
@@ -58,17 +76,14 @@ class ArchitectureScorer:
     - Scores are weighted by confidence
     - Assumption-heavy matches are penalized
     - Never force a recommendation
+
+    Configuration:
+    - Scoring weights can be customized via scorer-config.yaml
+    - Quality weights affect how catalog quality impacts scores
+    - See docs/configuration.md for details
     """
 
-    # Catalog quality weights (applied to final score)
-    QUALITY_WEIGHTS = {
-        CatalogQuality.CURATED: 1.0,
-        CatalogQuality.AI_ENRICHED: 0.95,
-        CatalogQuality.AI_SUGGESTED: 0.85,
-        CatalogQuality.EXAMPLE_ONLY: 0.70,
-    }
-
-    # Confidence penalty factors
+    # Confidence penalty factors (not configurable as they're fundamental)
     CONFIDENCE_PENALTIES = {
         SignalConfidence.HIGH: 0.0,
         SignalConfidence.MEDIUM: 0.05,
@@ -77,8 +92,20 @@ class ArchitectureScorer:
     }
 
     def __init__(self, weights: Optional[ScoringWeights] = None):
-        """Initialize scorer with optional custom weights."""
-        self.weights = weights or ScoringWeights()
+        """Initialize scorer with optional custom weights.
+
+        If weights is None, loads from configuration file or uses defaults.
+        """
+        self.weights = weights or ScoringWeights.from_config()
+
+        # Load quality weights from config
+        cfg = get_config().quality_weights
+        self.quality_weights = {
+            CatalogQuality.CURATED: cfg.curated,
+            CatalogQuality.AI_ENRICHED: cfg.ai_enriched,
+            CatalogQuality.AI_SUGGESTED: cfg.ai_suggested,
+            CatalogQuality.EXAMPLE_ONLY: cfg.example_only,
+        }
 
     def score(
         self,
@@ -136,8 +163,8 @@ class ArchitectureScorer:
         total_weights = sum(d.weight for d in dimensions)
         base_score = (total_weighted / total_weights * 100) if total_weights > 0 else 0
 
-        # Apply catalog quality weight
-        quality_weight = self.QUALITY_WEIGHTS.get(arch.catalog_quality, 0.85)
+        # Apply catalog quality weight (from config)
+        quality_weight = self.quality_weights.get(arch.catalog_quality, 0.85)
         quality_adjusted = base_score * quality_weight
 
         # Calculate confidence penalty

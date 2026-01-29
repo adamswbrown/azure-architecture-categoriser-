@@ -1,12 +1,140 @@
 # Configuration Reference
 
-All settings are now managed through a single YAML configuration file.
+This document covers configuration for both the **Catalog Builder** and **Architecture Scorer**.
+
+## Components with Configuration
+
+| Component | Config File | Generate Command |
+|-----------|-------------|------------------|
+| Catalog Builder | `catalog-config.yaml` | `catalog-builder init-config` |
+| Architecture Scorer | `scorer-config.yaml` | `architecture-scorer init-config` |
+
+---
+
+# Architecture Scorer Configuration
+
+The scorer configuration controls how applications are matched to architectures.
+
+## Quick Start - Scorer
+
+```bash
+# Generate default config file
+architecture-scorer init-config --out scorer-config.yaml
+
+# Edit the config file
+vim scorer-config.yaml
+
+# Score with custom config (auto-detected if in current directory)
+architecture-scorer score --catalog catalog.json --context app.json
+```
+
+## Scorer Config File Locations
+
+The scorer searches for config in this order:
+
+1. `ARCHITECTURE_SCORER_CONFIG` environment variable
+2. `./scorer-config.yaml`
+3. `./scorer-config.yml`
+4. `~/.config/architecture-scorer/config.yaml`
+
+## Scorer Configuration Structure
+
+```yaml
+# scorer-config.yaml
+
+scoring_weights:
+  treatment_alignment: 0.20      # Migration treatment match weight
+  runtime_model_compatibility: 0.10  # Runtime model match
+  platform_compatibility: 0.15    # Platform/technology match
+  app_mod_recommended: 0.10       # Boost for App Mod recommended
+  service_overlap: 0.10           # Service overlap weight
+  browse_tag_overlap: 0.05        # Browse tag match weight
+  availability_alignment: 0.10    # Availability requirements
+  operating_model_fit: 0.08       # Operational maturity match
+  complexity_tolerance: 0.07      # Complexity vs capability
+  cost_posture_alignment: 0.05    # Cost strategy match
+
+quality_weights:
+  curated: 1.0                    # Weight for curated architectures
+  ai_enriched: 0.95              # Weight for AI-enriched
+  ai_suggested: 0.90             # Weight for AI-suggested
+  example_only: 0.85             # Weight for examples
+
+confidence_thresholds:
+  high_score_threshold: 60.0     # Min score for "High" confidence
+  medium_score_threshold: 40.0   # Min score for "Medium" confidence
+  high_penalty_limit: 0.10       # Max penalty for "High" confidence
+  medium_penalty_limit: 0.20     # Max penalty for "Medium" confidence
+  high_max_low_signals: 1        # Max low-confidence signals for "High"
+  medium_max_low_signals: 3      # Max low-confidence signals for "Medium"
+  high_max_assumptions: 2        # Max assumptions for "High"
+
+question_generation:
+  question_threshold: low        # Generate questions for signals at/below
+  max_questions: 5               # Maximum questions to generate
+```
+
+## Scoring Weights Explained
+
+| Weight | Description | Range |
+|--------|-------------|-------|
+| `treatment_alignment` | How well the migration treatment (rehost, replatform, refactor) matches the architecture's supported treatments | 0.0-1.0 |
+| `runtime_model_compatibility` | How well the expected runtime model (microservices, n-tier, serverless) matches | 0.0-1.0 |
+| `platform_compatibility` | Technology/platform compatibility based on App Mod assessment | 0.0-1.0 |
+| `app_mod_recommended` | Boost when App Mod explicitly recommends the target platform | 0.0-1.0 |
+| `service_overlap` | Overlap between required services and architecture services | 0.0-1.0 |
+| `browse_tag_overlap` | Match on browse/topic tags | 0.0-1.0 |
+| `availability_alignment` | How well availability requirements align | 0.0-1.0 |
+| `operating_model_fit` | Alignment between team maturity and required operating model | 0.0-1.0 |
+| `complexity_tolerance` | Match between complexity and team capability | 0.0-1.0 |
+| `cost_posture_alignment` | Alignment with cost optimization strategy | 0.0-1.0 |
+
+**Note:** Weights should sum to approximately 1.0 for normalized scoring.
+
+## Confidence Threshold Tuning
+
+The confidence level (High/Medium/Low) is determined by multiple factors:
+
+**High Confidence** requires ALL of:
+- Match score >= `high_score_threshold`
+- Confidence penalty < `high_penalty_limit`
+- Low-confidence signals <= `high_max_low_signals`
+- Assumptions <= `high_max_assumptions`
+
+**Medium Confidence** requires ALL of:
+- Match score >= `medium_score_threshold`
+- Confidence penalty < `medium_penalty_limit`
+- Low-confidence signals <= `medium_max_low_signals`
+
+**Low Confidence**: Everything else.
+
+### Tuning Examples
+
+**More permissive (show more "High" confidence):**
+```yaml
+confidence_thresholds:
+  high_score_threshold: 50.0     # Lower from 60
+  high_max_low_signals: 2        # Allow more uncertain signals
+  high_max_assumptions: 4        # Allow more assumptions
+```
+
+**More strict (higher bar for "High" confidence):**
+```yaml
+confidence_thresholds:
+  high_score_threshold: 75.0     # Raise from 60
+  high_penalty_limit: 0.05       # Lower penalty tolerance
+  high_max_low_signals: 0        # Require all high-confidence signals
+```
+
+---
+
+# Catalog Builder Configuration
 
 For the complete design specification, see [design/catalog-builder-prompt-v1.md](design/catalog-builder-prompt-v1.md).
 
 ---
 
-## Quick Start
+## Quick Start - Catalog Builder
 
 ```bash
 # Generate default config file

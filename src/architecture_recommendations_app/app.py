@@ -2,8 +2,10 @@
 
 import json
 import os
+import subprocess
 import sys
 import tempfile
+from datetime import datetime, timedelta
 from pathlib import Path
 
 import streamlit as st
@@ -18,6 +20,7 @@ from architecture_recommendations_app.utils.validation import validate_uploaded_
 from architecture_recommendations_app.components.upload_section import render_upload_section
 from architecture_recommendations_app.components.results_display import render_results
 from architecture_recommendations_app.components.pdf_generator import generate_pdf_report
+from architecture_recommendations_app.components.config_editor import render_config_editor
 
 from architecture_scorer.engine import ScoringEngine
 from architecture_scorer.schema import ScoringResult
@@ -83,6 +86,125 @@ def get_catalog_info(catalog_path: str) -> dict:
         pass
 
     return info
+
+
+def get_catalog_age_days(catalog_path: str) -> int | None:
+    """Get the age of the catalog in days."""
+    try:
+        path = Path(catalog_path)
+        stat = path.stat()
+        modified = datetime.fromtimestamp(stat.st_mtime)
+        age = datetime.now() - modified
+        return age.days
+    except Exception:
+        return None
+
+
+def is_catalog_stale(catalog_path: str, threshold_days: int = 30) -> bool:
+    """Check if catalog is older than threshold."""
+    age = get_catalog_age_days(catalog_path)
+    if age is None:
+        return False
+    return age > threshold_days
+
+
+def get_default_repo_path() -> Path:
+    """Get the default path for the architecture-center repo."""
+    return Path.home() / "architecture-center"
+
+
+def clone_or_update_repo(repo_path: Path, progress_callback=None) -> tuple[bool, str]:
+    """Clone or update the architecture-center repository.
+
+    Returns (success, message) tuple.
+    """
+    repo_url = "https://github.com/MicrosoftDocs/architecture-center.git"
+
+    if progress_callback:
+        progress_callback("Checking repository...")
+
+    # Check if repo already exists
+    if repo_path.exists():
+        if (repo_path / '.git').exists() and (repo_path / 'docs').exists():
+            # Try to pull latest
+            if progress_callback:
+                progress_callback("Updating repository (git pull)...")
+            try:
+                result = subprocess.run(
+                    ['git', 'pull'],
+                    cwd=repo_path,
+                    capture_output=True,
+                    text=True,
+                    timeout=120
+                )
+                if result.returncode == 0:
+                    return True, "Repository updated"
+                else:
+                    return False, f"Git pull failed: {result.stderr}"
+            except subprocess.TimeoutExpired:
+                return False, "Git pull timed out"
+            except Exception as e:
+                return False, f"Error updating repo: {e}"
+        else:
+            return False, f"Directory exists but is not the architecture-center repo: {repo_path}"
+
+    # Clone the repository
+    if progress_callback:
+        progress_callback("Cloning repository (this may take a few minutes)...")
+
+    repo_path.parent.mkdir(parents=True, exist_ok=True)
+
+    try:
+        result = subprocess.run(
+            ['git', 'clone', '--depth', '1', repo_url, str(repo_path)],
+            capture_output=True,
+            text=True,
+            timeout=300
+        )
+        if result.returncode == 0:
+            return True, "Repository cloned successfully"
+        else:
+            return False, f"Git clone failed: {result.stderr}"
+    except subprocess.TimeoutExpired:
+        return False, "Git clone timed out (>5 minutes)"
+    except FileNotFoundError:
+        return False, "Git is not installed or not in PATH"
+    except Exception as e:
+        return False, f"Error cloning repo: {e}"
+
+
+def build_catalog_from_repo(repo_path: Path, output_path: Path, progress_callback=None) -> tuple[bool, str, int]:
+    """Build the catalog from the repository.
+
+    Returns (success, message, architecture_count) tuple.
+    """
+    try:
+        from catalog_builder.catalog import CatalogBuilder
+
+        if progress_callback:
+            progress_callback("Initializing catalog builder...")
+
+        builder = CatalogBuilder(repo_path)
+
+        if progress_callback:
+            progress_callback("Scanning repository and building catalog...")
+
+        catalog = builder.build()
+
+        if progress_callback:
+            progress_callback("Saving catalog...")
+
+        # Save the catalog
+        import json
+        with open(output_path, 'w', encoding='utf-8') as f:
+            json.dump(catalog.model_dump(), f, indent=2, default=str)
+
+        return True, "Catalog built successfully", catalog.total_architectures
+
+    except ImportError:
+        return False, "Catalog builder not installed. Run: pip install -e .", 0
+    except Exception as e:
+        return False, f"Error building catalog: {e}", 0
 
 
 def main() -> None:
@@ -172,8 +294,22 @@ def _render_sidebar() -> None:
                 # Show full path in a copyable format
                 st.code(info['path'], language=None)
 
+            # Check catalog freshness and show warning if stale
+            age_days = get_catalog_age_days(catalog_path)
+            if age_days is not None and age_days > 30:
+                st.warning(f"**Catalog is {age_days} days old.** Azure architectures may have been updated.")
+
+                if st.button("Refresh Catalog", type="primary", use_container_width=True,
+                           help="Update from Azure Architecture Center"):
+                    _refresh_catalog()
+
         else:
             st.warning("No catalog found")
+
+            # Offer to generate a catalog when none exists
+            st.info("Click below to generate a catalog from the Azure Architecture Center.")
+            if st.button("Generate Catalog", type="primary", use_container_width=True):
+                _refresh_catalog()
 
         st.markdown("---")
 
@@ -253,6 +389,21 @@ def _render_sidebar() -> None:
 
         st.markdown("---")
 
+        # Custom Catalog Builder section
+        st.subheader("Build Custom Catalog")
+        st.caption("Create a filtered catalog with specific products, categories, or topics.")
+
+        if st.button("Open Catalog Builder", use_container_width=True,
+                    help="Launch the Catalog Builder GUI for advanced filtering"):
+            _launch_catalog_builder()
+
+        st.markdown("---")
+
+        # Scoring configuration section
+        render_config_editor()
+
+        st.markdown("---")
+
         # Help section
         with st.expander("Help"):
             st.markdown("""
@@ -264,20 +415,146 @@ def _render_sidebar() -> None:
             3. `./architecture-catalog.json`
             4. Project root `architecture-catalog.json`
 
-            **How to generate a catalog?**
+            **Quick Refresh vs Custom Catalog:**
 
-            Use the Catalog Builder GUI:
+            - **Refresh Catalog** - Downloads latest Azure Architecture Center and rebuilds with default settings
+            - **Build Custom Catalog** - Opens the Catalog Builder GUI for advanced filtering by product, category, or topic
+
+            **Manual CLI options:**
             ```bash
+            # GUI with full filtering options
             ./bin/start-catalog-builder-gui.sh
-            ```
 
-            Or CLI:
-            ```bash
+            # CLI for scripting
             catalog-builder build-catalog \\
               --repo-path ./architecture-center \\
-              --out architecture-catalog.json
+              --product azure-kubernetes-service \\
+              --out my-catalog.json
             ```
             """)
+
+
+def _refresh_catalog() -> None:
+    """Refresh the catalog by cloning/updating repo and rebuilding."""
+    # Determine paths
+    repo_path = get_default_repo_path()
+    # Output to project root
+    project_root = Path(__file__).parent.parent.parent
+    output_path = project_root / "architecture-catalog.json"
+
+    # Create a status container
+    status_container = st.container()
+
+    with status_container:
+        st.subheader("Refreshing Catalog")
+        progress_bar = st.progress(0)
+        status_text = st.empty()
+
+        # Step 1: Clone or update repo (0-40%)
+        status_text.text("Step 1/2: Updating Azure Architecture Center repository...")
+        progress_bar.progress(5)
+
+        success, message = clone_or_update_repo(
+            repo_path,
+            progress_callback=lambda msg: status_text.text(f"Step 1/2: {msg}")
+        )
+
+        if not success:
+            st.error(f"Repository update failed: {message}")
+            st.info("Make sure Git is installed and you have internet access.")
+            return
+
+        progress_bar.progress(40)
+        st.success(f"Repository: {message}")
+
+        # Step 2: Build catalog (40-100%)
+        status_text.text("Step 2/2: Building catalog from repository...")
+        progress_bar.progress(50)
+
+        success, message, arch_count = build_catalog_from_repo(
+            repo_path,
+            output_path,
+            progress_callback=lambda msg: status_text.text(f"Step 2/2: {msg}")
+        )
+
+        if not success:
+            st.error(f"Catalog build failed: {message}")
+            return
+
+        progress_bar.progress(100)
+        status_text.text("Complete!")
+
+        st.success(f"Catalog updated: **{arch_count}** architectures from Azure Architecture Center")
+        st.info(f"Saved to: `{output_path}`")
+
+        # Clear cached state and reload
+        set_state('catalog_path', str(output_path))
+        set_state('catalog_source', 'project_root')
+        set_state('scoring_result', None)
+        set_state('questions', None)
+
+        if st.button("Continue", type="primary"):
+            st.rerun()
+
+
+def _launch_catalog_builder() -> None:
+    """Launch the Catalog Builder GUI in a new process."""
+    project_root = Path(__file__).parent.parent.parent
+
+    # Try to find the launch script
+    launch_script = project_root / "bin" / "start-catalog-builder-gui.sh"
+    launch_script_ps = project_root / "bin" / "start-catalog-builder-gui.ps1"
+
+    st.info("**Launching Catalog Builder GUI...**")
+    st.caption("The Catalog Builder will open in a new browser tab at http://localhost:8502")
+
+    try:
+        import platform
+        import subprocess
+
+        if platform.system() == "Windows":
+            if launch_script_ps.exists():
+                subprocess.Popen(
+                    ["powershell", "-ExecutionPolicy", "Bypass", "-File", str(launch_script_ps)],
+                    cwd=project_root,
+                    creationflags=subprocess.CREATE_NEW_CONSOLE
+                )
+            else:
+                # Fallback to direct streamlit command
+                subprocess.Popen(
+                    ["streamlit", "run", "src/catalog_builder_gui/app.py", "--server.port", "8502"],
+                    cwd=project_root,
+                    creationflags=subprocess.CREATE_NEW_CONSOLE
+                )
+        else:
+            # macOS/Linux
+            if launch_script.exists():
+                subprocess.Popen(
+                    ["bash", str(launch_script)],
+                    cwd=project_root,
+                    start_new_session=True
+                )
+            else:
+                # Fallback to direct streamlit command
+                subprocess.Popen(
+                    ["streamlit", "run", "src/catalog_builder_gui/app.py", "--server.port", "8502"],
+                    cwd=project_root,
+                    start_new_session=True
+                )
+
+        st.success("Catalog Builder launched! Check your browser for a new tab at http://localhost:8502")
+        st.markdown("[Open Catalog Builder](http://localhost:8502)")
+
+    except FileNotFoundError:
+        st.error("Could not launch Catalog Builder. Streamlit may not be installed correctly.")
+        st.markdown("""
+        **Try launching manually:**
+        ```bash
+        ./bin/start-catalog-builder-gui.sh
+        ```
+        """)
+    except Exception as e:
+        st.error(f"Error launching Catalog Builder: {e}")
 
 
 def _apply_custom_styles() -> None:

@@ -6,6 +6,7 @@ Builds the final output structure with complete transparency.
 
 from typing import Optional
 
+from .config import get_config
 from .schema import (
     ArchitectureRecommendation,
     DerivedIntent,
@@ -24,11 +25,22 @@ class RecommendationExplainer:
     - Every recommendation must be explainable
     - Assumptions must be visible
     - Unknown is better than wrong
+
+    Configuration:
+    - Confidence thresholds can be customized via scorer-config.yaml
+    - See docs/configuration.md for details
     """
 
-    # Confidence level thresholds for summary
-    HIGH_CONFIDENCE_THRESHOLD = 75.0
-    MEDIUM_CONFIDENCE_THRESHOLD = 50.0
+    def __init__(self):
+        """Initialize explainer with configuration."""
+        cfg = get_config().confidence_thresholds
+        self.high_threshold = cfg.high_score_threshold
+        self.medium_threshold = cfg.medium_score_threshold
+        self.high_penalty_limit = cfg.high_penalty_limit
+        self.medium_penalty_limit = cfg.medium_penalty_limit
+        self.high_max_low_signals = cfg.high_max_low_signals
+        self.medium_max_low_signals = cfg.medium_max_low_signals
+        self.high_max_assumptions = cfg.high_max_assumptions
 
     def generate_summary(
         self,
@@ -86,22 +98,22 @@ class RecommendationExplainer:
         primary: ArchitectureRecommendation,
         intent: DerivedIntent,
     ) -> str:
-        """Determine overall confidence level."""
+        """Determine overall confidence level based on config thresholds."""
         score = primary.likelihood_score
         penalty = primary.confidence_penalty
         low_confidence_count = self._count_low_confidence_signals(intent)
 
         # High confidence: high score, low penalty, few assumptions
-        if (score >= self.HIGH_CONFIDENCE_THRESHOLD and
-            penalty < 0.10 and
-            low_confidence_count <= 1 and
-            len(primary.assumptions) <= 2):
+        if (score >= self.high_threshold and
+            penalty < self.high_penalty_limit and
+            low_confidence_count <= self.high_max_low_signals and
+            len(primary.assumptions) <= self.high_max_assumptions):
             return "High"
 
         # Medium confidence: decent score with some uncertainty
-        if (score >= self.MEDIUM_CONFIDENCE_THRESHOLD and
-            penalty < 0.20 and
-            low_confidence_count <= 3):
+        if (score >= self.medium_threshold and
+            penalty < self.medium_penalty_limit and
+            low_confidence_count <= self.medium_max_low_signals):
             return "Medium"
 
         return "Low"
@@ -193,9 +205,9 @@ class RecommendationExplainer:
         """
         # Add rank-based context to fit summary
         if rank == 1:
-            if recommendation.likelihood_score >= self.HIGH_CONFIDENCE_THRESHOLD:
+            if recommendation.likelihood_score >= self.high_threshold:
                 recommendation.fit_summary.insert(0, "Strong match for application requirements")
-            elif recommendation.likelihood_score >= self.MEDIUM_CONFIDENCE_THRESHOLD:
+            elif recommendation.likelihood_score >= self.medium_threshold:
                 recommendation.fit_summary.insert(0, "Good match with some considerations")
             else:
                 recommendation.fit_summary.insert(0, "Possible match - review assumptions carefully")

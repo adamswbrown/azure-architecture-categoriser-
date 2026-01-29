@@ -529,5 +529,51 @@ def output_json(result: ScoringResult, out_path: Optional[str]):
         print(json_str)
 
 
+@main.command("init-config")
+@click.option(
+    "--out", "-o",
+    type=click.Path(),
+    default="scorer-config.yaml",
+    help="Output path for the configuration file"
+)
+@click.option(
+    "--force", "-f",
+    is_flag=True,
+    help="Overwrite existing config file"
+)
+def init_config_cmd(out: str, force: bool):
+    """Generate a default scorer configuration file.
+
+    Creates a YAML configuration file with all available settings
+    for customizing the scoring algorithm.
+
+    Example:
+        architecture-scorer init-config --out my-config.yaml
+    """
+    from .config import save_default_config
+
+    out_path = Path(out)
+    if out_path.exists() and not force:
+        console.print(f"[red]Error:[/red] Config file already exists: {out}")
+        console.print("Use --force to overwrite")
+        sys.exit(1)
+
+    try:
+        save_default_config(out_path)
+        console.print(f"[green]✓[/green] Config file created: {out}")
+        console.print("\nThis file configures:")
+        console.print("  • scoring_weights - How much each factor contributes to the match score")
+        console.print("  • quality_weights - How catalog quality affects scores")
+        console.print("  • confidence_thresholds - When to classify as High/Medium/Low confidence")
+        console.print("  • question_generation - Which clarification questions to ask")
+        console.print("\nThe scorer will look for config in this order:")
+        console.print("  1. ARCHITECTURE_SCORER_CONFIG environment variable")
+        console.print("  2. ./scorer-config.yaml (current directory)")
+        console.print("  3. ~/.config/architecture-scorer/config.yaml")
+    except Exception as e:
+        console.print(f"[red]Error creating config:[/red] {e}")
+        sys.exit(1)
+
+
 if __name__ == "__main__":
     main()

@@ -5,12 +5,19 @@ import streamlit as st
 from architecture_scorer.schema import ScoringResult, ArchitectureRecommendation
 
 
-# Quality badge colors (CSS classes defined in app.py)
+# Quality badge colors
 QUALITY_LABELS = {
     "curated": ("Curated", "#0078D4", "white"),
     "ai_enriched": ("AI Enriched", "#5C2D91", "white"),
     "ai_suggested": ("AI Suggested", "#FFB900", "black"),
     "example_only": ("Example", "#E6E6E6", "#666"),
+}
+
+# Confidence level styling
+CONFIDENCE_STYLES = {
+    "High": ("#107C10", "Strong match with clear requirements"),
+    "Medium": ("#FFB900", "Good match - consider answering questions for better accuracy"),
+    "Low": ("#D83B01", "Limited data - answering questions will improve recommendations"),
 }
 
 
@@ -30,8 +37,11 @@ def render_results(result: ScoringResult) -> None:
     if len(result.recommendations) > 1:
         st.markdown("---")
         st.subheader("Alternative Recommendations")
-        for rec in result.recommendations[1:]:
-            _render_recommendation_card(rec, is_primary=False)
+        # Show alternatives in a more compact grid
+        cols = st.columns(2)
+        for i, rec in enumerate(result.recommendations[1:5]):  # Max 4 alternatives
+            with cols[i % 2]:
+                _render_recommendation_card(rec, is_primary=False)
 
 
 def _render_summary(result: ScoringResult) -> None:
@@ -40,135 +50,169 @@ def _render_summary(result: ScoringResult) -> None:
 
     st.subheader("Analysis Summary")
 
-    # Metrics row
+    # Get confidence styling
+    conf_color, conf_help = CONFIDENCE_STYLES.get(
+        summary.confidence_level,
+        ("#666", "Confidence level based on data quality")
+    )
+
+    # Primary metrics - larger, cleaner display
     col1, col2, col3, col4 = st.columns(4)
 
     with col1:
-        st.metric("Application", result.application_name)
+        st.markdown(f"**Application**")
+        st.markdown(f"### {result.application_name}")
 
     with col2:
-        st.metric(
-            "Confidence",
-            summary.confidence_level,
-            help="Based on data quality and clarity of requirements"
+        st.markdown(f"**Match Confidence**")
+        st.markdown(
+            f'<h3 style="color:{conf_color}; margin:0;">{summary.confidence_level}</h3>',
+            unsafe_allow_html=True
         )
+        st.caption(conf_help)
 
     with col3:
-        st.metric("Recommendations", len(result.recommendations))
+        st.markdown("**Recommendations**")
+        st.markdown(f"### {len(result.recommendations)}")
 
     with col4:
-        st.metric("Architectures Evaluated", result.catalog_architecture_count)
+        st.markdown("**Architectures Evaluated**")
+        st.markdown(f"### {result.catalog_architecture_count}")
 
-    # Key insights
+    st.markdown("")  # Spacer
+
+    # Key insights in expanders for cleaner look
     col1, col2 = st.columns(2)
 
     with col1:
         if summary.key_drivers:
-            st.markdown("**Key Drivers:**")
-            for driver in summary.key_drivers[:4]:
-                st.markdown(f"- {driver}")
+            with st.expander("**Key Drivers** - Why these recommendations", expanded=True):
+                for driver in summary.key_drivers[:4]:
+                    st.markdown(f"- {driver}")
 
     with col2:
         if summary.key_risks:
-            st.markdown("**Key Considerations:**")
-            for risk in summary.key_risks[:4]:
-                st.markdown(f"- {risk}")
+            with st.expander("**Key Considerations** - Things to review", expanded=True):
+                for risk in summary.key_risks[:4]:
+                    st.markdown(f"- {risk}")
 
 
 def _render_recommendation_card(rec: ArchitectureRecommendation, is_primary: bool) -> None:
     """Render a single recommendation as a card."""
-    # Container with border
     with st.container(border=True):
-        # Header row with title and badges
-        col1, col2, col3 = st.columns([3, 1, 1])
+        # Score badge with appropriate color
+        score = rec.likelihood_score
+        if score >= 60:
+            score_color = "#107C10"  # Green
+            score_bg = "#DFF6DD"
+        elif score >= 40:
+            score_color = "#797673"  # Dark gray
+            score_bg = "#FFF4CE"
+        else:
+            score_color = "#D83B01"  # Red/orange
+            score_bg = "#FDE7E9"
 
-        with col1:
-            if is_primary:
-                st.markdown(f"#### :green[{rec.name}]")
-            else:
-                st.markdown(f"#### {rec.name}")
-            st.caption(f"Pattern: {rec.pattern_name}")
+        # Quality badge
+        quality_key = rec.catalog_quality.value
+        quality_label, quality_bg, quality_text = QUALITY_LABELS.get(
+            quality_key, ("Unknown", "#E6E6E6", "#666")
+        )
 
-        with col2:
-            # Score badge
-            score = rec.likelihood_score
-            if score >= 60:
-                st.success(f"{score:.0f}% Match")
-            elif score >= 40:
-                st.warning(f"{score:.0f}% Match")
-            else:
-                st.error(f"{score:.0f}% Match")
-
-        with col3:
-            # Quality badge
-            quality_key = rec.catalog_quality.value
-            label, bg_color, text_color = QUALITY_LABELS.get(
-                quality_key, ("Unknown", "#E6E6E6", "#666")
-            )
-            st.markdown(
-                f'<span style="background:{bg_color}; color:{text_color}; '
-                f'padding:0.25rem 0.5rem; border-radius:4px; font-size:0.8rem;">'
-                f'{label}</span>',
-                unsafe_allow_html=True
-            )
-
-        # Layout depends on whether this is primary or alternative
         if is_primary:
-            # Primary: larger image above content
+            # Primary recommendation - full width, prominent display
+            # Header with title and badges
+            header_col, badge_col = st.columns([3, 1])
+
+            with header_col:
+                st.markdown(f"### {rec.name}")
+                st.caption(f"Pattern: {rec.pattern_name}")
+
+            with badge_col:
+                # Score and quality badges stacked
+                st.markdown(
+                    f'<div style="text-align:right;">'
+                    f'<span style="background:{score_bg}; color:{score_color}; '
+                    f'padding:0.5rem 1rem; border-radius:8px; font-size:1.2rem; font-weight:bold;">'
+                    f'{score:.0f}% Match</span><br/><br/>'
+                    f'<span style="background:{quality_bg}; color:{quality_text}; '
+                    f'padding:0.25rem 0.75rem; border-radius:4px; font-size:0.85rem;">'
+                    f'{quality_label}</span>'
+                    f'</div>',
+                    unsafe_allow_html=True
+                )
+
+            # Architecture diagram (if available)
             if rec.diagram_url:
+                st.markdown("")  # Spacer
                 try:
-                    st.image(rec.diagram_url, width=450)
-                except Exception:
-                    pass
+                    st.image(rec.diagram_url, use_container_width=True)
+                except Exception as e:
+                    st.caption(f"_Architecture diagram unavailable_")
 
             # Description
             if rec.description:
-                desc = rec.description[:400] + "..." if len(rec.description) > 400 else rec.description
+                st.markdown("")
+                desc = rec.description[:500] + "..." if len(rec.description) > 500 else rec.description
                 st.markdown(desc)
 
-            # Details in columns
-            col1, col2 = st.columns(2)
+            # Why it fits / Challenges in columns
+            st.markdown("")
+            fit_col, challenge_col = st.columns(2)
 
-            with col1:
+            with fit_col:
                 if rec.fit_summary:
                     st.markdown("**Why it fits:**")
-                    for fit in rec.fit_summary[:3]:
+                    for fit in rec.fit_summary[:4]:
                         st.markdown(f"- {fit}")
 
-            with col2:
+            with challenge_col:
                 if rec.struggle_summary:
                     st.markdown("**Potential challenges:**")
-                    for struggle in rec.struggle_summary[:3]:
+                    for struggle in rec.struggle_summary[:4]:
                         st.markdown(f"- {struggle}")
+
+            # Services and Learn more
+            st.markdown("")
+            if rec.core_services or rec.supporting_services:
+                with st.expander("Azure Services"):
+                    if rec.core_services:
+                        st.markdown(f"**Core:** {', '.join(rec.core_services[:10])}")
+                    if rec.supporting_services:
+                        st.markdown(f"**Supporting:** {', '.join(rec.supporting_services[:8])}")
+
+            if rec.learn_url:
+                st.link_button("Learn more on Microsoft Docs", rec.learn_url)
+
         else:
-            # Alternative: smaller image on left, content on right
-            img_col, content_col = st.columns([1, 2])
+            # Alternative recommendation - compact card
+            # Header with score badge
+            st.markdown(
+                f'<div style="display:flex; justify-content:space-between; align-items:flex-start;">'
+                f'<div><strong>{rec.name}</strong><br/>'
+                f'<span style="color:#666; font-size:0.85rem;">{rec.pattern_name}</span></div>'
+                f'<span style="background:{score_bg}; color:{score_color}; '
+                f'padding:0.25rem 0.5rem; border-radius:4px; font-size:0.9rem; font-weight:bold;">'
+                f'{score:.0f}%</span>'
+                f'</div>',
+                unsafe_allow_html=True
+            )
 
-            with img_col:
-                if rec.diagram_url:
-                    try:
-                        st.image(rec.diagram_url, width=200)
-                    except Exception:
-                        pass
+            # Brief description
+            if rec.description:
+                desc = rec.description[:150] + "..." if len(rec.description) > 150 else rec.description
+                st.caption(desc)
 
-            with content_col:
-                # Description (shorter for alternatives)
-                if rec.description:
-                    desc = rec.description[:200] + "..." if len(rec.description) > 200 else rec.description
-                    st.markdown(desc)
+            # Key fit point
+            if rec.fit_summary:
+                st.markdown(f"**Fits:** {rec.fit_summary[0]}")
 
-                # Fit summary only (condensed)
-                if rec.fit_summary:
-                    st.markdown("**Why it fits:** " + "; ".join(rec.fit_summary[:2]))
+            # Compact services list
+            if rec.core_services:
+                services = ", ".join(rec.core_services[:4])
+                if len(rec.core_services) > 4:
+                    services += f" +{len(rec.core_services) - 4} more"
+                st.caption(f"Services: {services}")
 
-        # Services expander (both primary and alternative)
-        if rec.core_services or rec.supporting_services:
-            with st.expander("Azure Services"):
-                if rec.core_services:
-                    st.markdown(f"**Core:** {', '.join(rec.core_services[:8])}")
-                if rec.supporting_services:
-                    st.markdown(f"**Supporting:** {', '.join(rec.supporting_services[:5])}")
-
-        # Learn more link
-        if rec.learn_url:
-            st.markdown(f"[Learn more on Microsoft Docs]({rec.learn_url})")
+            # Learn more link
+            if rec.learn_url:
+                st.markdown(f"[View details]({rec.learn_url})")
