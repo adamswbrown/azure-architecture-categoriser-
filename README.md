@@ -27,51 +27,75 @@ This tool **integrates with** Dr. Migrate's workflow - it is not a feature of Dr
 
 ## Components
 
-| Component | Purpose | Documentation |
-|-----------|---------|---------------|
-| **Catalog Builder** | Compile Azure Architecture Center docs into a structured catalog | [docs/catalog-builder.md](docs/catalog-builder.md) |
-| **Architecture Scorer** | Score and rank architectures for an application context | [docs/architecture-scorer.md](docs/architecture-scorer.md) |
-| **Recommendations App** | Customer-facing web UI for recommendations | [docs/recommendations-app.md](docs/recommendations-app.md) |
+| Component | Purpose | For Who |
+|-----------|---------|---------|
+| **Catalog Builder GUI** | Generate architecture catalogs from Azure Architecture Center | All users (first-time setup) |
+| **Recommendations App** | Upload context files and get architecture recommendations | End users / customers |
+| **Architecture Scorer CLI** | Backend engine + command-line interface | Automation / power users |
 
-## Quick Start
+**Note:** The Recommendations App uses the Architecture Scorer as its backend engine. Most users will never need to use the CLI directly.
 
-### Option 1: Customer-Facing Web App (Recommended)
+## Quick Start (Typical User Flow)
+
+### Step 1: Install
 
 ```bash
-# Install
-pip install -e ".[recommendations-app]"
+# Clone this repository
+git clone https://github.com/adamswbrown/azure-architecture-categoriser-.git
+cd azure-architecture-categoriser-
 
-# Run (macOS/Linux)
+# Install with GUI support
+pip install -e ".[recommendations-app,gui]"
+```
+
+### Step 2: Generate a Catalog
+
+```bash
+# Launch Catalog Builder GUI (port 8502)
+./bin/start-catalog-builder-gui.sh
+
+# Or on Windows:
+.\bin\start-catalog-builder-gui.ps1
+```
+
+In the Catalog Builder:
+1. Click **Clone Repository** in the sidebar to get Azure Architecture Center
+2. Click **Generate with Defaults** to create `architecture-catalog.json`
+
+### Step 3: Get Recommendations
+
+```bash
+# Launch Recommendations App (port 8501)
 ./bin/start-recommendations-app.sh
 
-# Run (Windows PowerShell)
+# Or on Windows:
 .\bin\start-recommendations-app.ps1
 ```
 
-Upload your Dr. Migrate context file and get architecture recommendations instantly.
+In the Recommendations App:
+1. Upload your Dr. Migrate context file
+2. Answer optional clarification questions
+3. Download your PDF report
 
-### Option 2: CLI Scoring
+---
+
+## Alternative: CLI for Automation
+
+For scripting, CI/CD pipelines, or batch processing, use the CLI directly:
 
 ```bash
-# Install
+# Install base package (no GUI)
 pip install -e .
-
-# Score an application
-architecture-scorer score \
-  --catalog architecture-catalog.json \
-  --context my-app-context.json
-```
-
-### Option 3: Build Custom Catalog
-
-```bash
-# Clone Azure Architecture Center
-git clone https://github.com/MicrosoftDocs/architecture-center.git
 
 # Build catalog
 catalog-builder build-catalog \
   --repo-path ./architecture-center \
   --out architecture-catalog.json
+
+# Score an application
+architecture-scorer score \
+  --catalog architecture-catalog.json \
+  --context my-app-context.json
 ```
 
 ## Installation
@@ -101,49 +125,62 @@ pip install -e ".[dev]"
 │                        Azure Architecture Recommender                    │
 ├─────────────────────────────────────────────────────────────────────────┤
 │                                                                          │
-│  ┌──────────────────┐    ┌──────────────────┐    ┌──────────────────┐  │
-│  │  Catalog Builder │    │ Architecture     │    │ Recommendations  │  │
-│  │                  │    │ Scorer           │    │ App              │  │
-│  │  Build-time      │───▶│ Runtime engine   │───▶│ Customer UI      │  │
-│  │  CLI / GUI       │    │ CLI / Library    │    │ Streamlit        │  │
-│  └──────────────────┘    └──────────────────┘    └──────────────────┘  │
-│           │                       │                       │             │
-│           ▼                       ▼                       ▼             │
-│  ┌──────────────────┐    ┌──────────────────┐    ┌──────────────────┐  │
-│  │ architecture-    │    │ Context JSON     │    │ PDF Report       │  │
-│  │ catalog.json     │    │ (Dr. Migrate)    │    │ JSON Export      │  │
-│  └──────────────────┘    └──────────────────┘    └──────────────────┘  │
+│  ┌──────────────────┐         ┌──────────────────────────────────────┐  │
+│  │  Catalog Builder │         │       Recommendations App            │  │
+│  │       GUI        │         │         (Customer UI)                │  │
+│  │                  │         │                                      │  │
+│  │  One-time setup  │         │  ┌──────────────────────────────┐   │  │
+│  │  to generate     │────────▶│  │  Architecture Scorer         │   │  │
+│  │  catalog         │         │  │  (Backend Engine)            │   │  │
+│  └──────────────────┘         │  │                              │   │  │
+│           │                    │  │  Matching + Scoring + Q&A   │   │  │
+│           ▼                    │  └──────────────────────────────┘   │  │
+│  ┌──────────────────┐         └──────────────────────────────────────┘  │
+│  │ architecture-    │                          │                        │
+│  │ catalog.json     │                          ▼                        │
+│  │ (~50 reference   │         ┌──────────────────────────────────────┐  │
+│  │  architectures)  │         │  PDF Report / JSON Export            │  │
+│  └──────────────────┘         └──────────────────────────────────────┘  │
 │                                                                          │
+│  ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─   │
+│  For automation/scripting: architecture-scorer CLI (same engine)        │
 └─────────────────────────────────────────────────────────────────────────┘
 ```
 
-## Workflow
+## Typical Workflow
 
-1. **Build Catalog** (one-time or periodic)
-   - Run Catalog Builder against Azure Architecture Center
-   - Produces `architecture-catalog.json` with 170+ architectures
+1. **One-Time Setup: Build Catalog**
+   - Launch Catalog Builder GUI
+   - Clone Azure Architecture Center repository
+   - Generate `architecture-catalog.json` (~50 reference architectures)
 
-2. **Assess Application**
-   - Use Dr. Migrate or similar tool to assess your application
-   - Produces context JSON with technologies, servers, modernization results
+2. **Assess Application** (in Dr. Migrate)
+   - Use Dr. Migrate to assess your application with AppCat
+   - Export the context JSON file
 
 3. **Get Recommendations**
-   - Upload context to Recommendations App (or use CLI)
+   - Launch Recommendations App
+   - Upload your context file
    - Answer optional clarification questions
-   - Receive ranked architecture recommendations with explanations
+   - View ranked recommendations with explanations
 
 4. **Export & Share**
    - Download PDF report for stakeholders
    - Download JSON for integration with other tools
 
+5. **Periodic: Refresh Catalog**
+   - Click "Refresh Catalog" in Recommendations App when catalog is stale
+   - Or re-run Catalog Builder for custom filtering
+
 ## Key Features
 
-- **171 Azure Architectures** from official Azure Architecture Center
+- **~50 Reference Architectures** from official Azure Architecture Center (curated patterns, not examples)
 - **Explainable Recommendations** - See why each architecture fits or struggles
 - **Confidence Levels** - Know how certain the recommendations are
 - **Interactive Questions** - Improve accuracy by answering clarifying questions
 - **PDF Reports** - Professional reports for stakeholders
-- **Multiple Interfaces** - Web app, CLI, or programmatic API
+- **Configurable Scoring** - Tune weights and thresholds via config file or UI
+- **Multiple Interfaces** - Web app for users, CLI for automation
 
 ## Sample Data
 
