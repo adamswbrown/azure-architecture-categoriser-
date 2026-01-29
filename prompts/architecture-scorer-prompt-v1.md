@@ -131,12 +131,23 @@ def should_ask(confidence: SignalConfidence) -> bool:
 
 | Question ID | Dimension | Generation Condition |
 |-------------|-----------|---------------------|
+| `network_exposure` | Network exposure | **ALWAYS ASKED** - Critical for architecture selection |
 | `treatment` | Migration strategy | No declared treatment AND confidence ≤ LOW |
 | `time_category` | Strategic investment posture | UNKNOWN confidence only |
 | `availability` | Availability requirements | Confidence ≤ LOW |
 | `security_level` | Security/compliance level | No compliance requirements AND confidence ≤ LOW |
 | `operating_model` | Operational maturity | Confidence ≤ LOW |
 | `cost_posture` | Cost optimization priority | Confidence ≤ LOW |
+
+**Network Exposure Question (Always Asked):**
+
+The `network_exposure` question is ALWAYS asked because it critically affects architecture selection:
+
+| Value | Label | Description | Architecture Impact |
+|-------|-------|-------------|---------------------|
+| `external` | External (Internet-facing) | Public access (customers, APIs) | Needs WAF, DDoS, CDN, public endpoints |
+| `internal` | Internal Only | Corporate network only | Private endpoints, simpler security |
+| `mixed` | Mixed (Both) | Public and internal components | Most complex, needs both patterns |
 
 **Question Schema:**
 ```json
@@ -262,10 +273,11 @@ Each signal dimension has a confidence level that contributes to an overall pena
 | LOW | 15% |
 | UNKNOWN | 25% |
 
-**Tracked Signals (9 total):**
+**Tracked Signals (10 total):**
 
 | Signal | Has Question? | Source When No Answer |
 |--------|---------------|----------------------|
+| network_exposure | ✅ **ALWAYS** | App type inference |
 | treatment | ✅ Yes | App Mod or inference |
 | time_category | ✅ Yes | Treatment inference |
 | availability_requirement | ✅ Yes | Business criticality |
@@ -276,7 +288,7 @@ Each signal dimension has a confidence level that contributes to an overall pena
 | modernization_depth_feasible | ❌ No | App Mod results only |
 | cloud_native_feasibility | ❌ No | App Mod container_ready |
 
-**Important**: Only 6 of 9 signals can be addressed via clarification questions. The remaining 3 (`likely_runtime_model`, `modernization_depth_feasible`, `cloud_native_feasibility`) are derived from App Mod results or technology detection. Without App Mod data, these signals may remain at LOW/UNKNOWN confidence.
+**Important**: 7 of 10 signals can be addressed via clarification questions. The `network_exposure` question is ALWAYS asked. The remaining 3 (`likely_runtime_model`, `modernization_depth_feasible`, `cloud_native_feasibility`) are derived from App Mod results or technology detection. Without App Mod data, these signals may remain at LOW/UNKNOWN confidence.
 
 **Example Calculation:**
 ```

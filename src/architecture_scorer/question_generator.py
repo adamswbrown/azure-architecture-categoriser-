@@ -20,6 +20,7 @@ from .schema import (
     ClarificationOption,
     ClarificationQuestion,
     DerivedIntent,
+    NetworkExposure,
     SignalConfidence,
 )
 
@@ -53,6 +54,9 @@ class QuestionGenerator:
         """
         questions = []
 
+        # Network exposure is ALWAYS asked (critical for architecture selection)
+        questions.extend(self._check_network_exposure(context, intent))
+
         # Check each intent dimension
         questions.extend(self._check_treatment(context, intent))
         questions.extend(self._check_time_category(context, intent))
@@ -79,6 +83,55 @@ class QuestionGenerator:
         threshold_order = confidence_order.get(self.QUESTION_THRESHOLD, 1)
         signal_order = confidence_order.get(confidence, 0)
         return signal_order <= threshold_order
+
+    def _check_network_exposure(
+        self,
+        context: ApplicationContext,
+        intent: DerivedIntent,
+    ) -> list[ClarificationQuestion]:
+        """Check network exposure - ALWAYS ASKED.
+
+        This is a critical question that affects architecture selection:
+        - External: Needs WAF, DDoS protection, public endpoints
+        - Internal: Can use private endpoints, simpler security
+        - Mixed: Most complex, needs both patterns
+        """
+        questions = []
+        exposure_signal = intent.network_exposure
+
+        # Check if already answered in user_answers
+        if context.user_answers.get("network_exposure"):
+            return questions
+
+        # ALWAYS ask this question - it's critical for architecture selection
+        questions.append(ClarificationQuestion(
+            question_id="network_exposure",
+            dimension="network_exposure",
+            question_text="Is this application external-facing, internal-only, or mixed?",
+            options=[
+                ClarificationOption(
+                    value=NetworkExposure.EXTERNAL.value,
+                    label="External (Internet-facing)",
+                    description="Publicly accessible from the internet (customers, partners, public APIs)"
+                ),
+                ClarificationOption(
+                    value=NetworkExposure.INTERNAL.value,
+                    label="Internal Only",
+                    description="Only accessible within corporate network (employees, internal systems)"
+                ),
+                ClarificationOption(
+                    value=NetworkExposure.MIXED.value,
+                    label="Mixed (Both)",
+                    description="Has both public-facing and internal-only components"
+                ),
+            ],
+            required=True,  # Always required
+            affects_eligibility=True,  # Affects architecture selection significantly
+            current_inference=exposure_signal.value.value if exposure_signal.value else None,
+            inference_confidence=exposure_signal.confidence,
+        ))
+
+        return questions
 
     def _check_treatment(
         self,
@@ -426,5 +479,12 @@ class QuestionGenerator:
             updated_intent.cost_posture.confidence = SignalConfidence.HIGH
             updated_intent.cost_posture.source = "user_answer"
             updated_intent.cost_posture.reasoning = "User specified cost posture"
+
+        # Apply network exposure answer
+        if "network_exposure" in answers:
+            updated_intent.network_exposure.value = NetworkExposure(answers["network_exposure"])
+            updated_intent.network_exposure.confidence = SignalConfidence.HIGH
+            updated_intent.network_exposure.source = "user_answer"
+            updated_intent.network_exposure.reasoning = "User specified network exposure"
 
         return updated_intent

@@ -1,7 +1,7 @@
 {
   "version": "1.0.0",
-  "generated_at": "2026-01-29T09:50:58.249315",
-  "source_repo": "/private/tmp/architecture-center",
+  "generated_at": "2026-01-29T15:31:03.946011",
+  "source_repo": "/tmp/architecture-center",
   "source_commit": "06e0d0868e6f59645fdfac6a64048cb0dc57ce5e",
   "total_architectures": 171,
   "architectures": [
@@ -15,7 +15,7 @@
       },
       "description": "This article describes an architecture that replaces manual video analysis with an automated machine learning process. The automated process often produces more accurate results.",
       "source_repo_path": "docs/ai-ml/architecture/analyze-video-computer-vision-machine-learning-content.md",
-      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/ai-ml/architecture/analyze-video-computer-vision-machine-learning-content",
+      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/browse/?terms=analyze-video-computer-vision-machine-learning-content",
       "browse_tags": [
         "Azure",
         "AI",
@@ -132,7 +132,7 @@
       },
       "description": "This article describes an architecture that processes various documents. The architecture uses the durable functions feature of Azure Functions to implement pipelines. The pipelines process documents via Azure AI Document Intelligence for document splitting, named entity recognition (NER), and classification. Retrieval-augmented generation (RAG)-based natural language processing (NLP) uses document content and metadata to find and generate relevant information.",
       "source_repo_path": "docs/ai-ml/architecture/automate-document-classification-durable-functions-content.md",
-      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/ai-ml/architecture/automate-document-classification-durable-functions-content",
+      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/browse/?terms=automate-document-classification-durable-functions-content",
       "browse_tags": [
         "Azure",
         "Serverless",
@@ -257,7 +257,7 @@
       },
       "description": "This article describes an Azure architecture that you can use to replace costly and inflexible forms processing methods with cost-effective and flexible automated PDF processing.",
       "source_repo_path": "docs/ai-ml/architecture/automate-pdf-forms-processing-content.md",
-      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/ai-ml/architecture/automate-pdf-forms-processing-content",
+      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/browse/?terms=automate-pdf-forms-processing-content",
       "browse_tags": [
         "Azure",
         "AI",
@@ -375,7 +375,7 @@
       },
       "description": "Enterprise chat applications let employees interact with AI agents through natural language conversations. These applications use language models, like OpenAI GPT models, and open-source development kits, like the Microsoft Foundry SDKs or the Microsoft Agent Framework. These chat applications typically consist of the following components:",
       "source_repo_path": "docs/ai-ml/architecture/baseline-microsoft-foundry-chat-content.md",
-      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/ai-ml/architecture/baseline-microsoft-foundry-chat-content",
+      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/browse/?terms=baseline-microsoft-foundry-chat-content",
       "browse_tags": [
         "Azure",
         "AI",
@@ -385,17 +385,17 @@
       "browse_categories": [
         "Architecture",
         "Reference",
-        "AI + Machine Learning",
-        "Web",
         "Networking",
-        "Security"
+        "AI + Machine Learning",
+        "Security",
+        "Web"
       ],
       "family": "paas",
       "family_confidence": {
         "confidence": "ai_suggested",
         "source": "content_analysis"
       },
-      "workload_domain": "ai",
+      "workload_domain": "infrastructure",
       "workload_domain_confidence": {
         "confidence": "ai_suggested",
         "source": "yml_metadata"
@@ -517,7 +517,7 @@
       },
       "description": "This article is part of a series that builds on the Baseline Microsoft Foundry chat reference architecture. Review the baseline architecture so that you can identify necessary adjustments before you deploy it in an Azure application landing zone subscription.",
       "source_repo_path": "docs/ai-ml/architecture/baseline-microsoft-foundry-landing-zone-content.md",
-      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/ai-ml/architecture/baseline-microsoft-foundry-landing-zone-content",
+      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/browse/?terms=baseline-microsoft-foundry-landing-zone-content",
       "browse_tags": [
         "Azure",
         "AI",
@@ -528,17 +528,17 @@
       "browse_categories": [
         "Architecture",
         "Reference",
-        "AI + Machine Learning",
-        "Web",
         "Networking",
-        "Security"
+        "AI + Machine Learning",
+        "Security",
+        "Web"
       ],
       "family": "paas",
       "family_confidence": {
         "confidence": "ai_suggested",
         "source": "content_analysis"
       },
-      "workload_domain": "ai",
+      "workload_domain": "infrastructure",
       "workload_domain_confidence": {
         "confidence": "ai_suggested",
         "source": "yml_metadata"
@@ -653,7 +653,7 @@
       },
       "description": "This article provides a basic architecture to help you learn how to run chat applications by using Microsoft Foundry and Azure OpenAI in Foundry Models. The architecture includes a client user interface (UI) that runs in Azure App Service. To fetch grounding data for the language model, the UI uses an agent hosted in Foundry Agent Service to orchestrate the workflow from incoming prompts to data stores. The architecture runs in a single region.",
       "source_repo_path": "docs/ai-ml/architecture/basic-microsoft-foundry-chat-content.md",
-      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/ai-ml/architecture/basic-microsoft-foundry-chat-content",
+      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/browse/?terms=basic-microsoft-foundry-chat-content",
       "browse_tags": [
         "Azure",
         "Web",
@@ -663,8 +663,8 @@
         "Architecture",
         "Reference",
         "AI + Machine Learning",
-        "Web",
-        "Security"
+        "Security",
+        "Web"
       ],
       "family": "paas",
       "family_confidence": {
@@ -771,7 +771,7 @@
       },
       "description": "This article describes Azure solutions for building, training, deploying, and using custom document processing models. These Azure services also provide user interface (UI) capabilities for labeling or tagging text during processing.",
       "source_repo_path": "docs/ai-ml/architecture/build-deploy-custom-models-content.md",
-      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/ai-ml/architecture/build-deploy-custom-models-content",
+      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/browse/?terms=build-deploy-custom-models-content",
       "browse_tags": [
         "Azure",
         "AI",
@@ -889,7 +889,7 @@
       },
       "description": "This article describes a secure research environment that provides researchers access to sensitive data that requires a high level of control and protection. The architecture supports organizations that must adhere to regulatory compliance or other strict security requirements.",
       "source_repo_path": "docs/ai-ml/architecture/secure-compute-for-research-content.md",
-      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/ai-ml/architecture/secure-compute-for-research-content",
+      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/browse/?terms=secure-compute-for-research-content",
       "browse_tags": [
         "Azure",
         "AI"
@@ -1010,7 +1010,7 @@
       },
       "description": "This architecture demonstrates a document generation solution that lets organizations create intelligent structured and unstructured documents grounded in their enterprise data. The solution uses Foundry IQ to identify relevant data, summarize information, and generate contextual content through conversational interactions. Users can generate documents based on this organizational knowledge and receive them in Word format.",
       "source_repo_path": "docs/ai-ml/idea/generate-documents-from-your-data-content.md",
-      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/ai-ml/idea/generate-documents-from-your-data-content",
+      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/browse/?terms=generate-documents-from-your-data-content",
       "browse_tags": [
         "Azure",
         "Databases"
@@ -1123,7 +1123,7 @@
       },
       "description": "By using Azure services, such as the Computer Vision API and Azure Functions, companies can eliminate the need to manage individual servers, while reducing costs and utilizing the expertise that Microsoft has already developed with processing images with Azure AI services. This solution idea specifically addresses an image-processing use case. If you have different AI needs, consider the full suite of Azure AI services.",
       "source_repo_path": "docs/ai-ml/idea/intelligent-apps-image-processing-content.md",
-      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/ai-ml/idea/intelligent-apps-image-processing-content",
+      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/browse/?terms=intelligent-apps-image-processing-content",
       "browse_tags": [
         "Azure",
         "Databases",
@@ -1243,7 +1243,7 @@
       },
       "description": "This article describes an architecture for many models that uses Azure Machine Learning and compute clusters. A many-models architecture provides versatility for situations that require complex setup.",
       "source_repo_path": "docs/ai-ml/idea/many-models-machine-learning-azure-machine-learning-content.md",
-      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/ai-ml/idea/many-models-machine-learning-azure-machine-learning-content",
+      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/browse/?terms=many-models-machine-learning-azure-machine-learning-content",
       "browse_tags": [
         "Azure",
         "Data",
@@ -1253,15 +1253,15 @@
       "browse_categories": [
         "Architecture",
         "Example Scenario",
-        "AI + Machine Learning",
-        "Analytics"
+        "Analytics",
+        "AI + Machine Learning"
       ],
       "family": "cloud_native",
       "family_confidence": {
         "confidence": "ai_suggested",
         "source": "content_analysis"
       },
-      "workload_domain": "ai",
+      "workload_domain": "data",
       "workload_domain_confidence": {
         "confidence": "ai_suggested",
         "source": "yml_metadata"
@@ -1362,7 +1362,7 @@
       },
       "description": "This content processing solution extracts data and applies schemas across multimodal content through confidence scoring and user validation. It processes claims, invoices, contracts, and other documents by extracting information from unstructured content and mapping it to structured formats.",
       "source_repo_path": "docs/ai-ml/idea/multi-modal-content-processing-content.md",
-      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/ai-ml/idea/multi-modal-content-processing-content",
+      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/browse/?terms=multi-modal-content-processing-content",
       "browse_tags": [
         "Azure",
         "AI",
@@ -1481,7 +1481,7 @@
       },
       "description": "This architecture describes a process automation system that uses multiple specialized AI agents to coordinate and run organizational tasks automatically.",
       "source_repo_path": "docs/ai-ml/idea/multiple-agent-workflow-automation-content.md",
-      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/ai-ml/idea/multiple-agent-workflow-automation-content",
+      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/browse/?terms=multiple-agent-workflow-automation-content",
       "browse_tags": [
         "Azure",
         "Containers",
@@ -1602,7 +1602,7 @@
       },
       "description": "This article describes how merchandise distributors can use AI and machine learning to predict a customer's future order quantity for a specific stock-keeping unit (SKU). Distributors use next-order forecasting to provide product recommendations and suggest optimal order quantities to customers. This article builds on the concepts described in the many-models machine learning architecture.",
       "source_repo_path": "docs/ai-ml/idea/next-order-forecasting-content.md",
-      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/ai-ml/idea/next-order-forecasting-content",
+      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/browse/?terms=next-order-forecasting-content",
       "browse_tags": [
         "Azure",
         "AI",
@@ -1611,15 +1611,15 @@
       "browse_categories": [
         "Architecture",
         "Solution Idea",
-        "AI + Machine Learning",
-        "Analytics"
+        "Analytics",
+        "AI + Machine Learning"
       ],
       "family": "data",
       "family_confidence": {
         "confidence": "ai_suggested",
         "source": "content_analysis"
       },
-      "workload_domain": "ai",
+      "workload_domain": "data",
       "workload_domain_confidence": {
         "confidence": "ai_suggested",
         "source": "yml_metadata"
@@ -1720,7 +1720,7 @@
       },
       "description": "This article provides a machine learning operations (MLOps) architecture and process that uses Azure Databricks. Data scientists and engineers can use this standardized process to move machine learning models and pipelines from development to production.",
       "source_repo_path": "docs/ai-ml/idea/orchestrate-machine-learning-azure-databricks-content.md",
-      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/ai-ml/idea/orchestrate-machine-learning-azure-databricks-content",
+      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/browse/?terms=orchestrate-machine-learning-azure-databricks-content",
       "browse_tags": [
         "Azure",
         "Analytics"
@@ -1833,7 +1833,7 @@
       },
       "description": "This architecture describes a conversation knowledge mining solution that extracts actionable insights from large volumes of conversational data, like from a call center. The solution uses Azure Content Understanding, Foundry IQ, Microsoft Foundry, and supporting Azure services. These services analyze unstructured dialogue and transform it into meaningful, structured insights through natural language processing and vector-based search capabilities.",
       "source_repo_path": "docs/ai-ml/idea/unlock-insights-from-conversational-data-content.md",
-      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/ai-ml/idea/unlock-insights-from-conversational-data-content",
+      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/browse/?terms=unlock-insights-from-conversational-data-content",
       "browse_tags": [
         "Azure",
         "AI",
@@ -1951,7 +1951,7 @@
       },
       "description": "This article describes how to implement a medallion lakehouse design pattern for a solution-focused use case. The solution uses a hub-and-spoke network topology with landing zones that follow the Cloud Adoption Framework for Azure best practices.",
       "source_repo_path": "docs/databases/architecture/azure-data-factory-on-azure-landing-zones-baseline-content.md",
-      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/databases/architecture/azure-data-factory-on-azure-landing-zones-baseline-content",
+      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/browse/?terms=azure-data-factory-on-azure-landing-zones-baseline-content",
       "browse_tags": [
         "Azure",
         "Data",
@@ -1962,9 +1962,9 @@
       "browse_categories": [
         "Architecture",
         "Reference",
-        "Storage",
-        "Databases",
         "Networking",
+        "Databases",
+        "Storage",
         "Security"
       ],
       "family": "foundation",
@@ -1972,7 +1972,7 @@
         "confidence": "ai_suggested",
         "source": "content_analysis"
       },
-      "workload_domain": "data",
+      "workload_domain": "infrastructure",
       "workload_domain_confidence": {
         "confidence": "ai_suggested",
         "source": "yml_metadata"
@@ -2081,7 +2081,7 @@
       },
       "description": "This article presents a solution for deriving insights from MongoDB Atlas operational data. The solution connects MongoDB Atlas to Azure Synapse Analytics. The connection makes it possible to transfer data in batches and in real time. The real-time approach keeps Azure Synapse Analytics dedicated SQL pools in sync with changes in the MongoDB Atlas data source.",
       "source_repo_path": "docs/databases/architecture/azure-synapse-analytics-integrate-mongodb-atlas-content.md",
-      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/databases/architecture/azure-synapse-analytics-integrate-mongodb-atlas-content",
+      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/browse/?terms=azure-synapse-analytics-integrate-mongodb-atlas-content",
       "browse_tags": [
         "Azure",
         "Web",
@@ -2196,7 +2196,7 @@
       },
       "description": "This article describes how a fictional city planning office could use this solution. The solution provides an end-to-end data pipeline that follows the MDW architectural pattern, along with corresponding DevOps and DataOps processes, to assess parking use and make more informed business decisions.",
       "source_repo_path": "docs/databases/architecture/dataops-mdw-content.md",
-      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/databases/architecture/dataops-mdw-content",
+      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/browse/?terms=dataops-mdw-content",
       "browse_tags": [
         "Azure",
         "Data",
@@ -2315,7 +2315,7 @@
       },
       "description": "The following architecture outlines the use of Delphix Continuous Compliance (Delphix CC) in an Azure Data Factory extract, transform, and load (ETL) pipeline to identify and mask sensitive data.",
       "source_repo_path": "docs/databases/guide/data-obfuscation-with-delphix-in-azure-data-factory-content.md",
-      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/databases/guide/data-obfuscation-with-delphix-in-azure-data-factory-content",
+      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/browse/?terms=data-obfuscation-with-delphix-in-azure-data-factory-content",
       "browse_tags": [
         "Azure",
         "Data",
@@ -2435,7 +2435,7 @@
       },
       "description": "In many enterprises, SAP is the most mission-critical application and the primary system of record for a wide range of data. Companies must be able to harness insightful data for analytics from both SAP and its upstream and downstream applications in a cost-effective, scalable, and flexible manner. At the same time, companies also need to keep this data in compliance with myriad regulations.",
       "source_repo_path": "docs/databases/guide/data-scrambling-for-sap-using-delphix-and-azure-data-factory-content.md",
-      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/databases/guide/data-scrambling-for-sap-using-delphix-and-azure-data-factory-content",
+      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/browse/?terms=data-scrambling-for-sap-using-delphix-and-azure-data-factory-content",
       "browse_tags": [
         "Azure",
         "Data",
@@ -2549,7 +2549,7 @@
       },
       "description": "This article presents a high-availability solution for a web application dealing with large volumes of data that need to be accessible within a specific time frame. The solution involves using Azure Cosmos DB as the primary data store and using the Azure Cosmos DB change feed to replicate data to low-cost secondary storage. When the specified time period expires, Azure Functions is used to delete the data from Azure Cosmos DB. The data in secondary storage remains available for a longer period o",
       "source_repo_path": "docs/databases/idea/minimal-storage-change-feed-replicate-data-content.md",
-      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/databases/idea/minimal-storage-change-feed-replicate-data-content",
+      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/browse/?terms=minimal-storage-change-feed-replicate-data-content",
       "browse_tags": [
         "Azure",
         "Networking",
@@ -2560,17 +2560,17 @@
       "browse_categories": [
         "Architecture",
         "Solution Idea",
-        "Storage",
-        "Web",
+        "Migration",
         "Databases",
-        "Migration"
+        "Storage",
+        "Web"
       ],
       "family": "paas",
       "family_confidence": {
         "confidence": "ai_suggested",
         "source": "content_analysis"
       },
-      "workload_domain": "data",
+      "workload_domain": "infrastructure",
       "workload_domain_confidence": {
         "confidence": "ai_suggested",
         "source": "yml_metadata"
@@ -2683,7 +2683,7 @@
       },
       "description": "This article provides an overview of the Azure database solutions described in Azure Architecture Center.",
       "source_repo_path": "docs/databases/index-content.md",
-      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/databases/index-content",
+      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/browse/?terms=index-content",
       "browse_tags": [
         "Azure"
       ],
@@ -2796,7 +2796,7 @@
       },
       "description": "This article presents a solution for extracting text from images so it can be indexed and retrieved in SharePoint. By using AI Builder and Azure AI Document Intelligence, you can configure a Power Automate workflow to use a trained model to extract text from an image. Once you've configured a workflow, you can quickly search documents for meaningful text that's embedded in shapes and objects.",
       "source_repo_path": "docs/example-scenario/ai/extract-object-text-content.md",
-      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/example-scenario/ai/extract-object-text-content",
+      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/browse/?terms=extract-object-text-content",
       "browse_tags": [
         "Azure",
         "Serverless"
@@ -2904,7 +2904,7 @@
       },
       "description": "This article describes how to expose and protect a workload that runs in Azure Kubernetes Service (AKS) by using Azure Front Door, Azure Web Application Firewall, and an Azure Private Link service in a more secure manner. This architecture uses the NGINX ingress controller to expose a web application. The NGINX ingress controller is configured to use a private IP address as a front-end IP configuration of the AKS internal load balancer. The deployment provides end-to-end Transport Layer Security",
       "source_repo_path": "docs/example-scenario/aks-front-door/aks-front-door-content.md",
-      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/example-scenario/aks-front-door/aks-front-door-content",
+      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/browse/?terms=aks-front-door-content",
       "browse_tags": [
         "Azure",
         "Networking",
@@ -2914,8 +2914,8 @@
       "browse_categories": [
         "Architecture",
         "Example Scenario",
-        "Containers",
-        "Networking"
+        "Networking",
+        "Containers"
       ],
       "family": "cloud_native",
       "family_confidence": {
@@ -3039,7 +3039,7 @@
       },
       "description": "This article describes how to transfer data from an on-premises data warehouse to a cloud environment and then use a business intelligence (BI) model to serve the data. You can use this approach as an end goal or as a first step toward full modernization with cloud-based components.",
       "source_repo_path": "docs/example-scenario/analytics/enterprise-bi-microsoft-fabric-content.md",
-      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/example-scenario/analytics/enterprise-bi-microsoft-fabric-content",
+      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/browse/?terms=enterprise-bi-microsoft-fabric-content",
       "browse_tags": [
         "Azure",
         "Identity"
@@ -3047,9 +3047,9 @@
       "browse_categories": [
         "Architecture",
         "Example Scenario",
+        "Analytics",
         "Databases",
-        "Integration",
-        "Analytics"
+        "Integration"
       ],
       "family": "data",
       "family_confidence": {
@@ -3163,7 +3163,7 @@
       },
       "description": "Real-time analytics can help you make quick decisions and perform automated actions based on current insights. It can also help you deliver enhanced customer experiences. This solution describes how to keep Azure Synapse Analytics data pools in sync with operational data changes in MongoDB.",
       "source_repo_path": "docs/example-scenario/analytics/sync-mongodb-atlas-azure-synapse-analytics-content.md",
-      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/example-scenario/analytics/sync-mongodb-atlas-azure-synapse-analytics-content",
+      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/browse/?terms=sync-mongodb-atlas-azure-synapse-analytics-content",
       "browse_tags": [
         "Azure",
         "Analytics"
@@ -3279,7 +3279,7 @@
       },
       "description": "In this scenario, an e-commerce company in the travel industry migrates a legacy web application by using Azure API Management. The new UI is hosted as a platform as a service (PaaS) application on Azure, and it depends on both existing and new HTTP APIs. These APIs ship with a better-designed set of interfaces, which enable better performance, easier integration, and future extensibility.",
       "source_repo_path": "docs/example-scenario/apps/apim-api-scenario-content.md",
-      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/example-scenario/apps/apim-api-scenario-content",
+      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/browse/?terms=apim-api-scenario-content",
       "browse_tags": [
         "Azure",
         "Integration",
@@ -3289,16 +3289,16 @@
       "browse_categories": [
         "Architecture",
         "Example Scenario",
+        "Migration",
         "Integration",
-        "Web",
-        "Migration"
+        "Web"
       ],
       "family": "paas",
       "family_confidence": {
         "confidence": "ai_suggested",
         "source": "content_analysis"
       },
-      "workload_domain": "integration",
+      "workload_domain": "infrastructure",
       "workload_domain_confidence": {
         "confidence": "ai_suggested",
         "source": "yml_metadata"
@@ -3400,7 +3400,7 @@
       },
       "description": "This article describes how to deploy secure applications by using the [App Service Environment][intro-to-app-svc-env]. This architecture uses [Azure Application Gateway][docs-appgw] and [Azure Web Application Firewall][docs-waf] to restrict application access from the internet. This article also explains how to integrate continuous integration and continuous deployment (CI/CD) with App Service Environments by using Azure DevOps.",
       "source_repo_path": "docs/example-scenario/apps/fully-managed-secure-apps-content.md",
-      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/example-scenario/apps/fully-managed-secure-apps-content",
+      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/browse/?terms=fully-managed-secure-apps-content",
       "browse_tags": [
         "Azure",
         "Web",
@@ -3527,7 +3527,7 @@
       },
       "description": "The solution described in this article can help you create a sustainability model for applications that are hosted on Azure. The model uses proxies that, over time, allow you to score an application's carbon impact and efficiency. The score is known as the Software Carbon Intensity (SCI) score. It provides a baseline for measuring changes in an application's carbon output.",
       "source_repo_path": "docs/example-scenario/apps/measure-azure-app-sustainability-sci-score-content.md",
-      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/example-scenario/apps/measure-azure-app-sustainability-sci-score-content",
+      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/browse/?terms=measure-azure-app-sustainability-sci-score-content",
       "browse_tags": [
         "Azure",
         "Monitoring",
@@ -3536,8 +3536,8 @@
       "browse_categories": [
         "Architecture",
         "Example Scenario",
-        "AI + Machine Learning",
         "Databases",
+        "AI + Machine Learning",
         "Storage"
       ],
       "family": "paas",
@@ -3545,7 +3545,7 @@
         "confidence": "ai_suggested",
         "source": "content_analysis"
       },
-      "workload_domain": "ai",
+      "workload_domain": "data",
       "workload_domain_confidence": {
         "confidence": "ai_suggested",
         "source": "yml_metadata"
@@ -3649,7 +3649,7 @@
       },
       "description": "This reference architecture shows a set of proven practices for running a high-availability SAP NetWeaver with Oracle Database on Azure. The architecture principles are OS-agnostic, however, unless otherwise specified, the architecture is assumed to be based on Linux.",
       "source_repo_path": "docs/example-scenario/apps/sap-production-content.md",
-      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/example-scenario/apps/sap-production-content",
+      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/browse/?terms=sap-production-content",
       "browse_tags": [
         "Azure",
         "Compute",
@@ -3771,7 +3771,7 @@
       },
       "description": "The success of your cloud solution depends on its reliability. Reliability can be broadly defined as the probability that the system functions as expected, under the specified environmental conditions, within a specified time. Site reliability engineering (SRE) is a set of principles and practices for creating scalable and highly reliable software systems. Increasingly, SRE is used during the design of digital services to ensure greater reliability.",
       "source_repo_path": "docs/example-scenario/apps/scalable-apps-performance-modeling-site-reliability-content.md",
-      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/example-scenario/apps/scalable-apps-performance-modeling-site-reliability-content",
+      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/browse/?terms=scalable-apps-performance-modeling-site-reliability-content",
       "browse_tags": [
         "Azure",
         "Networking",
@@ -3781,15 +3781,15 @@
       "browse_categories": [
         "Architecture",
         "Example Scenario",
-        "Web",
-        "Developer Tools"
+        "Developer Tools",
+        "Web"
       ],
       "family": "cloud_native",
       "family_confidence": {
         "confidence": "ai_suggested",
         "source": "content_analysis"
       },
-      "workload_domain": "web",
+      "workload_domain": "infrastructure",
       "workload_domain_confidence": {
         "confidence": "ai_suggested",
         "source": "yml_metadata"
@@ -3896,7 +3896,7 @@
       },
       "description": "This article describes a high-availability blue/green deployment solution for applications on Azure Spring Apps.",
       "source_repo_path": "docs/example-scenario/blue-green-spring/blue-green-spring-content.md",
-      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/example-scenario/blue-green-spring/blue-green-spring-content",
+      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/browse/?terms=blue-green-spring-content",
       "browse_tags": [],
       "browse_categories": [
         "Architecture"
@@ -4002,7 +4002,7 @@
       },
       "description": "In cybersecurity, setting up automatic certificate renewal is important to maintaining a secure and reliable environment. Failure to update or renew certificates in a timely manner exposes systems to vulnerabilities. Potentially vulnerable areas include:",
       "source_repo_path": "docs/example-scenario/certificate-lifecycle/index-content.md",
-      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/example-scenario/certificate-lifecycle/index-content",
+      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/browse/?terms=index-content",
       "browse_tags": [
         "Azure",
         "Security"
@@ -4122,7 +4122,7 @@
       },
       "description": "This example scenario demonstrates a data pipeline that integrates large amounts of data from multiple sources into a unified analytics platform in Azure. This specific scenario is based on a sales and marketing solution, but the design patterns are relevant for many industries requiring advanced analytics of large datasets such as e-commerce, retail, and healthcare.",
       "source_repo_path": "docs/example-scenario/data/data-warehouse-content.md",
-      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/example-scenario/data/data-warehouse-content",
+      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/browse/?terms=data-warehouse-content",
       "browse_tags": [
         "Azure",
         "Databases",
@@ -4131,8 +4131,8 @@
       "browse_categories": [
         "Architecture",
         "Example Scenario",
-        "Databases",
-        "Analytics"
+        "Analytics",
+        "Databases"
       ],
       "family": "data",
       "family_confidence": {
@@ -4237,7 +4237,7 @@
       },
       "description": "This architecture shows how you can deploy Esri ArcGIS Pro in Azure Virtual Desktop to support the hyperscale of Azure. The architecture also includes back-end components like ArcGIS Enterprise to build a complete system on Azure.",
       "source_repo_path": "docs/example-scenario/data/esri-arcgis-azure-virtual-desktop-content.md",
-      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/example-scenario/data/esri-arcgis-azure-virtual-desktop-content",
+      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/browse/?terms=esri-arcgis-azure-virtual-desktop-content",
       "browse_tags": [
         "Azure",
         "Monitoring",
@@ -4246,9 +4246,9 @@
       "browse_categories": [
         "Architecture",
         "Example Scenario",
+        "Analytics",
         "Databases",
         "Azure Virtual Desktop",
-        "Analytics",
         "Identity"
       ],
       "family": "cloud_native",
@@ -4358,15 +4358,15 @@
       },
       "description": "This example workload illustrates a greenfield solution for creating a scalable data platform by using Microsoft Fabric and the lakehouse design paradigm. Fabric is a platform that integrates data storage, processing, and analytics. A greenfield lakehouse provides a clean start for designing an efficient, future-proof data ecosystem.",
       "source_repo_path": "docs/example-scenario/data/greenfield-lakehouse-fabric-content.md",
-      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/example-scenario/data/greenfield-lakehouse-fabric-content",
+      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/browse/?terms=greenfield-lakehouse-fabric-content",
       "browse_tags": [
         "Azure"
       ],
       "browse_categories": [
         "Architecture",
         "Reference",
-        "Databases",
         "Analytics",
+        "Databases",
         "Storage"
       ],
       "family": "data",
@@ -4474,7 +4474,7 @@
       },
       "description": "Data-driven enterprises need to keep their back-end and analytics systems in near real-time sync with customer-facing applications. The effects of transactions, updates, and changes must reflect accurately through end-to-end processes, related applications, and online transaction processing (OLTP) systems. The tolerable latency for changes in OLTP applications to reflect in the downstream systems that use the data might only be a few minutes.",
       "source_repo_path": "docs/example-scenario/data/real-time-lakehouse-data-processing-content.md",
-      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/example-scenario/data/real-time-lakehouse-data-processing-content",
+      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/browse/?terms=real-time-lakehouse-data-processing-content",
       "browse_tags": [
         "Azure",
         "Databases",
@@ -4594,7 +4594,7 @@
       },
       "description": "This article describes ways that small or medium-sized businesses can migrate and modernize legacy data stores within their current budgets and skill set. It shows how to progressively explore big data tools and capabilities. These data warehousing solutions integrate with Azure Machine Learning, Foundry Tools, Microsoft Power Platform, Dynamics 365, and other Microsoft technologies. These solutions provide an initial entry point to Microsoft Fabric, which is a managed software as a service (Saa",
       "source_repo_path": "docs/example-scenario/data/small-medium-data-warehouse-content.md",
-      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/example-scenario/data/small-medium-data-warehouse-content",
+      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/browse/?terms=small-medium-data-warehouse-content",
       "browse_tags": [
         "Azure",
         "Databases"
@@ -4602,8 +4602,8 @@
       "browse_categories": [
         "Architecture",
         "Example Scenario",
-        "Databases",
         "Analytics",
+        "Databases",
         "Storage"
       ],
       "family": "paas",
@@ -4718,7 +4718,7 @@
       },
       "description": "The solution in this article combines a range of Microsoft services that ingest, store, process, enrich, and serve data and insights from different sources. These sources include structured, semistructured, unstructured, and streaming formats.",
       "source_repo_path": "docs/example-scenario/dataplate2e/data-platform-end-to-end-content.md",
-      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/example-scenario/dataplate2e/data-platform-end-to-end-content",
+      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/browse/?terms=data-platform-end-to-end-content",
       "browse_tags": [
         "Azure",
         "Databases",
@@ -4728,8 +4728,8 @@
       "browse_categories": [
         "Architecture",
         "Example Scenario",
-        "Databases",
-        "Analytics"
+        "Analytics",
+        "Databases"
       ],
       "family": "data",
       "family_confidence": {
@@ -4841,7 +4841,7 @@
       },
       "description": "APIOps is a methodology that applies the concepts of GitOps and DevOps to API deployment. Like DevOps, APIOps helps team members easily make changes and deploy them in an iterative and automated way. This architecture demonstrates how you can improve the entire API lifecycle and API quality by using APIOps.",
       "source_repo_path": "docs/example-scenario/devops/automated-api-deployments-apiops-content.md",
-      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/example-scenario/devops/automated-api-deployments-apiops-content",
+      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/browse/?terms=automated-api-deployments-apiops-content",
       "browse_tags": [
         "Azure",
         "Integration"
@@ -4849,9 +4849,9 @@
       "browse_categories": [
         "Architecture",
         "Example Scenario",
-        "DevOps",
         "Developer Tools",
-        "Management"
+        "Management",
+        "DevOps"
       ],
       "family": "cloud_native",
       "family_confidence": {
@@ -4958,7 +4958,7 @@
       },
       "description": "This article describes a solution that tracks changes that service administrators make and adds an approval process to deployments to Microsoft 365 tenants. It can help you prevent untracked changes to Microsoft 365 tenants and prevent configuration drift between multiple Microsoft 365 tenants.",
       "source_repo_path": "docs/example-scenario/devops/manage-microsoft-365-tenant-configuration-microsoft365dsc-devops-content.md",
-      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/example-scenario/devops/manage-microsoft-365-tenant-configuration-microsoft365dsc-devops-content",
+      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/browse/?terms=manage-microsoft-365-tenant-configuration-microsoft365dsc-devops-content",
       "browse_tags": [
         "Azure",
         "Security"
@@ -4966,8 +4966,8 @@
       "browse_categories": [
         "Architecture",
         "Example Scenario",
-        "DevOps",
-        "Management"
+        "Management",
+        "DevOps"
       ],
       "family": "iaas",
       "family_confidence": {
@@ -5071,22 +5071,22 @@
       },
       "description": "This architecture provides file shares that fail over automatically to a backup region in case of failure. The failover is transparent to the clients and applications that access the shares. The shares can be used for applications and virtual desktops that must be resilient to disruption, whether planned or unplanned.",
       "source_repo_path": "docs/example-scenario/file-storage/enterprise-file-shares-disaster-recovery-content.md",
-      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/example-scenario/file-storage/enterprise-file-shares-disaster-recovery-content",
+      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/browse/?terms=enterprise-file-shares-disaster-recovery-content",
       "browse_tags": [
         "Azure"
       ],
       "browse_categories": [
         "Architecture",
         "Example Scenario",
-        "Storage",
-        "Networking"
+        "Networking",
+        "Storage"
       ],
       "family": "iaas",
       "family_confidence": {
         "confidence": "ai_suggested",
         "source": "content_analysis"
       },
-      "workload_domain": "data",
+      "workload_domain": "infrastructure",
       "workload_domain_confidence": {
         "confidence": "ai_suggested",
         "source": "yml_metadata"
@@ -5182,7 +5182,7 @@
       },
       "description": "Moodle is an open-source learning management system that requires high-throughput, low-latency access to storage. Many Moodle deployments require easy scalability to adapt to growing demand. This article explains how you can deploy Moodle by using Azure services on Azure Virtual Machine Scale Sets and store user-accessible learning data files in Azure NetApp Files. This article describes a zonal deployment for high availability and cross-zone replication and also gives examples of a single-zone ",
       "source_repo_path": "docs/example-scenario/file-storage/moodle-azure-netapp-files-content.md",
-      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/example-scenario/file-storage/moodle-azure-netapp-files-content",
+      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/browse/?terms=moodle-azure-netapp-files-content",
       "browse_tags": [
         "Azure",
         "Networking"
@@ -5190,16 +5190,16 @@
       "browse_categories": [
         "Architecture",
         "Example Scenario",
-        "Storage",
+        "Networking",
         "Databases",
-        "Networking"
+        "Storage"
       ],
       "family": "iaas",
       "family_confidence": {
         "confidence": "ai_suggested",
         "source": "content_analysis"
       },
-      "workload_domain": "data",
+      "workload_domain": "infrastructure",
       "workload_domain_confidence": {
         "confidence": "ai_suggested",
         "source": "yml_metadata"
@@ -5298,7 +5298,7 @@
       },
       "description": "The most demanding Oracle Database workloads require substantial I/O capacity. They also need low-latency access to storage. This document describes a scalable, high-bandwidth, low-latency solution for running Oracle Database workloads on Azure virtual machines (VMs) with shared file access via the network file system (NFS) protocol. The architecture uses Azure NetApp Files, a first-party Azure shared file-storage service.",
       "source_repo_path": "docs/example-scenario/file-storage/oracle-azure-netapp-files-content.md",
-      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/example-scenario/file-storage/oracle-azure-netapp-files-content",
+      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/browse/?terms=oracle-azure-netapp-files-content",
       "browse_tags": [
         "Azure",
         "Compute",
@@ -5307,18 +5307,18 @@
       "browse_categories": [
         "Architecture",
         "Example Scenario",
-        "Storage",
-        "Databases",
         "Networking",
+        "Databases",
+        "Migration",
         "Hybrid",
-        "Migration"
+        "Storage"
       ],
       "family": "iaas",
       "family_confidence": {
         "confidence": "ai_suggested",
         "source": "content_analysis"
       },
-      "workload_domain": "data",
+      "workload_domain": "infrastructure",
       "workload_domain_confidence": {
         "confidence": "ai_suggested",
         "source": "yml_metadata"
@@ -5416,7 +5416,7 @@
       },
       "description": "This article provides guidance about how to migrate SQL Server workloads to Azure Virtual Machines by using Azure NetApp Files. Azure NetApp Files is an enterprise-class file storage service that delivers high-performance, low-latency, and scalable storage via the Server Message Block (SMB) protocol. These capabilities make it well-suited for online transaction processing (OLTP) applications. This migration strategy enables cost-effective deployment while preserving enterprise-grade performance ",
       "source_repo_path": "docs/example-scenario/file-storage/sql-server-azure-netapp-files-content.md",
-      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/example-scenario/file-storage/sql-server-azure-netapp-files-content",
+      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/browse/?terms=sql-server-azure-netapp-files-content",
       "browse_tags": [
         "Azure",
         "Compute",
@@ -5425,18 +5425,18 @@
       "browse_categories": [
         "Architecture",
         "Example Scenario",
-        "Storage",
-        "Databases",
         "Networking",
+        "Databases",
+        "Migration",
         "Hybrid",
-        "Migration"
+        "Storage"
       ],
       "family": "iaas",
       "family_confidence": {
         "confidence": "ai_suggested",
         "source": "content_analysis"
       },
-      "workload_domain": "data",
+      "workload_domain": "infrastructure",
       "workload_domain_confidence": {
         "confidence": "ai_suggested",
         "source": "yml_metadata"
@@ -5532,7 +5532,7 @@
       },
       "description": "This article outlines an infrastructure and workflow process designed to help teams provide digital evidence that demonstrates a valid chain of custody in response to legal requests. This article describes how to maintain a valid chain of custody throughout the stages of evidence acquisition, preservation, and access.",
       "source_repo_path": "docs/example-scenario/forensics/index-content.md",
-      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/example-scenario/forensics/index-content",
+      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/browse/?terms=index-content",
       "browse_tags": [
         "Azure",
         "Security"
@@ -5648,7 +5648,7 @@
       },
       "description": "To help secure Azure application workloads, use protective measures such as authentication and encryption in the applications themselves. You can add security layers to the virtual networks that host the applications. These security layers help protect the application's inbound flows from unintended use. They also limit outbound flows to the internet to only those endpoints that your application requires. This article describes [Azure Virtual Network][azure-virtual-network] security services lik",
       "source_repo_path": "docs/example-scenario/gateway/firewall-application-gateway-content.md",
-      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/example-scenario/gateway/firewall-application-gateway-content",
+      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/browse/?terms=firewall-application-gateway-content",
       "browse_tags": [
         "Azure",
         "Networking",
@@ -5778,7 +5778,7 @@
       },
       "description": "GitOps is a set of principles for operating and managing a software system. This article describes techniques for using GitOps principles to operate and manage an Azure Kubernetes Services (AKS) cluster.",
       "source_repo_path": "docs/example-scenario/gitops-aks/gitops-blueprint-aks-content.md",
-      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/example-scenario/gitops-aks/gitops-blueprint-aks-content",
+      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/browse/?terms=gitops-blueprint-aks-content",
       "browse_tags": [
         "Azure",
         "Containers"
@@ -5786,8 +5786,8 @@
       "browse_categories": [
         "Architecture",
         "Example Scenario",
-        "DevOps",
-        "Containers"
+        "Containers",
+        "DevOps"
       ],
       "family": "cloud_native",
       "family_confidence": {
@@ -5898,7 +5898,7 @@
       },
       "description": "This scenario illustrates how to design and implement a baseline architecture for Microsoft Azure Kubernetes Service (AKS) that runs on Azure Local.",
       "source_repo_path": "docs/example-scenario/hybrid/aks-baseline-content.md",
-      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/example-scenario/hybrid/aks-baseline-content",
+      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/browse/?terms=aks-baseline-content",
       "browse_tags": [
         "Azure",
         "Containers"
@@ -6022,7 +6022,7 @@
       },
       "description": "This article provides recommendations for building an app deployment pipeline for containerized apps on Azure Kubernetes Service (AKS) enabled by Azure Arc. The apps can run on Azure Local. The guidance is specifically for deployments that use Azure Arc and GitOps.",
       "source_repo_path": "docs/example-scenario/hybrid/aks-hybrid-azure-local-content.md",
-      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/example-scenario/hybrid/aks-hybrid-azure-local-content",
+      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/browse/?terms=aks-hybrid-azure-local-content",
       "browse_tags": [
         "Azure",
         "Containers"
@@ -6140,7 +6140,7 @@
       },
       "description": "This scenario illustrates how to design and implement network concepts for deploying Azure Kubernetes Service (AKS) nodes on AKS clusters.",
       "source_repo_path": "docs/example-scenario/hybrid/aks-network-content.md",
-      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/example-scenario/hybrid/aks-network-content",
+      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/browse/?terms=aks-network-content",
       "browse_tags": [],
       "browse_categories": [
         "Architecture"
@@ -6254,7 +6254,7 @@
       },
       "description": "This architecture demonstrates one way to provide file shares in the cloud to on-premises users and applications that access files on Windows Server through a private endpoint.",
       "source_repo_path": "docs/example-scenario/hybrid/azure-files-on-premises-authentication-content.md",
-      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/example-scenario/hybrid/azure-files-on-premises-authentication-content",
+      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/browse/?terms=azure-files-on-premises-authentication-content",
       "browse_tags": [
         "Azure",
         "Networking"
@@ -6262,8 +6262,8 @@
       "browse_categories": [
         "Architecture",
         "Example Scenario",
-        "Storage",
         "Hybrid",
+        "Storage",
         "Security"
       ],
       "family": "paas",
@@ -6271,7 +6271,7 @@
         "confidence": "ai_suggested",
         "source": "content_analysis"
       },
-      "workload_domain": "data",
+      "workload_domain": "infrastructure",
       "workload_domain_confidence": {
         "confidence": "ai_suggested",
         "source": "yml_metadata"
@@ -6374,7 +6374,7 @@
       },
       "description": "The article shows how to implement multifactor authentication for Outlook desktop clients that access Microsoft Exchange. There are four architectures that correspond to four different possibilities for the Microsoft Exchange that has the user mailbox:",
       "source_repo_path": "docs/example-scenario/hybrid/secure-hybrid-messaging-client-content.md",
-      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/example-scenario/hybrid/secure-hybrid-messaging-client-content",
+      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/browse/?terms=secure-hybrid-messaging-client-content",
       "browse_tags": [
         "Azure",
         "Identity"
@@ -6382,8 +6382,8 @@
       "browse_categories": [
         "Architecture",
         "Example Scenario",
-        "Identity",
         "Hybrid",
+        "Identity",
         "Security"
       ],
       "family": "paas",
@@ -6391,7 +6391,7 @@
         "confidence": "ai_suggested",
         "source": "content_analysis"
       },
-      "workload_domain": "security",
+      "workload_domain": "infrastructure",
       "workload_domain_confidence": {
         "confidence": "ai_suggested",
         "source": "yml_metadata"
@@ -6486,7 +6486,7 @@
       },
       "description": "The article shows how to implement multifactor authentication for Outlook mobile clients that access Microsoft Exchange. There are two architectures that correspond to two different possibilities for the Microsoft Exchange that has the user mailbox:",
       "source_repo_path": "docs/example-scenario/hybrid/secure-hybrid-messaging-mobile-content.md",
-      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/example-scenario/hybrid/secure-hybrid-messaging-mobile-content",
+      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/browse/?terms=secure-hybrid-messaging-mobile-content",
       "browse_tags": [
         "Azure",
         "Identity"
@@ -6494,9 +6494,9 @@
       "browse_categories": [
         "Architecture",
         "Example Scenario",
-        "Mobile",
-        "Identity",
         "Hybrid",
+        "Identity",
+        "Mobile",
         "Security"
       ],
       "family": "paas",
@@ -6504,7 +6504,7 @@
         "confidence": "ai_suggested",
         "source": "content_analysis"
       },
-      "workload_domain": "security",
+      "workload_domain": "infrastructure",
       "workload_domain_confidence": {
         "confidence": "ai_suggested",
         "source": "yml_metadata"
@@ -6599,7 +6599,7 @@
       },
       "description": "The solution in this article provides a way for you to help protect your messaging service (Outlook on the web or Exchange Control Panel) when mailboxes are hosted in Exchange Online or Exchange on-premises.",
       "source_repo_path": "docs/example-scenario/hybrid/secure-hybrid-messaging-web-content.md",
-      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/example-scenario/hybrid/secure-hybrid-messaging-web-content",
+      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/browse/?terms=secure-hybrid-messaging-web-content",
       "browse_tags": [
         "Azure",
         "Identity"
@@ -6607,9 +6607,9 @@
       "browse_categories": [
         "Architecture",
         "Example Scenario",
+        "Hybrid",
         "Web",
         "Identity",
-        "Hybrid",
         "Security"
       ],
       "family": "integration",
@@ -6617,7 +6617,7 @@
         "confidence": "ai_suggested",
         "source": "content_analysis"
       },
-      "workload_domain": "web",
+      "workload_domain": "infrastructure",
       "workload_domain_confidence": {
         "confidence": "ai_suggested",
         "source": "yml_metadata"
@@ -6713,7 +6713,7 @@
       },
       "description": "This architecture shows how to extend an on-premises Active Directory domain to Azure to provide distributed authentication services.",
       "source_repo_path": "docs/example-scenario/identity/adds-extend-domain-content.md",
-      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/example-scenario/identity/adds-extend-domain-content",
+      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/browse/?terms=adds-extend-domain-content",
       "browse_tags": [
         "Azure",
         "Networking"
@@ -6721,15 +6721,15 @@
       "browse_categories": [
         "Architecture",
         "Example Scenario",
-        "Identity",
-        "Hybrid"
+        "Hybrid",
+        "Identity"
       ],
       "family": "iaas",
       "family_confidence": {
         "confidence": "ai_suggested",
         "source": "content_analysis"
       },
-      "workload_domain": "security",
+      "workload_domain": "infrastructure",
       "workload_domain_confidence": {
         "confidence": "ai_suggested",
         "source": "yml_metadata"
@@ -6830,15 +6830,15 @@
       },
       "description": "This example scenario is applicable to any industry that needs to deploy resilient multitier applications built for high availability and disaster recovery. In this scenario, the application consists of three layers.",
       "source_repo_path": "docs/example-scenario/infrastructure/multi-tier-app-disaster-recovery-content.md",
-      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/example-scenario/infrastructure/multi-tier-app-disaster-recovery-content",
+      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/browse/?terms=multi-tier-app-disaster-recovery-content",
       "browse_tags": [
         "Azure"
       ],
       "browse_categories": [
         "Architecture",
         "Example Scenario",
-        "Web",
-        "Featured"
+        "Featured",
+        "Web"
       ],
       "family": "iaas",
       "family_confidence": {
@@ -6945,7 +6945,7 @@
       },
       "description": "This article describes a solution for small to medium-sized WordPress installations. The solution provides the scalability, reliability, and security of the Azure platform without the need for complex configuration or management. For solutions for larger or storage-intensive installations, see WordPress hosting options on Azure.",
       "source_repo_path": "docs/example-scenario/infrastructure/wordpress-app-service-content.md",
-      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/example-scenario/infrastructure/wordpress-app-service-content",
+      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/browse/?terms=wordpress-app-service-content",
       "browse_tags": [
         "Azure",
         "Networking",
@@ -7063,7 +7063,7 @@
       },
       "description": "This article describes a container solution that hosts a large, storage-intensive installation of WordPress on Azure. The solution maximizes scalability and security. Key components include Azure Front Door, Azure Kubernetes Service (AKS), and Azure NetApp Files.",
       "source_repo_path": "docs/example-scenario/infrastructure/wordpress-container-content.md",
-      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/example-scenario/infrastructure/wordpress-container-content",
+      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/browse/?terms=wordpress-container-content",
       "browse_tags": [
         "Azure",
         "Networking",
@@ -7072,15 +7072,15 @@
       "browse_categories": [
         "Architecture",
         "Example Scenario",
-        "Web",
-        "Containers"
+        "Containers",
+        "Web"
       ],
       "family": "cloud_native",
       "family_confidence": {
         "confidence": "ai_suggested",
         "source": "content_analysis"
       },
-      "workload_domain": "web",
+      "workload_domain": "infrastructure",
       "workload_domain_confidence": {
         "confidence": "ai_suggested",
         "source": "yml_metadata"
@@ -7183,7 +7183,7 @@
       },
       "description": "APIs have become increasingly integral to how organizations and their customers access services, both within internal systems and through external channels. Internally, APIs facilitate access to line-of-business (LoB) applications, proprietary solutions, and partner integrations. Externally, a growing number of organizations are focused on enhancing productivity and generating revenue through API monetization. Given this trend, Azure API Management serves as a foundational element in the standar",
       "source_repo_path": "docs/example-scenario/integration/app-gateway-internal-api-management-function-content.md",
-      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/example-scenario/integration/app-gateway-internal-api-management-function-content",
+      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/browse/?terms=app-gateway-internal-api-management-function-content",
       "browse_tags": [
         "Azure",
         "Integration",
@@ -7193,15 +7193,15 @@
       "browse_categories": [
         "Architecture",
         "Example Scenario",
-        "Integration",
-        "Developer Tools"
+        "Developer Tools",
+        "Integration"
       ],
       "family": "cloud_native",
       "family_confidence": {
         "confidence": "ai_suggested",
         "source": "content_analysis"
       },
-      "workload_domain": "integration",
+      "workload_domain": "infrastructure",
       "workload_domain_confidence": {
         "confidence": "ai_suggested",
         "source": "yml_metadata"
@@ -7312,7 +7312,7 @@
       },
       "description": "This article describes two OpCon options for implementation in Azure. OpCon Cloud is a managed OpCon implementation that SMA sets up and manages. The OpCon datacenter is a cloud installation that you set up and manage.",
       "source_repo_path": "docs/example-scenario/integration/sma-opcon-azure-content.md",
-      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/example-scenario/integration/sma-opcon-azure-content",
+      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/browse/?terms=sma-opcon-azure-content",
       "browse_tags": [
         "Azure",
         "Containers",
@@ -7441,7 +7441,7 @@
       },
       "description": "This article describes how to use a private network to upload files to an Azure Storage account.",
       "source_repo_path": "docs/example-scenario/iot/iot-private-file-upload-content.md",
-      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/example-scenario/iot/iot-private-file-upload-content",
+      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/browse/?terms=iot-private-file-upload-content",
       "browse_tags": [
         "Azure",
         "Storage",
@@ -7562,7 +7562,7 @@
       },
       "description": "This article provides an overview of the measure and control process loop architecture, characteristics, and components.",
       "source_repo_path": "docs/example-scenario/iot/measure-control-loop-content.md",
-      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/example-scenario/iot/measure-control-loop-content",
+      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/browse/?terms=measure-control-loop-content",
       "browse_tags": [],
       "browse_categories": [
         "Architecture"
@@ -7667,7 +7667,7 @@
       },
       "description": "CloudFrame Renovate migrates COBOL code to Java Spring Boot Batch quickly, without compromising quality, precision, functional equivalency, or performance. Renovate is a DIY tool that uses guided actions and automation to help make code migration easy. Just provide the inputs and download Maven or Gradle Java projects. No specialized skills or staff are required.",
       "source_repo_path": "docs/example-scenario/mainframe/cloudframe-renovate-mainframe-refactor-content.md",
-      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/example-scenario/mainframe/cloudframe-renovate-mainframe-refactor-content",
+      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/browse/?terms=cloudframe-renovate-mainframe-refactor-content",
       "browse_tags": [
         "Azure",
         "Compute",
@@ -7798,7 +7798,7 @@
       },
       "description": "Digital transformation is imperative for any business that wants to stay competitive in today's marketplace. This transformation demands timely access to data and data insights, which drive new business processes and client experiences. However, it can also affect existing applications and data in ways that might be overlooked or misunderstood.",
       "source_repo_path": "docs/example-scenario/mainframe/extend-mainframes-rest-apis-content.md",
-      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/example-scenario/mainframe/extend-mainframes-rest-apis-content",
+      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/browse/?terms=extend-mainframes-rest-apis-content",
       "browse_tags": [
         "Azure",
         "Identity",
@@ -7919,7 +7919,7 @@
       },
       "description": "The following architecture illustrates a general refactoring approach that can use Azure Kubernetes Service (AKS) or Azure virtual machines (VMs). This choice depends on the portability of existing applications and your preference. Refactoring can accelerate the move into Azure by automatically converting code to Java or .NET and converting pre-relational databases to relational databases.",
       "source_repo_path": "docs/example-scenario/mainframe/general-mainframe-refactor-content.md",
-      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/example-scenario/mainframe/general-mainframe-refactor-content",
+      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/browse/?terms=general-mainframe-refactor-content",
       "browse_tags": [
         "Azure",
         "Databases",
@@ -8054,7 +8054,7 @@
       },
       "description": "This article describes the lift-and-shift migration of an HP-UX workload to Azure. HP-UX is HP's Unix operating system for PA-RISC workstations and servers. The article shows how emulator software called Charon-PAR from Microsoft partner Stromasys can run HP-UX workloads on Azure.",
       "source_repo_path": "docs/example-scenario/mainframe/hp-ux-stromasys-charon-par-content.md",
-      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/example-scenario/mainframe/hp-ux-stromasys-charon-par-content",
+      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/browse/?terms=hp-ux-stromasys-charon-par-content",
       "browse_tags": [
         "Azure",
         "Compute",
@@ -8172,7 +8172,7 @@
       },
       "description": "Online transaction processing (OLTP) systems are the face of your business because they interact directly with customers. By migrating to a dynamically adaptable infrastructure, your business can create and launch products quickly so that customers can use your products sooner.",
       "source_repo_path": "docs/example-scenario/mainframe/ibm-zos-online-transaction-processing-azure-content.md",
-      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/example-scenario/mainframe/ibm-zos-online-transaction-processing-azure-content",
+      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/browse/?terms=ibm-zos-online-transaction-processing-azure-content",
       "browse_tags": [
         "Azure",
         "Networking",
@@ -8305,7 +8305,7 @@
       },
       "description": "This architecture shows how to use Raincode's IMSql to rehost IMS Database Manager (IMS DB) and IMS Transaction Manager (IMS TM) systems on .NET and SQL Server in the simplest way: by using virtual machines. You can recompile legacy applications to target .NET and interact with IMSql in the same way that they interact with IMS on a mainframe. IMSql transitions mainframe applications to an Azure-native architecture while thoroughly preserving the business logic.",
       "source_repo_path": "docs/example-scenario/mainframe/imsql-rehost-ims-content.md",
-      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/example-scenario/mainframe/imsql-rehost-ims-content",
+      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/browse/?terms=imsql-rehost-ims-content",
       "browse_tags": [
         "Azure",
         "Compute",
@@ -8420,7 +8420,7 @@
       },
       "description": "When you use Azure as a modern data platform, you have your choice of platform as a service (PaaS) or infrastructure as a service (IaaS). PaaS provides cloud-native options for data ingestion, transformation, and storage. IaaS gives you greater control over your hybrid infrastructure, starting with the size and type of virtual machines (VM) you choose. With either approach, you can take advantage of a variety of fully managed relational, NoSQL, and in-memory databases, storage solutions, and ana",
       "source_repo_path": "docs/example-scenario/mainframe/integrate-ibm-message-queues-azure-content.md",
-      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/example-scenario/mainframe/integrate-ibm-message-queues-azure-content",
+      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/browse/?terms=integrate-ibm-message-queues-azure-content",
       "browse_tags": [
         "Azure",
         "Integration",
@@ -8429,15 +8429,15 @@
       "browse_categories": [
         "Architecture",
         "Example Scenario",
-        "Integration",
-        "Hybrid"
+        "Hybrid",
+        "Integration"
       ],
       "family": "paas",
       "family_confidence": {
         "confidence": "ai_suggested",
         "source": "content_analysis"
       },
-      "workload_domain": "integration",
+      "workload_domain": "infrastructure",
       "workload_domain_confidence": {
         "confidence": "ai_suggested",
         "source": "yml_metadata"
@@ -8540,7 +8540,7 @@
       },
       "description": "The high volume of transactions for mainframe applications creates a large volume of data. Azure offers a compelling target for mainframe modernization and data migration. Azure relational and NoSQL databases provide scalability, high availability, and ease of maintenance that meets or exceeds that of mainframe environments. If you want to retire a mainframe workload and retain the data in a low-cost storage, Azure provides options.",
       "source_repo_path": "docs/example-scenario/mainframe/mainframe-data-replication-azure-data-platform-content.md",
-      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/example-scenario/mainframe/mainframe-data-replication-azure-data-platform-content",
+      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/browse/?terms=mainframe-data-replication-azure-data-platform-content",
       "browse_tags": [
         "Azure",
         "Databases",
@@ -8549,17 +8549,17 @@
       "browse_categories": [
         "Architecture",
         "Example Scenario",
-        "Storage",
-        "DevOps",
+        "Migration",
         "Databases",
-        "Migration"
+        "Storage",
+        "DevOps"
       ],
       "family": "paas",
       "family_confidence": {
         "confidence": "ai_suggested",
         "source": "content_analysis"
       },
-      "workload_domain": "data",
+      "workload_domain": "infrastructure",
       "workload_domain_confidence": {
         "confidence": "ai_suggested",
         "source": "yml_metadata"
@@ -8674,7 +8674,7 @@
       },
       "description": "Rocket® Data Replicate and Sync (RDRS), formerly tcVISION, is a data replication solution developed by Rocket Software. RDRS provides an IBM mainframe integration solution for mainframe data replication, data synchronization, data migration, and change data capture (CDC) for several Azure data platform services.",
       "source_repo_path": "docs/example-scenario/mainframe/mainframe-data-replication-azure-rdrs-content.md",
-      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/example-scenario/mainframe/mainframe-data-replication-azure-rdrs-content",
+      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/browse/?terms=mainframe-data-replication-azure-rdrs-content",
       "browse_tags": [
         "Azure",
         "Serverless",
@@ -8685,8 +8685,8 @@
       "browse_categories": [
         "Architecture",
         "Example Scenario",
-        "Integration",
         "Databases",
+        "Integration",
         "Migration"
       ],
       "family": "paas",
@@ -8694,7 +8694,7 @@
         "confidence": "ai_suggested",
         "source": "content_analysis"
       },
-      "workload_domain": "integration",
+      "workload_domain": "data",
       "workload_domain_confidence": {
         "confidence": "ai_suggested",
         "source": "yml_metadata"
@@ -8809,7 +8809,7 @@
       },
       "description": "This solution uses an on-premises instance of Qlik to replicate on-premises data sources to Azure in real time.",
       "source_repo_path": "docs/example-scenario/mainframe/mainframe-midrange-data-replication-azure-qlik-content.md",
-      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/example-scenario/mainframe/mainframe-midrange-data-replication-azure-qlik-content",
+      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/browse/?terms=mainframe-midrange-data-replication-azure-qlik-content",
       "browse_tags": [
         "Azure",
         "Messaging",
@@ -8932,7 +8932,7 @@
       },
       "description": "Organizations can modernize their mainframe systems to take advantage of the benefits of cloud computing. The integration of mainframe data with cloud platforms enhances scalability, performance, and cost efficiency.",
       "source_repo_path": "docs/example-scenario/mainframe/mainframe-modernization-bmc-ami-cloud-content.md",
-      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/example-scenario/mainframe/mainframe-modernization-bmc-ami-cloud-content",
+      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/browse/?terms=mainframe-modernization-bmc-ami-cloud-content",
       "browse_tags": [
         "Azure",
         "Monitoring"
@@ -9054,7 +9054,7 @@
       },
       "description": "Rehosting is a way to run legacy mainframe applications, intact, on an open system. This path is the fastest way to take applications off your mainframe hardware and run them on a Windows or Linux platform in a cloud-native environment. Application code written in legacy languages like COBOL or PL/1 are migrated as is and recompiled in the new environment with no change to the business logic. Rehosting helps to preserve the application's logic. At the same time, rehosting minimizes the risk and ",
       "source_repo_path": "docs/example-scenario/mainframe/mainframe-rehost-architecture-azure-content.md",
-      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/example-scenario/mainframe/mainframe-rehost-architecture-azure-content",
+      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/browse/?terms=mainframe-rehost-architecture-azure-content",
       "browse_tags": [
         "Azure",
         "Compute",
@@ -9182,7 +9182,7 @@
       },
       "description": "This article describes how to use Precisely Connect to migrate mainframe and midrange systems to Azure. Precisely Connect provides real-time data replication from legacy systems to Azure by using change data capture (CDC) technology.",
       "source_repo_path": "docs/example-scenario/mainframe/mainframe-replication-precisely-connect-content.md",
-      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/example-scenario/mainframe/mainframe-replication-precisely-connect-content",
+      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/browse/?terms=mainframe-replication-precisely-connect-content",
       "browse_tags": [
         "Azure",
         "Databases",
@@ -9309,7 +9309,7 @@
       },
       "description": "This sample solution is a prescriptive, well-architected example of a Micro Focus Enterprise Server 6.0 VM-based deployment in Azure. The solution implements high availability (HA) and disaster recovery (DR) by using a secondary Azure failover region. The failover region uses Azure Site Recovery for the VMs in the application tier, and a SQL Server Always On configuration for the data tier. A Micro Focus Performance Availability Cluster (PAC) boosts VM performance, availability, and scalability.",
       "source_repo_path": "docs/example-scenario/mainframe/micro-focus-server-content.md",
-      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/example-scenario/mainframe/micro-focus-server-content",
+      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/browse/?terms=micro-focus-server-content",
       "browse_tags": [
         "Azure",
         "Compute",
@@ -9431,7 +9431,7 @@
       },
       "description": "Skytap on Azure simplifies cloud migration for applications that run on IBM Power Systems. This example illustrates a migration of AIX logical partitions (LPARs) to Skytap on Azure and is based on best practices from recent customer experiences. A web app on Microsoft Azure gives users a modern interface for the resources running in LPARs on Skytap on Azure.",
       "source_repo_path": "docs/example-scenario/mainframe/migrate-aix-workloads-to-azure-with-skytap-content.md",
-      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/example-scenario/mainframe/migrate-aix-workloads-to-azure-with-skytap-content",
+      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/browse/?terms=migrate-aix-workloads-to-azure-with-skytap-content",
       "browse_tags": [
         "Azure",
         "Networking",
@@ -9550,7 +9550,7 @@
       },
       "description": "This example architecture shows how to use the native IBM i backup and recovery services with Microsoft Azure components to quickly migrate IBM i workloads to Skytap on Azure. This native IBM Power9 infrastructure is hosted in an Azure datacenter, minimizing the latency between traditional workloads and those running natively on Azure. You get the reliability and reach of Azure, the flexibility to deploy and scale IBM i logical partitions (LPARs) on demand, plus full backup and recovery services",
       "source_repo_path": "docs/example-scenario/mainframe/migrate-ibm-i-series-to-azure-with-skytap-content.md",
-      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/example-scenario/mainframe/migrate-ibm-i-series-to-azure-with-skytap-content",
+      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/browse/?terms=migrate-ibm-i-series-to-azure-with-skytap-content",
       "browse_tags": [
         "Azure",
         "Networking",
@@ -9669,7 +9669,7 @@
       },
       "description": "This solution migrates Unisys Dorado mainframe systems to Azure with Astadia and Micro Focus products, without rewriting code, switching data models, or updating screens.",
       "source_repo_path": "docs/example-scenario/mainframe/migrate-unisys-dorado-mainframe-apps-with-astadia-micro-focus-content.md",
-      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/example-scenario/mainframe/migrate-unisys-dorado-mainframe-apps-with-astadia-micro-focus-content",
+      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/browse/?terms=migrate-unisys-dorado-mainframe-apps-with-astadia-micro-focus-content",
       "browse_tags": [
         "Azure",
         "Data",
@@ -9799,7 +9799,7 @@
       },
       "description": "Apache®, Spark, and the flame logo are either registered trademarks or trademarks of the Apache Software Foundation in the United States and/or other countries. No endorsement by The Apache Software Foundation is implied by the use of these marks.",
       "source_repo_path": "docs/example-scenario/mainframe/modernize-mainframe-data-to-azure-content.md",
-      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/example-scenario/mainframe/modernize-mainframe-data-to-azure-content",
+      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/browse/?terms=modernize-mainframe-data-to-azure-content",
       "browse_tags": [
         "Azure",
         "Databases",
@@ -9920,7 +9920,7 @@
       },
       "description": "This reference architecture shows how to move data from mainframe and midrange systems to Azure. In this architecture, archived data is serviced and used only in the mainframe system. Azure is used only as a storage medium.",
       "source_repo_path": "docs/example-scenario/mainframe/move-archive-data-mainframes-content.md",
-      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/example-scenario/mainframe/move-archive-data-mainframes-content",
+      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/browse/?terms=move-archive-data-mainframes-content",
       "browse_tags": [
         "Azure",
         "Data",
@@ -10034,7 +10034,7 @@
       },
       "description": "The architecture uses AKS to implement compute clusters of the applications that process high-volume batches of transactions. The applications receive the transactions in messages from Service Bus topics or queues. The topics and queues can be at Azure datacenters in different geographic regions, and multiple AKS clusters can read input from them.",
       "source_repo_path": "docs/example-scenario/mainframe/process-batch-transactions-content.md",
-      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/example-scenario/mainframe/process-batch-transactions-content",
+      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/browse/?terms=process-batch-transactions-content",
       "browse_tags": [
         "Azure",
         "Containers",
@@ -10044,8 +10044,8 @@
       "browse_categories": [
         "Architecture",
         "Example Scenario",
-        "Hybrid",
         "Migration",
+        "Hybrid",
         "Compute"
       ],
       "family": "cloud_native",
@@ -10170,7 +10170,7 @@
       },
       "description": "This reference architecture shows how you can use Azure to re-engineer a z/OS mainframe batch application to deliver a secure, scalable, and highly available system in the cloud using Azure. Because of ever evolving business needs, data and applications need to deliver and scale without affecting your infrastructure. Re-engineering to the cloud can help businesses in finance, health, insurance, and retail minimize their product or feature delivery times, and reduce costs.",
       "source_repo_path": "docs/example-scenario/mainframe/reengineer-mainframe-batch-apps-azure-content.md",
-      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/example-scenario/mainframe/reengineer-mainframe-batch-apps-azure-content",
+      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/browse/?terms=reengineer-mainframe-batch-apps-azure-content",
       "browse_tags": [
         "Azure",
         "Data",
@@ -10314,7 +10314,7 @@
       },
       "description": "Software AG provides a popular 4GL mainframe platform that's based on the Natural programming language and the Adabas database. This article provides an architecture for organizations that are using mainframe computers that run Adabas & Natural and that are looking for ways to modernize these workloads and move them to the cloud.",
       "source_repo_path": "docs/example-scenario/mainframe/refactor-adabas-aks-content.md",
-      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/example-scenario/mainframe/refactor-adabas-aks-content",
+      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/browse/?terms=refactor-adabas-aks-content",
       "browse_tags": [
         "Azure",
         "Containers"
@@ -10442,7 +10442,7 @@
       },
       "description": "For decades, Software AG Adabas has been the adaptable database system behind many large mission-critical business applications. Now you can bring the convenience of cloud computing to these applications without giving up your Adabas database or the Natural programming language. This architecture presents the option to rehost your system on Azure. It provides a high-level look at what's possible, whether you keep the green screen or go modern.",
       "source_repo_path": "docs/example-scenario/mainframe/rehost-adabas-software-ag-content.md",
-      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/example-scenario/mainframe/rehost-adabas-software-ag-content",
+      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/browse/?terms=rehost-adabas-software-ag-content",
       "browse_tags": [
         "Azure",
         "Networking",
@@ -10562,7 +10562,7 @@
       },
       "description": "This architecture describes how to implement an Information Management System (IMS) mainframe application workload on Azure by using Raincode's IMSql. Migrating an IMS database (DB) application to a cloud-native solution is more complex than migrating a relational DB application. This article describes how to seamlessly rehost a mainframe IMS workload that has critical IMS features and capabilities to Azure. You don't need to translate or modify your existing application.",
       "source_repo_path": "docs/example-scenario/mainframe/rehost-ims-raincode-imsql-content.md",
-      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/example-scenario/mainframe/rehost-ims-raincode-imsql-content",
+      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/browse/?terms=rehost-ims-raincode-imsql-content",
       "browse_tags": [
         "Azure",
         "Integration",
@@ -10685,7 +10685,7 @@
       },
       "description": "<!-- cSpell:ignore Unisys ClearPath postmigration HDDs Tmax tmaxsoft openframe replatforming replatformed -->",
       "source_repo_path": "docs/example-scenario/mainframe/unisys-clearpath-forward-mainframe-rehost-content.md",
-      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/example-scenario/mainframe/unisys-clearpath-forward-mainframe-rehost-content",
+      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/browse/?terms=unisys-clearpath-forward-mainframe-rehost-content",
       "browse_tags": [
         "Azure",
         "Storage",
@@ -10695,8 +10695,8 @@
       "browse_categories": [
         "Architecture",
         "Example Scenario",
-        "Hybrid",
         "Migration",
+        "Hybrid",
         "Compute"
       ],
       "family": "iaas",
@@ -10810,7 +10810,7 @@
       },
       "description": "This architecture describes a solution that provides near real-time monitoring and observability of systems and user device telemetry data. It focuses on a use case for the media industry.",
       "source_repo_path": "docs/example-scenario/monitoring/monitoring-observable-systems-media-content.md",
-      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/example-scenario/monitoring/monitoring-observable-systems-media-content",
+      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/browse/?terms=monitoring-observable-systems-media-content",
       "browse_tags": [
         "Azure",
         "Serverless",
@@ -10819,8 +10819,8 @@
       "browse_categories": [
         "Architecture",
         "Example Scenario",
-        "AI + Machine Learning",
         "Analytics",
+        "AI + Machine Learning",
         "Media"
       ],
       "family": "data",
@@ -10828,7 +10828,7 @@
         "confidence": "ai_suggested",
         "source": "content_analysis"
       },
-      "workload_domain": "ai",
+      "workload_domain": "data",
       "workload_domain_confidence": {
         "confidence": "ai_suggested",
         "source": "yml_metadata"
@@ -10931,7 +10931,7 @@
       },
       "description": "Teams that manage workloads often rely on fully qualified domain names (FQDNs) for customer access. FQDNs are typically combined with Transport Layer Security (TLS) Server Name Indication (SNI). With this approach, when public customers access a workload from the public internet or enterprise customers access a workload internally, the routing to the application might follow fixed paths and have various levels of security or quality of service (QoS).",
       "source_repo_path": "docs/example-scenario/networking/split-brain-dns-content.md",
-      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/example-scenario/networking/split-brain-dns-content",
+      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/browse/?terms=split-brain-dns-content",
       "browse_tags": [
         "Azure",
         "Networking"
@@ -10939,9 +10939,9 @@
       "browse_categories": [
         "Architecture",
         "Example Scenario",
-        "Web",
-        "Hybrid",
         "Networking",
+        "Hybrid",
+        "Web",
         "Security"
       ],
       "family": "paas",
@@ -10949,7 +10949,7 @@
         "confidence": "ai_suggested",
         "source": "content_analysis"
       },
-      "workload_domain": "web",
+      "workload_domain": "infrastructure",
       "workload_domain_confidence": {
         "confidence": "ai_suggested",
         "source": "yml_metadata"
@@ -11054,7 +11054,7 @@
       },
       "description": "Classical computing is increasingly challenged with today's most complex compute problems - even at the scale of our most powerful supercomputers. Quantum computers hold the promise to dramatically extend our compute capabilities. By exploiting the properties of quantum physics to perform computations, they provide exponential speedups for certain types of problems. For example, quantum computers do exceptionally well with problems that require calculating a large number of possible combinations",
       "source_repo_path": "docs/example-scenario/quantum/quantum-computing-integration-with-classical-apps-content.md",
-      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/example-scenario/quantum/quantum-computing-integration-with-classical-apps-content",
+      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/browse/?terms=quantum-computing-integration-with-classical-apps-content",
       "browse_tags": [
         "Azure",
         "Security",
@@ -11171,7 +11171,7 @@
       },
       "description": "This article describes how to manage virtual machine compliance without impairing DevOps practices. Use Azure VM Image Builder and Azure Compute Gallery to minimize risk from system images.",
       "source_repo_path": "docs/example-scenario/security/virtual-machine-compliance-content.md",
-      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/example-scenario/security/virtual-machine-compliance-content",
+      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/browse/?terms=virtual-machine-compliance-content",
       "browse_tags": [
         "Azure"
       ],
@@ -11283,7 +11283,7 @@
       },
       "description": "This scenario shows an existing workload originally designed for Kubernetes, which is replatformed to run in Azure Container Apps. Container Apps supports brownfield workloads where teams want to simplify infrastructure and container orchestration.",
       "source_repo_path": "docs/example-scenario/serverless/microservices-with-container-apps-content.md",
-      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/example-scenario/serverless/microservices-with-container-apps-content",
+      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/browse/?terms=microservices-with-container-apps-content",
       "browse_tags": [
         "Azure",
         "Containers",
@@ -11410,7 +11410,7 @@
       },
       "description": "This article describes a solution for running an order management system that has 10 microservices on Azure Container Apps. The solution also uses microservices best practices through Distributed Application Runtime (Dapr) and event-driven scaling with Kubernetes event-driven autoscaling (KEDA).",
       "source_repo_path": "docs/example-scenario/serverless/microservices-with-container-apps-dapr-content.md",
-      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/example-scenario/serverless/microservices-with-container-apps-dapr-content",
+      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/browse/?terms=microservices-with-container-apps-dapr-content",
       "browse_tags": [
         "Azure",
         "Containers",
@@ -11419,15 +11419,15 @@
       "browse_categories": [
         "Architecture",
         "Example Scenario",
-        "Web",
-        "Containers"
+        "Containers",
+        "Web"
       ],
       "family": "cloud_native",
       "family_confidence": {
         "confidence": "ai_suggested",
         "source": "content_analysis"
       },
-      "workload_domain": "web",
+      "workload_domain": "infrastructure",
       "workload_domain_confidence": {
         "confidence": "ai_suggested",
         "source": "yml_metadata"
@@ -11536,7 +11536,7 @@
       },
       "description": "Many lessons you learn in larger companies aren't directly applicable to a startup's first stack. In a product's initial explore stage, you need to optimize deployment for speed, cost, and optionality. Optionality refers to how fast you can change directions within a given architecture.",
       "source_repo_path": "docs/example-scenario/startups/core-startup-stack-content.md",
-      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/example-scenario/startups/core-startup-stack-content",
+      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/browse/?terms=core-startup-stack-content",
       "browse_tags": [
         "Azure",
         "Web",
@@ -11545,10 +11545,10 @@
       "browse_categories": [
         "Architecture",
         "Example Scenario",
-        "DevOps",
-        "Web",
         "Developer Tools",
-        "Management"
+        "Web",
+        "Management",
+        "DevOps"
       ],
       "family": "paas",
       "family_confidence": {
@@ -11659,7 +11659,7 @@
       },
       "description": "This solution describes a migration from an IBM AIX Unix platform to Red Hat Enterprise Linux (RHEL) in Azure. The real-world example was a Health and Human Services application for a large customer. Low transaction time and latency were important requirements for both the legacy and the Azure systems. A key functionality is storing customer information in a database that links into a network file store containing related graphical images. Azure addresses this need with Azure NetApp Files.",
       "source_repo_path": "docs/example-scenario/unix-migration/migrate-aix-azure-linux-content.md",
-      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/example-scenario/unix-migration/migrate-aix-azure-linux-content",
+      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/browse/?terms=migrate-aix-azure-linux-content",
       "browse_tags": [
         "Azure",
         "Databases",
@@ -11786,7 +11786,7 @@
       },
       "description": "As the publisher of APIs, you need a website that effectively markets your APIs and helps customers to differentiate between offerings. When they've selected APIs, you need to be able to give access only to authenticated users, manage consumption, and deliver accurate invoices for use. This example scenario shows how you can use Azure service and GitHub to create a platform that does all of this and more.",
       "source_repo_path": "docs/example-scenario/web/design-api-developer-experiences-management-github-content.md",
-      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/example-scenario/web/design-api-developer-experiences-management-github-content",
+      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/browse/?terms=design-api-developer-experiences-management-github-content",
       "browse_tags": [
         "Azure",
         "Web",
@@ -11899,7 +11899,7 @@
       },
       "description": "If you've locked down your Azure virtual network from the internet, you can still get Windows updates without jeopardizing security and opening up access to the internet as a whole. This article contains recommendations on how you can set up a perimeter network, also called a DMZ, to host a Windows Server Update Service (WSUS) instance to securely update virtual networks without internet connectivity.",
       "source_repo_path": "docs/example-scenario/wsus/index-content.md",
-      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/example-scenario/wsus/index-content",
+      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/browse/?terms=index-content",
       "browse_tags": [
         "Azure",
         "Security",
@@ -12010,7 +12010,7 @@
       },
       "description": "This architecture is for global, internet-facing applications that use HTTP(S) and non-HTTP(S) protocols. It features DNS-based global load balancing, two forms of regional load balancing, and global virtual network peering to create a high availability architecture that can withstand a regional outage. Traffic inspection is provided by both Azure Web Application Firewall (WAF) and Azure Firewall.",
       "source_repo_path": "docs/high-availability/reference-architecture-traffic-manager-application-gateway-content.md",
-      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/high-availability/reference-architecture-traffic-manager-application-gateway-content",
+      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/browse/?terms=reference-architecture-traffic-manager-application-gateway-content",
       "browse_tags": [
         "Azure",
         "Security",
@@ -12019,15 +12019,15 @@
       "browse_categories": [
         "Architecture",
         "Reference",
-        "Web",
-        "Networking"
+        "Networking",
+        "Web"
       ],
       "family": "cloud_native",
       "family_confidence": {
         "confidence": "ai_suggested",
         "source": "content_analysis"
       },
-      "workload_domain": "web",
+      "workload_domain": "infrastructure",
       "workload_domain_confidence": {
         "confidence": "ai_suggested",
         "source": "yml_metadata"
@@ -12138,7 +12138,7 @@
       },
       "description": "This reference architecture describes how Azure Arc extends Kubernetes cluster management and configuration across customer datacenters, edge locations, and multiple cloud environments.",
       "source_repo_path": "docs/hybrid/arc-hybrid-kubernetes-content.md",
-      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/hybrid/arc-hybrid-kubernetes-content",
+      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/browse/?terms=arc-hybrid-kubernetes-content",
       "browse_tags": [
         "Azure",
         "Containers",
@@ -12260,7 +12260,7 @@
       },
       "description": "This reference architecture illustrates how to use Azure Arc for management, maintenance, and monitoring of SQL Server instances in on-premises and multicloud environments.",
       "source_repo_path": "docs/hybrid/azure-arc-sql-server-content.md",
-      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/hybrid/azure-arc-sql-server-content",
+      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/browse/?terms=azure-arc-sql-server-content",
       "browse_tags": [
         "Azure",
         "Containers"
@@ -12381,7 +12381,7 @@
       },
       "description": "This architecture shows how to include Azure file shares in your hybrid environment. Azure file shares are used as serverless file shares. By integrating them with Active Directory Domain Services (AD DS), you can control and limit access to AD DS users. Azure file shares then can replace traditional file servers.",
       "source_repo_path": "docs/hybrid/azure-file-share-content.md",
-      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/hybrid/azure-file-share-content",
+      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/browse/?terms=azure-file-share-content",
       "browse_tags": [
         "Azure",
         "Identity"
@@ -12389,15 +12389,15 @@
       "browse_categories": [
         "Architecture",
         "Reference",
-        "Storage",
-        "Hybrid"
+        "Hybrid",
+        "Storage"
       ],
       "family": "cloud_native",
       "family_confidence": {
         "confidence": "ai_suggested",
         "source": "content_analysis"
       },
-      "workload_domain": "data",
+      "workload_domain": "infrastructure",
       "workload_domain_confidence": {
         "confidence": "ai_suggested",
         "source": "yml_metadata"
@@ -12492,7 +12492,7 @@
       },
       "description": "This reference architecture illustrates an enterprise-level cloud file sharing solution that uses Azure services including Azure Files, Azure File Sync, Azure Private DNS, and Azure Private Endpoint. The solution generates cost savings by outsourcing the management of file servers and infrastructure while retaining control of the data.",
       "source_repo_path": "docs/hybrid/azure-files-private-content.md",
-      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/hybrid/azure-files-private-content",
+      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/browse/?terms=azure-files-private-content",
       "browse_tags": [
         "Azure",
         "Networking",
@@ -12501,15 +12501,15 @@
       "browse_categories": [
         "Architecture",
         "Reference",
-        "Storage",
-        "Hybrid"
+        "Hybrid",
+        "Storage"
       ],
       "family": "iaas",
       "family_confidence": {
         "confidence": "ai_suggested",
         "source": "content_analysis"
       },
-      "workload_domain": "data",
+      "workload_domain": "infrastructure",
       "workload_domain_confidence": {
         "confidence": "ai_suggested",
         "source": "yml_metadata"
@@ -12617,7 +12617,7 @@
       },
       "description": "This baseline reference architecture provides workload-agnostic guidance and recommendations for configuring Azure Local 2311 and later infrastructure, to provide a reliable platform for highly available virtualized and containerized workloads. This architecture describes the resource components and cluster design choices for the physical machines that provide local compute, storage, and networking capabilities. It also describes how to use Azure services to simplify the day-to-day management of",
       "source_repo_path": "docs/hybrid/azure-local-baseline-content.md",
-      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/hybrid/azure-local-baseline-content",
+      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/browse/?terms=azure-local-baseline-content",
       "browse_tags": [
         "Azure",
         "Security",
@@ -12750,7 +12750,7 @@
       },
       "description": "This article is part of a series that builds on the Azure Local baseline reference architecture. To effectively deploy Azure Local by using a storage switchless design, it's important to understand the baseline architecture. This process requires you to familiarize yourself with the cluster design choices for the physical nodes that deliver local compute, storage, and networking capabilities. This knowledge helps you identify the necessary changes for a successful deployment. The guidance in thi",
       "source_repo_path": "docs/hybrid/azure-local-switchless-content.md",
-      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/hybrid/azure-local-switchless-content",
+      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/browse/?terms=azure-local-switchless-content",
       "browse_tags": [
         "Azure",
         "Security",
@@ -12871,7 +12871,7 @@
       },
       "description": "This article describes how to choose and set up an Azure Virtual Desktop for Azure Local solution. Use this architecture to save time and effort when you deploy and manage your Azure Virtual Desktop for Azure Local solution.",
       "source_repo_path": "docs/hybrid/azure-local-workload-virtual-desktop-content.md",
-      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/hybrid/azure-local-workload-virtual-desktop-content",
+      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/browse/?terms=azure-local-workload-virtual-desktop-content",
       "browse_tags": [
         "Azure",
         "Identity"
@@ -12986,7 +12986,7 @@
       },
       "description": "This reference architecture illustrates how to design a hybrid Domain Name System (DNS) solution to resolve names for workloads that are hosted on-premises and in Microsoft Azure. This architecture works for users and other systems that are connecting from on-premises and the public internet.",
       "source_repo_path": "docs/hybrid/hybrid-dns-infra-content.md",
-      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/hybrid/hybrid-dns-infra-content",
+      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/browse/?terms=hybrid-dns-infra-content",
       "browse_tags": [
         "Azure",
         "Networking"
@@ -12994,8 +12994,8 @@
       "browse_categories": [
         "Architecture",
         "Reference",
-        "Hybrid",
-        "Networking"
+        "Networking",
+        "Hybrid"
       ],
       "family": "iaas",
       "family_confidence": {
@@ -13103,7 +13103,7 @@
       },
       "description": "This reference architecture illustrates how to use Azure File Sync and Azure Files to extend file services hosting capabilities across cloud and on-premises file share resources.",
       "source_repo_path": "docs/hybrid/hybrid-file-services-content.md",
-      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/hybrid/hybrid-file-services-content",
+      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/browse/?terms=hybrid-file-services-content",
       "browse_tags": [
         "Azure",
         "Identity"
@@ -13111,15 +13111,15 @@
       "browse_categories": [
         "Architecture",
         "Reference",
-        "Storage",
-        "Hybrid"
+        "Hybrid",
+        "Storage"
       ],
       "family": "cloud_native",
       "family_confidence": {
         "confidence": "ai_suggested",
         "source": "content_analysis"
       },
-      "workload_domain": "data",
+      "workload_domain": "infrastructure",
       "workload_domain_confidence": {
         "confidence": "ai_suggested",
         "source": "yml_metadata"
@@ -13213,7 +13213,7 @@
       },
       "description": "This reference architecture shows how to use Azure Monitor to monitor the performance and availability of operating system (OS) workloads that run in virtual machines (VMs). The VMs can be in Microsoft Azure, in on-premises environments, or in non-Azure clouds.",
       "source_repo_path": "docs/hybrid/hybrid-perf-monitoring-content.md",
-      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/hybrid/hybrid-perf-monitoring-content",
+      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/browse/?terms=hybrid-perf-monitoring-content",
       "browse_tags": [
         "Azure",
         "Messaging",
@@ -13224,9 +13224,9 @@
       "browse_categories": [
         "Architecture",
         "Reference",
-        "Monitoring",
         "Hybrid",
-        "Management"
+        "Management",
+        "Monitoring"
       ],
       "family": "iaas",
       "family_confidence": {
@@ -13339,7 +13339,7 @@
       },
       "description": "Automotive original equipment manufacturers (OEMs) need solutions to minimize the time between test drives and delivering test drive diagnostic data to R&D engineers. As vehicles become more automated, the software development lifecycles become shorter, which requires faster digital feedback loops. New technology can democratize data access and provide R&D engineers with near real-time insights into test drive diagnostic data. Use Copilot for Data Science and Data Engineering for data analytics ",
       "source_repo_path": "docs/industries/automotive/automotive-telemetry-analytics-content.md",
-      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/industries/automotive/automotive-telemetry-analytics-content",
+      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/browse/?terms=automotive-telemetry-analytics-content",
       "browse_tags": [
         "Azure",
         "Messaging",
@@ -13462,7 +13462,7 @@
       },
       "description": "This article describes how to use virtualization technologies from Unisys, a Microsoft partner, with an existing Unisys ClearPath Forward (CPF) Dorado enterprise server. Use this approach to quickly move your system to Azure without having to rewrite your application code or redesign your database. Existing code is maintained in its original form. The application screens, user interactions, and data structures behind the scenes stay the same, which eliminates the need to retrain your users.",
       "source_repo_path": "docs/mainframe/virtualization-of-unisys-clearpath-forward-os-2200-enterprise-server-on-azure-content.md",
-      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/mainframe/virtualization-of-unisys-clearpath-forward-os-2200-enterprise-server-on-azure-content",
+      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/browse/?terms=virtualization-of-unisys-clearpath-forward-os-2200-enterprise-server-on-azure-content",
       "browse_tags": [
         "Azure",
         "Compute",
@@ -13583,7 +13583,7 @@
       },
       "description": "This article presents a solution for using Azure DNS Private Resolver to simplify hybrid recursive domain name system (DNS) resolution. You can use DNS Private Resolver for on-premises workloads and Azure workloads. DNS Private Resolver simplifies private DNS resolution from on-premises to the Azure private DNS service and from the Azure private DNS service to on-premises.",
       "source_repo_path": "docs/networking/architecture/azure-dns-private-resolver-content.md",
-      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/networking/architecture/azure-dns-private-resolver-content",
+      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/browse/?terms=azure-dns-private-resolver-content",
       "browse_tags": [
         "Azure",
         "Security",
@@ -13592,8 +13592,8 @@
       "browse_categories": [
         "Architecture",
         "Example Scenario",
-        "Hybrid",
-        "Networking"
+        "Networking",
+        "Hybrid"
       ],
       "family": "iaas",
       "family_confidence": {
@@ -13707,7 +13707,7 @@
       },
       "description": "This reference architecture implements a hub-spoke network pattern with customer-managed hub infrastructure components. For a Microsoft-managed hub infrastructure solution, see Hub-spoke network topology with Azure Virtual WAN.",
       "source_repo_path": "docs/networking/architecture/hub-spoke-content.md",
-      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/networking/architecture/hub-spoke-content",
+      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/browse/?terms=hub-spoke-content",
       "browse_tags": [
         "Azure",
         "Security",
@@ -13716,9 +13716,9 @@
       "browse_categories": [
         "Architecture",
         "Reference",
+        "Networking",
         "Hybrid",
-        "Management",
-        "Networking"
+        "Management"
       ],
       "family": "cloud_native",
       "family_confidence": {
@@ -13839,7 +13839,7 @@
       },
       "description": "This hub-spoke architecture provides an alternate solution to the hub-spoke network topology architecture and the secure hybrid network architecture.",
       "source_repo_path": "docs/networking/architecture/hub-spoke-virtual-wan-architecture-content.md",
-      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/networking/architecture/hub-spoke-virtual-wan-architecture-content",
+      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/browse/?terms=hub-spoke-virtual-wan-architecture-content",
       "browse_tags": [
         "Azure"
       ],
@@ -13956,7 +13956,7 @@
       },
       "description": "A global manufacturing company provided the architecture that this article describes. The company's operational technology and information technology departments are highly integrated, demanding a single internal network. But the environments have drastically different security and performance requirements. Because of the sensitive nature of the company's operations, all traffic needs to be firewall protected by a network virtual appliance (NVA) the customer hosts on their own virtual machines a",
       "source_repo_path": "docs/networking/architecture/performance-security-optimized-vwan-content.md",
-      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/networking/architecture/performance-security-optimized-vwan-content",
+      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/browse/?terms=performance-security-optimized-vwan-content",
       "browse_tags": [
         "Azure",
         "Networking"
@@ -14073,7 +14073,7 @@
       },
       "description": "This architecture shows how the Raincode COBOL compiler modernizes mainframe legacy applications by migrating and integrating them with a modern, Azure-based technology stack without changing a single line of code. With Raincode's compiler technology, you can keep current optimized mainframe applications and deploy them on the cloud, allowing you to preserve decades of development while improving performance and flexibility. Raincode's solution is aimed at transforming the mainframe to an Azure-",
       "source_repo_path": "docs/reference-architectures/app-modernization/raincode-reference-architecture-content.md",
-      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/reference-architectures/app-modernization/raincode-reference-architecture-content",
+      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/browse/?terms=raincode-reference-architecture-content",
       "browse_tags": [
         "Azure",
         "Compute",
@@ -14082,15 +14082,15 @@
       "browse_categories": [
         "Architecture",
         "Reference",
-        "Integration",
-        "Databases"
+        "Databases",
+        "Integration"
       ],
       "family": "cloud_native",
       "family_confidence": {
         "confidence": "ai_suggested",
         "source": "content_analysis"
       },
-      "workload_domain": "integration",
+      "workload_domain": "data",
       "workload_domain_confidence": {
         "confidence": "ai_suggested",
         "source": "yml_metadata"
@@ -14200,7 +14200,7 @@
       },
       "description": "This article provides AWS identity architects, administrators, and security analysts with immediate insights and detailed guidance to deploy Microsoft Entra identity and access solutions for AWS. You can configure and test these Microsoft security solutions without affecting your existing identity providers and AWS account users until you're ready to switch.",
       "source_repo_path": "docs/reference-architectures/aws/aws-azure-ad-security-content.md",
-      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/reference-architectures/aws/aws-azure-ad-security-content",
+      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/browse/?terms=aws-azure-ad-security-content",
       "browse_tags": [
         "Azure",
         "Identity"
@@ -14314,7 +14314,7 @@
       },
       "description": "This article provides a recommended baseline infrastructure architecture to deploy an Azure Kubernetes Service (AKS) cluster. It follows our design principles and aligns with AKS architectural best practices from the Azure Well-Architected Framework. The article guides multiple distinct interdisciplinary groups, like networking, security, and identity teams, when they deploy this general-purpose infrastructure.",
       "source_repo_path": "docs/reference-architectures/containers/aks/baseline-aks-content.md",
-      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/reference-architectures/containers/aks/baseline-aks-content",
+      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/browse/?terms=baseline-aks-content",
       "browse_tags": [
         "Azure",
         "Networking",
@@ -14325,8 +14325,8 @@
         "Architecture",
         "Reference",
         "Kubernetes",
-        "Aks",
-        "Containers"
+        "Containers",
+        "Aks"
       ],
       "family": "cloud_native",
       "family_confidence": {
@@ -14455,7 +14455,7 @@
       },
       "description": "This reference architecture describes several configurations to consider when you run microservices on Azure Kubernetes Service (AKS). This article discusses network policy configuration, pod autoscaling, and distributed tracing across a microservice-based application.",
       "source_repo_path": "docs/reference-architectures/containers/aks-microservices/aks-microservices-advanced-content.md",
-      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/reference-architectures/containers/aks-microservices/aks-microservices-advanced-content",
+      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/browse/?terms=aks-microservices-advanced-content",
       "browse_tags": [
         "Azure",
         "Networking",
@@ -14582,7 +14582,7 @@
       },
       "description": "This architecture shows a microservices application deployed to Azure Kubernetes Service (AKS). It describes a basic AKS configuration that you can use as the starting point for most deployments. This article assumes that you have a basic understanding of Kubernetes. It highlights the infrastructure and developer operations (DevOps) aspects of how to manage microservices on AKS. For production deployments, this architecture recommends that you use Azure CNI powered by Cilium as the networking so",
       "source_repo_path": "docs/reference-architectures/containers/aks-microservices/aks-microservices-content.md",
-      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/reference-architectures/containers/aks-microservices/aks-microservices-content",
+      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/browse/?terms=aks-microservices-content",
       "browse_tags": [
         "Azure",
         "Identity",
@@ -14710,7 +14710,7 @@
       },
       "description": "Data decisions for the architecture of a mission-critical workload on Azure.",
       "source_repo_path": "docs/reference-architectures/containers/aks-mission-critical/mission-critical-data-platform.md",
-      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/reference-architectures/containers/aks-mission-critical/mission-critical-data-platform",
+      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/browse/?terms=mission-critical-data-platform-content",
       "browse_tags": [],
       "browse_categories": [
         "Architecture",
@@ -14819,7 +14819,7 @@
       },
       "description": "Reference architecture for a workload that is accessed over a public endpoint without extra dependencies to other company resources - Deployment and Testing.",
       "source_repo_path": "docs/reference-architectures/containers/aks-mission-critical/mission-critical-deploy-test.md",
-      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/reference-architectures/containers/aks-mission-critical/mission-critical-deploy-test",
+      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/browse/?terms=mission-critical-deploy-test-content",
       "browse_tags": [],
       "browse_categories": [
         "Architecture",
@@ -14934,7 +14934,7 @@
       },
       "description": "Reference architecture for a workload that is accessed over a public endpoint without extra dependencies to other company resources - Health modeling.",
       "source_repo_path": "docs/reference-architectures/containers/aks-mission-critical/mission-critical-health-modeling.md",
-      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/reference-architectures/containers/aks-mission-critical/mission-critical-health-modeling",
+      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/browse/?terms=mission-critical-health-modeling-content",
       "browse_tags": [],
       "browse_categories": [
         "Architecture",
@@ -15050,7 +15050,7 @@
       },
       "description": "Networking decisions for the architecture of a mission-critical workload on Azure.",
       "source_repo_path": "docs/reference-architectures/containers/aks-mission-critical/mission-critical-networking.md",
-      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/reference-architectures/containers/aks-mission-critical/mission-critical-networking",
+      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/browse/?terms=mission-critical-networking-content",
       "browse_tags": [],
       "browse_categories": [
         "Architecture",
@@ -15157,7 +15157,7 @@
       },
       "description": "Guidance for operations for the architecture of a mission-critical workload on Azure.",
       "source_repo_path": "docs/reference-architectures/containers/aks-mission-critical/mission-critical-operations.md",
-      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/reference-architectures/containers/aks-mission-critical/mission-critical-operations",
+      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/browse/?terms=mission-critical-operations-content",
       "browse_tags": [],
       "browse_categories": [
         "Architecture",
@@ -15269,7 +15269,7 @@
       },
       "description": "This architecture details how to run multiple instances of an Azure Kubernetes Service (AKS) cluster across multiple regions in an active/active and highly available configuration.",
       "source_repo_path": "docs/reference-architectures/containers/aks-multi-region/aks-multi-cluster-content.md",
-      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/reference-architectures/containers/aks-multi-region/aks-multi-cluster-content",
+      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/browse/?terms=aks-multi-cluster-content",
       "browse_tags": [
         "Azure",
         "Containers",
@@ -15280,8 +15280,8 @@
         "Architecture",
         "Example Scenario",
         "Kubernetes",
-        "Aks",
-        "Containers"
+        "Containers",
+        "Aks"
       ],
       "family": "cloud_native",
       "family_confidence": {
@@ -15399,7 +15399,7 @@
       },
       "description": "This article describes how to implement an Azure Red Hat OpenShift landing zone architecture for the financial services industry (FSI). This guidance outlines how to use any supported Azure Red Hat OpenShift 4.x version in a hybrid cloud environment to create secure, resilient, and compliant solutions that meet FSI regulatory requirements and security standards.",
       "source_repo_path": "docs/reference-architectures/containers/aro/azure-redhat-openshift-financial-services-workloads-content.md",
-      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/reference-architectures/containers/aro/azure-redhat-openshift-financial-services-workloads-content",
+      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/browse/?terms=azure-redhat-openshift-financial-services-workloads-content",
       "browse_tags": [
         "Azure"
       ],
@@ -15523,7 +15523,7 @@
       },
       "description": "<!-- cSpell:ignore eventhubs shapefile malformedrides malformedfares Dropwizard dropoff timechart DBUs DBCU -->",
       "source_repo_path": "docs/reference-architectures/data/stream-processing-databricks-content.md",
-      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/reference-architectures/data/stream-processing-databricks-content",
+      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/browse/?terms=stream-processing-databricks-content",
       "browse_tags": [
         "Azure",
         "Databases",
@@ -15534,8 +15534,8 @@
       "browse_categories": [
         "Architecture",
         "Reference",
-        "Databases",
-        "Analytics"
+        "Analytics",
+        "Databases"
       ],
       "family": "iaas",
       "family_confidence": {
@@ -15639,7 +15639,7 @@
       },
       "description": "This reference architecture shows an end-to-end stream processing pipeline. The pipeline ingests data from two sources, correlates records in the two streams, and calculates a rolling average across a time window. The results are stored for further analysis.",
       "source_repo_path": "docs/reference-architectures/data/stream-processing-stream-analytics-content.md",
-      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/reference-architectures/data/stream-processing-stream-analytics-content",
+      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/browse/?terms=stream-processing-stream-analytics-content",
       "browse_tags": [
         "Azure",
         "Databases",
@@ -15649,8 +15649,8 @@
       "browse_categories": [
         "Architecture",
         "Reference",
-        "Databases",
-        "Analytics"
+        "Analytics",
+        "Databases"
       ],
       "family": "paas",
       "family_confidence": {
@@ -15759,7 +15759,7 @@
       },
       "description": "This reference architecture shows a secure hybrid network that extends an on-premises network to Azure. The architecture implements a perimeter network, also called a DMZ, between the on-premises network and an Azure virtual network. All inbound and outbound traffic passes through Azure Firewall.",
       "source_repo_path": "docs/reference-architectures/dmz/secure-vnet-dmz-content.md",
-      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/reference-architectures/dmz/secure-vnet-dmz-content",
+      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/browse/?terms=secure-vnet-dmz-content",
       "browse_tags": [
         "Azure",
         "Security",
@@ -15769,8 +15769,8 @@
       "browse_categories": [
         "Architecture",
         "Reference",
-        "Hybrid",
         "Networking",
+        "Hybrid",
         "Security"
       ],
       "family": "iaas",
@@ -15883,7 +15883,7 @@
       },
       "description": "This reference architecture uses [Azure Integration Services][integration-services] to orchestrate calls to enterprise backend systems. The backend systems can include software as a service (SaaS) systems, Azure services, and existing web services in your enterprise.",
       "source_repo_path": "docs/reference-architectures/enterprise-integration/basic-enterprise-integration-content.md",
-      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/reference-architectures/enterprise-integration/basic-enterprise-integration-content",
+      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/browse/?terms=basic-enterprise-integration-content",
       "browse_tags": [
         "Azure",
         "Identity",
@@ -15893,16 +15893,16 @@
       "browse_categories": [
         "Architecture",
         "Reference",
-        "Integration",
         "Developer Tools",
-        "Management"
+        "Management",
+        "Integration"
       ],
       "family": "paas",
       "family_confidence": {
         "confidence": "ai_suggested",
         "source": "content_analysis"
       },
-      "workload_domain": "integration",
+      "workload_domain": "infrastructure",
       "workload_domain_confidence": {
         "confidence": "ai_suggested",
         "source": "yml_metadata"
@@ -16003,7 +16003,7 @@
       },
       "description": "This reference architecture shows how to connect an on-premises network to an Azure virtual network by using Azure ExpressRoute, with a site-to-site virtual private network (VPN) as a failover connection.",
       "source_repo_path": "docs/reference-architectures/hybrid-networking/expressroute-vpn-failover-content.md",
-      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/reference-architectures/hybrid-networking/expressroute-vpn-failover-content",
+      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/browse/?terms=expressroute-vpn-failover-content",
       "browse_tags": [
         "Azure",
         "Networking"
@@ -16011,8 +16011,8 @@
       "browse_categories": [
         "Architecture",
         "Reference",
-        "Hybrid",
-        "Networking"
+        "Networking",
+        "Hybrid"
       ],
       "family": "iaas",
       "family_confidence": {
@@ -16120,7 +16120,7 @@
       },
       "description": "This article compares three options for connecting an on-premises network to an Azure Virtual Network (VNet). For each option, a more detailed reference architecture is available.",
       "source_repo_path": "docs/reference-architectures/hybrid-networking/index-content.md",
-      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/reference-architectures/hybrid-networking/index-content",
+      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/browse/?terms=index-content",
       "browse_tags": [
         "Azure",
         "Networking"
@@ -16128,8 +16128,8 @@
       "browse_categories": [
         "Architecture",
         "Reference",
-        "Hybrid",
-        "Networking"
+        "Networking",
+        "Hybrid"
       ],
       "family": "foundation",
       "family_confidence": {
@@ -16227,7 +16227,7 @@
       },
       "description": "This article compares two ways to connect virtual networks in Azure: virtual network peering and virtual private network (VPN) gateways. It also explores spoke-to-spoke communication patterns for hub-and-spoke architectures to help you choose the optimal approach for your networking requirements.",
       "source_repo_path": "docs/reference-architectures/hybrid-networking/virtual-network-peering-content.md",
-      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/reference-architectures/hybrid-networking/virtual-network-peering-content",
+      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/browse/?terms=virtual-network-peering-content",
       "browse_tags": [
         "Azure",
         "Identity",
@@ -16236,15 +16236,15 @@
       "browse_categories": [
         "Architecture",
         "Reference",
-        "Integration",
-        "Networking"
+        "Networking",
+        "Integration"
       ],
       "family": "foundation",
       "family_confidence": {
         "confidence": "ai_suggested",
         "source": "content_analysis"
       },
-      "workload_domain": "integration",
+      "workload_domain": "infrastructure",
       "workload_domain_confidence": {
         "confidence": "ai_suggested",
         "source": "yml_metadata"
@@ -16341,7 +16341,7 @@
       },
       "description": "This reference architecture shows how to create a separate Active Directory domain in Azure that is trusted by domains in your on-premises Active Directory forest.",
       "source_repo_path": "docs/reference-architectures/identity/adds-forest-content.md",
-      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/reference-architectures/identity/adds-forest-content",
+      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/browse/?terms=adds-forest-content",
       "browse_tags": [
         "Azure",
         "Identity",
@@ -16350,15 +16350,15 @@
       "browse_categories": [
         "Architecture",
         "Reference",
-        "Identity",
-        "Hybrid"
+        "Hybrid",
+        "Identity"
       ],
       "family": "iaas",
       "family_confidence": {
         "confidence": "ai_suggested",
         "source": "content_analysis"
       },
-      "workload_domain": "security",
+      "workload_domain": "infrastructure",
       "workload_domain_confidence": {
         "confidence": "ai_suggested",
         "source": "yml_metadata"
@@ -16455,7 +16455,7 @@
       },
       "description": "This reference architecture implements a secure hybrid network that extends your on-premises network to Azure and uses [Active Directory Federation Services (AD FS)][active-directory-federation-services] to perform federated authentication and authorization for components that run in Azure.",
       "source_repo_path": "docs/reference-architectures/identity/adfs-content.md",
-      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/reference-architectures/identity/adfs-content",
+      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/browse/?terms=adfs-content",
       "browse_tags": [
         "Azure",
         "Identity"
@@ -16463,15 +16463,15 @@
       "browse_categories": [
         "Architecture",
         "Reference",
-        "Identity",
-        "Hybrid"
+        "Hybrid",
+        "Identity"
       ],
       "family": "iaas",
       "family_confidence": {
         "confidence": "ai_suggested",
         "source": "content_analysis"
       },
-      "workload_domain": "security",
+      "workload_domain": "infrastructure",
       "workload_domain_confidence": {
         "confidence": "ai_suggested",
         "source": "yml_metadata"
@@ -16567,7 +16567,7 @@
       },
       "description": "Microsoft Entra ID is a cloud-based directory and identity service. This reference architecture shows best practices for integrating on-premises Active Directory domains with Microsoft Entra ID to provide cloud-based identity authentication.",
       "source_repo_path": "docs/reference-architectures/identity/azure-ad-content.md",
-      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/reference-architectures/identity/azure-ad-content",
+      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/browse/?terms=azure-ad-content",
       "browse_tags": [
         "Azure",
         "Compute",
@@ -16577,15 +16577,15 @@
       "browse_categories": [
         "Architecture",
         "Reference",
-        "Identity",
-        "Hybrid"
+        "Hybrid",
+        "Identity"
       ],
       "family": "iaas",
       "family_confidence": {
         "confidence": "ai_suggested",
         "source": "content_analysis"
       },
-      "workload_domain": "security",
+      "workload_domain": "infrastructure",
       "workload_domain_confidence": {
         "confidence": "ai_suggested",
         "source": "yml_metadata"
@@ -16685,7 +16685,7 @@
       },
       "description": "This example architecture outlines an implementation plan to replicate and sync data during modernization to Azure. It describes technical aspects like data stores, tools, and services.",
       "source_repo_path": "docs/reference-architectures/migration/sync-mainframe-data-with-azure-content.md",
-      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/reference-architectures/migration/sync-mainframe-data-with-azure-content",
+      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/browse/?terms=sync-mainframe-data-with-azure-content",
       "browse_tags": [
         "Azure",
         "Data",
@@ -16810,7 +16810,7 @@
       },
       "description": "This article describes how to use Avanade Automated Migration Technology (AMT) to migrate Unisys Master Control Program (MCP) source code and emulated MCP systems to the Azure cloud.",
       "source_repo_path": "docs/reference-architectures/migration/unisys-mainframe-migration-content.md",
-      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/reference-architectures/migration/unisys-mainframe-migration-content",
+      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/browse/?terms=unisys-mainframe-migration-content",
       "browse_tags": [
         "Azure",
         "Databases",
@@ -16933,7 +16933,7 @@
       },
       "description": "Provisioning a virtual machine (VM) in Azure requires additional components besides the VM itself, including networking and storage resources. This article shows best practices for running a secure Linux VM on Azure.",
       "source_repo_path": "docs/reference-architectures/n-tier/linux-vm-content.md",
-      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/reference-architectures/n-tier/linux-vm-content",
+      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/browse/?terms=linux-vm-content",
       "browse_tags": [
         "Azure",
         "Storage",
@@ -17050,7 +17050,7 @@
       },
       "description": "The following example focuses specifically on the SAP BW/4HANA application tier. It's suitable for a small-scale production environment of SAP BW/4HANA on Azure, where high availability is a priority.",
       "source_repo_path": "docs/reference-architectures/sap/run-sap-bw4hana-with-linux-virtual-machines-content.md",
-      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/reference-architectures/sap/run-sap-bw4hana-with-linux-virtual-machines-content",
+      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/browse/?terms=run-sap-bw4hana-with-linux-virtual-machines-content",
       "browse_tags": [
         "Azure",
         "Compute",
@@ -17175,7 +17175,7 @@
       },
       "description": "This reference architecture shows a set of proven practices for running SAP HANA in a highly available, scale-up environment that supports disaster recovery on Azure. This implementation focuses on the database layer only.",
       "source_repo_path": "docs/reference-architectures/sap/run-sap-hana-for-linux-virtual-machines-content.md",
-      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/reference-architectures/sap/run-sap-hana-for-linux-virtual-machines-content",
+      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/browse/?terms=run-sap-hana-for-linux-virtual-machines-content",
       "browse_tags": [
         "Azure",
         "Compute"
@@ -17297,7 +17297,7 @@
       },
       "description": "This article describes how to use image processing, natural language processing, and custom skills to capture domain-specific data. You can use that data to enrich text and image documents. Incorporate Azure AI Search with AI enrichment to help identify and explore relevant content at scale. This solution uses AI enrichment to extract meaning from the original complex, unstructured JFK Assassination Records (JFK Files) dataset.",
       "source_repo_path": "docs/solution-ideas/articles/ai-search-skillsets-content.md",
-      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/solution-ideas/articles/ai-search-skillsets-content",
+      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/browse/?terms=ai-search-skillsets-content",
       "browse_tags": [
         "Azure",
         "Web",
@@ -17411,7 +17411,7 @@
       },
       "description": "This solution outlines the key principles and components of modern data architectures. Azure Databricks forms the core of the solution. This platform works seamlessly with other services, such as Azure Data Lake Storage, Microsoft Fabric, and Power BI.",
       "source_repo_path": "docs/solution-ideas/articles/azure-databricks-modern-analytics-architecture-content.md",
-      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/solution-ideas/articles/azure-databricks-modern-analytics-architecture-content",
+      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/browse/?terms=azure-databricks-modern-analytics-architecture-content",
       "browse_tags": [
         "Azure",
         "Analytics"
@@ -17419,15 +17419,15 @@
       "browse_categories": [
         "Architecture",
         "Solution Idea",
-        "AI + Machine Learning",
-        "Analytics"
+        "Analytics",
+        "AI + Machine Learning"
       ],
       "family": "data",
       "family_confidence": {
         "confidence": "ai_suggested",
         "source": "content_analysis"
       },
-      "workload_domain": "ai",
+      "workload_domain": "data",
       "workload_domain_confidence": {
         "confidence": "ai_suggested",
         "source": "yml_metadata"
@@ -17527,7 +17527,7 @@
       },
       "description": "You can use various Azure services to create a complete IT infrastructure for your organization. Azure also provides security services that help you protect that infrastructure. By using Azure security solutions, you can enhance your environment's security posture, mitigate vulnerabilities, and reduce breach risk via a well-architected solution based on Microsoft best practices.",
       "source_repo_path": "docs/solution-ideas/articles/azure-security-build-first-layer-defense-content.md",
-      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/solution-ideas/articles/azure-security-build-first-layer-defense-content",
+      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/browse/?terms=azure-security-build-first-layer-defense-content",
       "browse_tags": [
         "Azure",
         "Identity"
@@ -17655,7 +17655,7 @@
       },
       "description": "This article presents a solution for using Azure Kubernetes Service (AKS) to quickly process and analyze a large volume of streaming data from devices.",
       "source_repo_path": "docs/solution-ideas/articles/data-streaming-scenario-content.md",
-      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/solution-ideas/articles/data-streaming-scenario-content",
+      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/browse/?terms=data-streaming-scenario-content",
       "browse_tags": [
         "Azure",
         "Web",
@@ -17774,7 +17774,7 @@
       },
       "description": "This solution idea illustrates the DevSecOps pipeline that uses GitHub for infrastructure as code (IaC). It also describes how to govern the workflow for operational excellence, security, and cost optimization.",
       "source_repo_path": "docs/solution-ideas/articles/devsecops-infrastructure-as-code-content.md",
-      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/solution-ideas/articles/devsecops-infrastructure-as-code-content",
+      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/browse/?terms=devsecops-infrastructure-as-code-content",
       "browse_tags": [
         "Azure",
         "Monitoring"
@@ -17782,15 +17782,15 @@
       "browse_categories": [
         "Architecture",
         "Solution Idea",
-        "DevOps",
-        "Security"
+        "Security",
+        "DevOps"
       ],
       "family": "cloud_native",
       "family_confidence": {
         "confidence": "ai_suggested",
         "source": "content_analysis"
       },
-      "workload_domain": "infrastructure",
+      "workload_domain": "security",
       "workload_domain_confidence": {
         "confidence": "ai_suggested",
         "source": "yml_metadata"
@@ -17887,7 +17887,7 @@
       },
       "description": "This solution provides a highly available deployment of SharePoint using a load balanced Microsoft Entra ID, highly available SQL always on instance, and highly available SharePoint resources.",
       "source_repo_path": "docs/solution-ideas/articles/highly-available-sharepoint-farm-content.md",
-      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/solution-ideas/articles/highly-available-sharepoint-farm-content",
+      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/browse/?terms=highly-available-sharepoint-farm-content",
       "browse_tags": [
         "Azure",
         "Identity"
@@ -17895,15 +17895,15 @@
       "browse_categories": [
         "Architecture",
         "Solution Idea",
-        "Web",
-        "Management"
+        "Management",
+        "Web"
       ],
       "family": "iaas",
       "family_confidence": {
         "confidence": "ai_suggested",
         "source": "content_analysis"
       },
-      "workload_domain": "web",
+      "workload_domain": "infrastructure",
       "workload_domain_confidence": {
         "confidence": "ai_suggested",
         "source": "yml_metadata"
@@ -18002,7 +18002,7 @@
       },
       "description": "Your organization needs to ingest data of any format, size, and speed into the cloud in a consistent way. The solution in this article meets that need with an architecture that implements extract, transform, and load (ETL) from your data sources to a data lake. The data lake can hold all the data, including transformed and curated versions at various scales. The data can be used for data analytics, business intelligence (BI), reporting, data science, and machine learning.",
       "source_repo_path": "docs/solution-ideas/articles/ingest-etl-stream-with-adb-content.md",
-      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/solution-ideas/articles/ingest-etl-stream-with-adb-content",
+      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/browse/?terms=ingest-etl-stream-with-adb-content",
       "browse_tags": [
         "Azure",
         "Analytics",
@@ -18012,8 +18012,8 @@
       "browse_categories": [
         "Architecture",
         "Solution Idea",
-        "Databases",
         "Analytics",
+        "Databases",
         "IoT"
       ],
       "family": "data",
@@ -18117,7 +18117,7 @@
       },
       "description": "This solution idea describes how Azure Data Explorer provides near real-time analytics for fast flowing, high volume streaming data from internet of things (IoT) devices and sensors. This analytics workflow is part of an overall IoT solution that integrates operational and analytical workloads with Azure Cosmos DB and Azure Data Explorer.",
       "source_repo_path": "docs/solution-ideas/articles/iot-azure-data-explorer-content.md",
-      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/solution-ideas/articles/iot-azure-data-explorer-content",
+      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/browse/?terms=iot-azure-data-explorer-content",
       "browse_tags": [
         "Azure",
         "Databases"
@@ -18236,7 +18236,7 @@
       },
       "description": "When you migrate an on-premises mainframe or midrange application to Azure, data transfer is a key consideration. Several modernization scenarios require you to replicate files to Azure quickly or to maintain synchronization between on-premises files and Azure files.",
       "source_repo_path": "docs/solution-ideas/articles/mainframe-azure-file-replication-content.md",
-      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/solution-ideas/articles/mainframe-azure-file-replication-content",
+      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/browse/?terms=mainframe-azure-file-replication-content",
       "browse_tags": [
         "Azure",
         "Data",
@@ -18358,7 +18358,7 @@
       },
       "description": "This article outlines how to diagram your organization's core IT environment and create a threat map. These diagrams are valuable tools for planning and building a robust defensive security layer. Understanding your IT environment and its architecture is crucial for identifying the security services needed to provide adequate protection.",
       "source_repo_path": "docs/solution-ideas/articles/map-threats-it-environment-content.md",
-      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/solution-ideas/articles/map-threats-it-environment-content",
+      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/browse/?terms=map-threats-it-environment-content",
       "browse_tags": [
         "Azure"
       ],
@@ -18480,7 +18480,7 @@
       },
       "description": "Many organizations operate in a hybrid environment, with resources hosted both on Azure and on-premises. Most Azure resources, such as virtual machines (VMs), Azure applications, and Microsoft Entra ID, can be secured using Azure’s built-in security services.",
       "source_repo_path": "docs/solution-ideas/articles/microsoft-365-defender-build-second-layer-defense-content.md",
-      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/solution-ideas/articles/microsoft-365-defender-build-second-layer-defense-content",
+      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/browse/?terms=microsoft-365-defender-build-second-layer-defense-content",
       "browse_tags": [
         "Azure"
       ],
@@ -18602,7 +18602,7 @@
       },
       "description": "You can strengthen your organization's IT security posture by using the security features available in Microsoft 365 and Azure. This fifth and final article in the series explains how to integrate these security capabilities by using Microsoft Defender XDR and Azure monitoring services.",
       "source_repo_path": "docs/solution-ideas/articles/microsoft-365-defender-security-integrate-azure-content.md",
-      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/solution-ideas/articles/microsoft-365-defender-security-integrate-azure-content",
+      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/browse/?terms=microsoft-365-defender-security-integrate-azure-content",
       "browse_tags": [
         "Azure",
         "Monitoring"
@@ -18727,7 +18727,7 @@
       },
       "description": "Microsoft Sentinel is a scalable cloud-based solution for security information and event management (SIEM) and security orchestration, automation, and response (SOAR). It offers intelligent security analytics for organizations of all sizes and provides the following capabilities and more:",
       "source_repo_path": "docs/solution-ideas/articles/microsoft-sentinel-automated-response-content.md",
-      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/solution-ideas/articles/microsoft-sentinel-automated-response-content",
+      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/browse/?terms=microsoft-sentinel-automated-response-content",
       "browse_tags": [
         "Azure",
         "Identity",
@@ -18736,9 +18736,9 @@
       "browse_categories": [
         "Architecture",
         "Solution Idea",
+        "Security",
         "Identity",
-        "Migration",
-        "Security"
+        "Migration"
       ],
       "family": "cloud_native",
       "family_confidence": {
@@ -18843,7 +18843,7 @@
       },
       "description": "During business transformations like acquisitions or divestitures, organizations might migrate cloud workloads from an existing Microsoft Entra tenant to a new tenant. Teams must plan how to separate or join their cloud workloads. This article describes how to define and implement a cross-tenant workload migration strategy that maintains security boundaries and ensures business continuity.",
       "source_repo_path": "docs/solution-ideas/articles/migrate-cloud-workloads-across-security-tenants-content.md",
-      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/solution-ideas/articles/migrate-cloud-workloads-across-security-tenants-content",
+      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/browse/?terms=migrate-cloud-workloads-across-security-tenants-content",
       "browse_tags": [
         "Azure",
         "Identity"
@@ -18851,16 +18851,16 @@
       "browse_categories": [
         "Architecture",
         "Solution Idea",
+        "Security",
         "Management",
-        "Migration",
-        "Security"
+        "Migration"
       ],
       "family": "paas",
       "family_confidence": {
         "confidence": "ai_suggested",
         "source": "content_analysis"
       },
-      "workload_domain": "infrastructure",
+      "workload_domain": "security",
       "workload_domain_confidence": {
         "confidence": "ai_suggested",
         "source": "yml_metadata"
@@ -18969,7 +18969,7 @@
       },
       "description": "This solution offers a multilayered strategy for protecting virtual machines (VMs) in Azure, ensuring accessibility while minimizing the attack surface for management and administrative purposes.",
       "source_repo_path": "docs/solution-ideas/articles/multilayered-protection-azure-vm-content.md",
-      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/solution-ideas/articles/multilayered-protection-azure-vm-content",
+      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/browse/?terms=multilayered-protection-azure-vm-content",
       "browse_tags": [
         "Azure",
         "Identity",
@@ -18978,8 +18978,8 @@
       "browse_categories": [
         "Architecture",
         "Solution Idea",
-        "Identity",
         "Management",
+        "Identity",
         "Security"
       ],
       "family": "iaas",
@@ -18987,7 +18987,7 @@
         "confidence": "ai_suggested",
         "source": "content_analysis"
       },
-      "workload_domain": "security",
+      "workload_domain": "infrastructure",
       "workload_domain_confidence": {
         "confidence": "ai_suggested",
         "source": "yml_metadata"
@@ -19088,7 +19088,7 @@
       },
       "description": "Project 15 Open Platform was developed in partnership with the GEF Small Grants Programme, which the United Nations Development Programme implemented. For more information, see Project 15 from Microsoft – A story in five parts.",
       "source_repo_path": "docs/solution-ideas/articles/project-15-iot-sustainability-content.md",
-      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/solution-ideas/articles/project-15-iot-sustainability-content",
+      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/browse/?terms=project-15-iot-sustainability-content",
       "browse_tags": [
         "Azure",
         "Messaging",
@@ -19209,7 +19209,7 @@
       },
       "description": "This solution architecture illustrates how a user request flows through an SAP landscape that's built on high-performance Azure Virtual Machines and an in-memory HANA database, which runs on HANA Large Instances for unparalleled scalability and performance.",
       "source_repo_path": "docs/solution-ideas/articles/sap-s4-hana-on-hli-with-ha-and-dr-content.md",
-      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/solution-ideas/articles/sap-s4-hana-on-hli-with-ha-and-dr-content",
+      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/browse/?terms=sap-s4-hana-on-hli-with-ha-and-dr-content",
       "browse_tags": [
         "Azure",
         "Compute"
@@ -19217,16 +19217,16 @@
       "browse_categories": [
         "Architecture",
         "Solution Idea",
+        "Compute",
         "Storage",
-        "Web",
-        "Compute"
+        "Web"
       ],
       "family": "iaas",
       "family_confidence": {
         "confidence": "ai_suggested",
         "source": "content_analysis"
       },
-      "workload_domain": "data",
+      "workload_domain": "infrastructure",
       "workload_domain_confidence": {
         "confidence": "ai_suggested",
         "source": "yml_metadata"
@@ -19324,7 +19324,7 @@
       },
       "description": "This architecture demonstrates how to use the SUSE SAP automation solution on Azure.",
       "source_repo_path": "docs/solution-ideas/articles/sap-workload-automation-suse-content.md",
-      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/solution-ideas/articles/sap-workload-automation-suse-content",
+      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/browse/?terms=sap-workload-automation-suse-content",
       "browse_tags": [
         "Azure",
         "Networking"
@@ -19439,7 +19439,7 @@
       },
       "description": "This solution describes a secure and resilient deployment pattern for Azure SQL Managed Instance. It highlights how Azure Key Vault Managed HSM is used to store the customer-managed transparent data encryption (TDE) protector keys.",
       "source_repo_path": "docs/solution-ideas/articles/secure-sql-managed-instance-managed-hardware-security-module-content.md",
-      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/solution-ideas/articles/secure-sql-managed-instance-managed-hardware-security-module-content",
+      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/browse/?terms=secure-sql-managed-instance-managed-hardware-security-module-content",
       "browse_tags": [
         "Azure",
         "Security"
@@ -19554,7 +19554,7 @@
       },
       "description": "This article describes how small and medium businesses (SMBs) can build a modern data platform architecture by combining existing investments in Azure Databricks with a fully managed software as a service (SaaS) data platform such as Microsoft Fabric. SaaS data platforms are end-to-end data analytics solutions that integrate easily with tools like Azure Machine Learning, Azure AI Services, Power Platform, Microsoft Dynamics 365, and other Microsoft technologies.",
       "source_repo_path": "docs/solution-ideas/articles/small-medium-modern-data-platform-content.md",
-      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/solution-ideas/articles/small-medium-modern-data-platform-content",
+      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/browse/?terms=small-medium-modern-data-platform-content",
       "browse_tags": [
         "Azure",
         "Analytics",
@@ -19563,8 +19563,8 @@
       "browse_categories": [
         "Architecture",
         "Solution Idea",
-        "Databases",
         "Analytics",
+        "Databases",
         "Storage"
       ],
       "family": "data",
@@ -19680,7 +19680,7 @@
       },
       "description": "This article shows how an emulator called Charon-SSP from the Microsoft partner, Stromasys, can run SPARC processor-based Solaris virtual machines (VMs) in Azure. Charon-SSP is a member of the Charon cross-platform hardware virtualization product family. The emulator can create virtual replicas of Sun-4m, Sun-4u, or Sun-4v SPARC family members on standard x86-64 Linux physical computers or hypervisors.",
       "source_repo_path": "docs/solution-ideas/articles/solaris-azure-content.md",
-      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/solution-ideas/articles/solaris-azure-content",
+      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/browse/?terms=solaris-azure-content",
       "browse_tags": [
         "Azure",
         "Storage",
@@ -19794,7 +19794,7 @@
       },
       "description": "This article provides a foundational reference architecture for a workload deployed on Azure Virtual Machines.",
       "source_repo_path": "docs/virtual-machines/baseline-content.md",
-      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/virtual-machines/baseline-content",
+      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/browse/?terms=baseline-content",
       "browse_tags": [
         "Azure",
         "Security",
@@ -19804,8 +19804,8 @@
       "browse_categories": [
         "Architecture",
         "Reference",
-        "Networking",
         "Migration",
+        "Networking",
         "Compute"
       ],
       "family": "iaas",
@@ -19924,7 +19924,7 @@
       },
       "description": "Organizations increasingly adopt API-first design approaches while facing growing threats to web applications. You need a comprehensive security strategy to protect APIs, especially when exposing AI-powered APIs and implementing zero trust architecture principles. The Gateway Routing pattern provides one approach to API security by protecting network traffic. The gateway restricts traffic source locations and traffic quality while supporting flexible routing rules. This article describes how to ",
       "source_repo_path": "docs/web-apps/api-management/architectures/protect-apis-content.md",
-      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/web-apps/api-management/architectures/protect-apis-content",
+      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/browse/?terms=protect-apis-content",
       "browse_tags": [
         "Azure",
         "Integration",
@@ -19933,15 +19933,15 @@
       "browse_categories": [
         "Architecture",
         "Reference",
-        "Web",
-        "Security"
+        "Security",
+        "Web"
       ],
       "family": "cloud_native",
       "family_confidence": {
         "confidence": "ai_suggested",
         "source": "content_analysis"
       },
-      "workload_domain": "web",
+      "workload_domain": "security",
       "workload_domain_confidence": {
         "confidence": "ai_suggested",
         "source": "yml_metadata"
@@ -20051,7 +20051,7 @@
       },
       "description": "This baseline architecture builds on the basic web application architecture and provides detailed guidance for designing a secure, zone-redundant, and highly available web app on Azure. In this architecture, Azure Application Gateway with Azure Web Application Firewall exposes a public endpoint and routes requests to Azure App Service through Azure Private Link. The App Service application uses virtual network integration and Private Link to communicate securely with Azure platform as a service ",
       "source_repo_path": "docs/web-apps/app-service/architectures/baseline-zone-redundant-content.md",
-      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/web-apps/app-service/architectures/baseline-zone-redundant-content",
+      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/browse/?terms=baseline-zone-redundant-content",
       "browse_tags": [
         "Azure",
         "Web",
@@ -20063,15 +20063,15 @@
       "browse_categories": [
         "Architecture",
         "Reference",
-        "Web",
-        "Management"
+        "Management",
+        "Web"
       ],
       "family": "paas",
       "family_confidence": {
         "confidence": "ai_suggested",
         "source": "content_analysis"
       },
-      "workload_domain": "web",
+      "workload_domain": "infrastructure",
       "workload_domain_confidence": {
         "confidence": "ai_suggested",
         "source": "yml_metadata"
@@ -20184,7 +20184,7 @@
       },
       "description": "This article provides a basic architecture to help you learn about running web applications on Azure App Service in a single region.",
       "source_repo_path": "docs/web-apps/app-service/architectures/basic-web-app-content.md",
-      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/web-apps/app-service/architectures/basic-web-app-content",
+      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/browse/?terms=basic-web-app-content",
       "browse_tags": [
         "Azure",
         "Web",
@@ -20305,7 +20305,7 @@
       },
       "description": "> [!NOTE]\n> App Service Environment version 3 is the main component of this architecture. Versions 1 and 2 were retired on August 31, 2024.",
       "source_repo_path": "docs/web-apps/app-service-environment/architectures/app-service-environment-high-availability-deployment-content.md",
-      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/web-apps/app-service-environment/architectures/app-service-environment-high-availability-deployment-content",
+      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/browse/?terms=app-service-environment-high-availability-deployment-content",
       "browse_tags": [
         "Azure",
         "Identity",
@@ -20429,7 +20429,7 @@
       },
       "description": "This reference architecture demonstrates a common enterprise workload that uses Azure App Service Environment version 3. It also describes best practices for strengthening the security of the workload.",
       "source_repo_path": "docs/web-apps/app-service-environment/architectures/app-service-environment-standard-deployment-content.md",
-      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/web-apps/app-service-environment/architectures/app-service-environment-standard-deployment-content",
+      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/browse/?terms=app-service-environment-standard-deployment-content",
       "browse_tags": [
         "Azure",
         "Identity",
@@ -20557,7 +20557,7 @@
       },
       "description": "This article shows how to set up improved-security private connectivity to an App Service web app or a function app from an on-premises network or from within an Azure virtual network. It also shows how to set up improved-security connectivity between the app and other Azure platform as a service (PaaS) solutions over Azure Private Link, without using the public internet.",
       "source_repo_path": "docs/web-apps/guides/networking/access-multitenant-web-app-from-on-premises-content.md",
-      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/web-apps/guides/networking/access-multitenant-web-app-from-on-premises-content",
+      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/browse/?terms=access-multitenant-web-app-from-on-premises-content",
       "browse_tags": [
         "Azure",
         "Web",

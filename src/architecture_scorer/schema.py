@@ -144,6 +144,13 @@ class DependencyComplexity(str, Enum):
     UNKNOWN = "unknown"
 
 
+class NetworkExposure(str, Enum):
+    """Application network exposure type."""
+    EXTERNAL = "external"  # Internet-facing, public access
+    INTERNAL = "internal"  # Internal only, corporate network
+    MIXED = "mixed"  # Both internal and external components
+
+
 # =============================================================================
 # Raw Input Models (matching AppCatContextFileCreator format)
 # =============================================================================
@@ -460,6 +467,13 @@ class DerivedIntent(BaseModel):
     time_category: DerivedSignal = Field(
         default_factory=lambda: DerivedSignal(
             value=TimeCategory.MIGRATE,
+            confidence=SignalConfidence.UNKNOWN,
+            source="default"
+        )
+    )
+    network_exposure: DerivedSignal = Field(
+        default_factory=lambda: DerivedSignal(
+            value=NetworkExposure.INTERNAL,
             confidence=SignalConfidence.UNKNOWN,
             source="default"
         )

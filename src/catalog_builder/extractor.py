@@ -5,7 +5,6 @@ import re
 from datetime import datetime
 from pathlib import Path
 from typing import Optional
-from urllib.parse import quote
 
 from .config import get_config
 from .parser import MarkdownParser, ParsedDocument
@@ -752,22 +751,15 @@ class MetadataExtractor:
         return ""
 
     def _build_learn_url(self, rel_path: str) -> Optional[str]:
-        """Build the Microsoft Learn URL for the document."""
+        """Build the GitHub source URL for the document.
+
+        Uses GitHub direct links which are guaranteed to work since we parse from this repo.
+        Format: https://github.com/MicrosoftDocs/architecture-center/blob/main/docs/...
+        """
         config = get_config().urls
 
-        # Remove docs/ prefix and .md extension
-        path = rel_path
-        if path.startswith('docs/'):
-            path = path[5:]
-        if path.endswith('.md'):
-            path = path[:-3]
-        if path.endswith('/index'):
-            path = path[:-6]
-
-        # URL encode the path
-        path = quote(path, safe='/')
-
-        return f"{config.learn_base_url}/{path}"
+        # GitHub URL is straightforward - just append the relative path
+        return f"{config.github_base_url}{rel_path}"
 
     def _extract_diagrams(self, doc: ParsedDocument, rel_path: str) -> list[str]:
         """Extract diagram asset paths."""

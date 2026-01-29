@@ -25,13 +25,17 @@ dev = [
     "pytest>=7.0.0",
     "pytest-cov>=4.0.0",
 ]
+gui = [
+    "streamlit>=1.30.0",
+]
 
 [project.scripts]
 catalog-builder = "catalog_builder.cli:main"
 architecture-scorer = "architecture_scorer.cli:main"
+catalog-builder-gui = "catalog_builder_gui.app:main"
 
 [tool.hatch.build.targets.wheel]
-packages = ["src/catalog_builder", "src/architecture_scorer"]
+packages = ["src/catalog_builder", "src/architecture_scorer", "src/catalog_builder_gui"]
 
 [tool.hatch.build.targets.sdist]
 include = [

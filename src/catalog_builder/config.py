@@ -469,6 +469,9 @@ class ServiceConfig(BaseModel):
 class UrlConfig(BaseModel):
     """URL generation configuration."""
 
+    # GitHub source URL - guaranteed to work since we parse from this repo
+    github_base_url: str = "https://github.com/MicrosoftDocs/architecture-center/blob/main/"
+    # Microsoft Learn base URL (direct paths often 404)
     learn_base_url: str = "https://learn.microsoft.com/en-us/azure/architecture"
 
 

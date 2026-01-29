@@ -24,6 +24,7 @@ from .schema import (
     DerivedIntent,
     DerivedSignal,
     ModernizationDepth,
+    NetworkExposure,
     SignalConfidence,
 )
 
@@ -46,6 +47,7 @@ class IntentDeriver:
             availability_requirement=self._derive_availability_requirement(context),
             security_requirement=self._derive_security_requirement(context),
             cost_posture=self._derive_cost_posture(context),
+            network_exposure=self._derive_network_exposure(context),
         )
 
     def _derive_treatment(self, context: ApplicationContext) -> DerivedSignal:
@@ -572,4 +574,64 @@ class IntentDeriver:
             confidence=SignalConfidence.LOW,
             source="default",
             reasoning="Default balanced cost profile"
+        )
+
+    def _derive_network_exposure(self, context: ApplicationContext) -> DerivedSignal:
+        """Derive network exposure from app type and technology.
+
+        This affects architecture selection significantly:
+        - External: Needs WAF, DDoS protection, CDN, public endpoints
+        - Internal: Private endpoints, simpler security model
+        - Mixed: Both patterns needed (most complex)
+        """
+        app = context.app_overview
+        tech = context.detected_technology
+
+        # Check app_type for hints
+        app_type = (app.app_type or "").lower()
+
+        # External-facing indicators
+        external_indicators = [
+            "web application", "web app", "website", "portal",
+            "customer", "public", "e-commerce", "ecommerce",
+            "mobile backend", "api", "b2c", "consumer"
+        ]
+        if any(ind in app_type for ind in external_indicators):
+            return DerivedSignal(
+                value=NetworkExposure.EXTERNAL,
+                confidence=SignalConfidence.LOW,
+                source="app_type",
+                reasoning=f"App type '{app.app_type}' suggests external-facing"
+            )
+
+        # Internal-facing indicators
+        internal_indicators = [
+            "internal", "intranet", "back-office", "backoffice",
+            "admin", "management", "employee", "corporate",
+            "batch", "etl", "data pipeline"
+        ]
+        if any(ind in app_type for ind in internal_indicators):
+            return DerivedSignal(
+                value=NetworkExposure.INTERNAL,
+                confidence=SignalConfidence.LOW,
+                source="app_type",
+                reasoning=f"App type '{app.app_type}' suggests internal-only"
+            )
+
+        # Check for web technology (suggests possibly external)
+        web_tech = ["IIS", "Apache", "Nginx", "ASP.NET", "React", "Angular", "Vue"]
+        if any(t in tech.technologies for t in web_tech):
+            return DerivedSignal(
+                value=NetworkExposure.EXTERNAL,
+                confidence=SignalConfidence.LOW,
+                source="technology_detection",
+                reasoning="Web server technology detected, possibly external-facing"
+            )
+
+        # Default to internal (safer assumption)
+        return DerivedSignal(
+            value=NetworkExposure.INTERNAL,
+            confidence=SignalConfidence.UNKNOWN,
+            source="default",
+            reasoning="No clear external indicators; defaulting to internal"
         )

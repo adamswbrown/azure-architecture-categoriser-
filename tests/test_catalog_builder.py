@@ -183,12 +183,17 @@ class TestMetadataExtractor:
         assert "data-analytics-big-data" in id2
 
     def test_build_learn_url(self):
-        """Test Learn URL generation."""
+        """Test URL generation uses GitHub source links."""
         parser = MarkdownParser()
         extractor = MetadataExtractor(parser)
 
+        # GitHub URL format: https://github.com/MicrosoftDocs/architecture-center/blob/main/<path>
         url = extractor._build_learn_url("docs/example-scenario/web-app/index.md")
-        assert url == "https://learn.microsoft.com/en-us/azure/architecture/example-scenario/web-app"
+        assert url == "https://github.com/MicrosoftDocs/architecture-center/blob/main/docs/example-scenario/web-app/index.md"
+
+        # Test a non-index file
+        url2 = extractor._build_learn_url("docs/reference-architectures/containers/aks-baseline.md")
+        assert url2 == "https://github.com/MicrosoftDocs/architecture-center/blob/main/docs/reference-architectures/containers/aks-baseline.md"
 
 
 class TestArchitectureClassifier:
