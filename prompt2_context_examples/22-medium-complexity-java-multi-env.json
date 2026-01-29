@@ -1,0 +1,294 @@
+[
+  {
+    "app_overview": [
+      {
+        "application": "CustomerPortal",
+        "app_type": "Web Application",
+        "business_crtiticality": "Medium",
+        "treatment": "Replatform",
+        "app_function": "Customer Facing",
+        "pii_data": "Customer and Personal",
+        "disaster_recovery": "No",
+        "high_availability": "No"
+      }
+    ],
+    "detected_technology_running": [
+      "Java 17",
+      "Spring Boot",
+      "Apache Tomcat 10",
+      "PostgreSQL 14",
+      "Redis",
+      "Ubuntu 22.04"
+    ],
+    "app_approved_azure_services": [
+      {
+        "Tomcat": "Azure App Service",
+        "PostgreSQL": "Azure Database for PostgreSQL",
+        "Redis": "Azure Cache for Redis"
+      }
+    ],
+    "server_details": [
+      {
+        "machine": "PORTAL-WEB-PROD01",
+        "environment": "Production",
+        "OperatingSystem": "Ubuntu 22.04",
+        "ip_address": [
+          "10.201.1.10"
+        ],
+        "StorageGB": 100.0,
+        "MemoryGB": 16.0,
+        "Cores": 4.0,
+        "CPUUsage": 35.0,
+        "MemoryUsage": 50.0,
+        "DiskReadOpsPersec": 60.0,
+        "DiskWriteOpsPerSec": 45.0,
+        "NetworkInMBPS": 25.0,
+        "NetworkOutMBPS": 20.0,
+        "StandardSSDDisks": 1.0,
+        "StandardHDDDisks": 0.0,
+        "PremiumDisks": 0.0,
+        "AzureVMReadiness": "Ready",
+        "AzureReadinessIssues": null,
+        "migration_strategy": "Replatform/Refactor",
+        "treatment_option": "Azure App Service",
+        "detected_COTS": [
+          "Apache Tomcat"
+        ],
+        "ServerCategory": "Web Server",
+        "ServerSubCategory": "Tomcat",
+        "treatment_option_other": null
+      },
+      {
+        "machine": "PORTAL-WEB-PROD02",
+        "environment": "Production",
+        "OperatingSystem": "Ubuntu 22.04",
+        "ip_address": [
+          "10.201.1.11"
+        ],
+        "StorageGB": 100.0,
+        "MemoryGB": 16.0,
+        "Cores": 4.0,
+        "CPUUsage": 30.0,
+        "MemoryUsage": 45.0,
+        "DiskReadOpsPersec": 55.0,
+        "DiskWriteOpsPerSec": 40.0,
+        "NetworkInMBPS": 22.0,
+        "NetworkOutMBPS": 18.0,
+        "StandardSSDDisks": 1.0,
+        "StandardHDDDisks": 0.0,
+        "PremiumDisks": 0.0,
+        "AzureVMReadiness": "Ready",
+        "AzureReadinessIssues": null,
+        "migration_strategy": "Replatform/Refactor",
+        "treatment_option": "Azure App Service",
+        "detected_COTS": [
+          "Apache Tomcat"
+        ],
+        "ServerCategory": "Web Server",
+        "ServerSubCategory": "Tomcat",
+        "treatment_option_other": null
+      },
+      {
+        "machine": "PORTAL-DB-PROD01",
+        "environment": "Production",
+        "OperatingSystem": "Ubuntu 22.04",
+        "ip_address": [
+          "10.201.1.20"
+        ],
+        "StorageGB": 500.0,
+        "MemoryGB": 32.0,
+        "Cores": 8.0,
+        "CPUUsage": 40.0,
+        "MemoryUsage": 60.0,
+        "DiskReadOpsPersec": 150.0,
+        "DiskWriteOpsPerSec": 120.0,
+        "NetworkInMBPS": 40.0,
+        "NetworkOutMBPS": 35.0,
+        "StandardSSDDisks": 0.0,
+        "StandardHDDDisks": 0.0,
+        "PremiumDisks": 2.0,
+        "AzureVMReadiness": "Ready",
+        "AzureReadinessIssues": null,
+        "migration_strategy": "Replatform/Refactor",
+        "treatment_option": "Azure Database for PostgreSQL",
+        "detected_COTS": [
+          "PostgreSQL 14"
+        ],
+        "ServerCategory": "Database",
+        "ServerSubCategory": "PostgreSQL",
+        "treatment_option_other": null
+      },
+      {
+        "machine": "PORTAL-CACHE-PROD01",
+        "environment": "Production",
+        "OperatingSystem": "Ubuntu 22.04",
+        "ip_address": [
+          "10.201.1.30"
+        ],
+        "StorageGB": 50.0,
+        "MemoryGB": 16.0,
+        "Cores": 4.0,
+        "CPUUsage": 20.0,
+        "MemoryUsage": 70.0,
+        "DiskReadOpsPersec": 30.0,
+        "DiskWriteOpsPerSec": 25.0,
+        "NetworkInMBPS": 30.0,
+        "NetworkOutMBPS": 28.0,
+        "StandardSSDDisks": 1.0,
+        "StandardHDDDisks": 0.0,
+        "PremiumDisks": 0.0,
+        "AzureVMReadiness": "Ready",
+        "AzureReadinessIssues": null,
+        "migration_strategy": "Replatform/Refactor",
+        "treatment_option": "Azure Cache for Redis",
+        "detected_COTS": [
+          "Redis"
+        ],
+        "ServerCategory": "Cache",
+        "ServerSubCategory": "Redis",
+        "treatment_option_other": null
+      },
+      {
+        "machine": "PORTAL-WEB-UAT01",
+        "environment": "UAT",
+        "OperatingSystem": "Ubuntu 22.04",
+        "ip_address": [
+          "10.202.1.10"
+        ],
+        "StorageGB": 80.0,
+        "MemoryGB": 8.0,
+        "Cores": 2.0,
+        "CPUUsage": 15.0,
+        "MemoryUsage": 30.0,
+        "DiskReadOpsPersec": 20.0,
+        "DiskWriteOpsPerSec": 15.0,
+        "NetworkInMBPS": 5.0,
+        "NetworkOutMBPS": 4.0,
+        "StandardSSDDisks": 1.0,
+        "StandardHDDDisks": 0.0,
+        "PremiumDisks": 0.0,
+        "AzureVMReadiness": "Ready",
+        "AzureReadinessIssues": null,
+        "migration_strategy": "Replatform/Refactor",
+        "treatment_option": "Azure App Service",
+        "detected_COTS": [
+          "Apache Tomcat"
+        ],
+        "ServerCategory": "Web Server",
+        "ServerSubCategory": "Tomcat",
+        "treatment_option_other": null
+      },
+      {
+        "machine": "PORTAL-DB-UAT01",
+        "environment": "UAT",
+        "OperatingSystem": "Ubuntu 22.04",
+        "ip_address": [
+          "10.202.1.20"
+        ],
+        "StorageGB": 200.0,
+        "MemoryGB": 16.0,
+        "Cores": 4.0,
+        "CPUUsage": 10.0,
+        "MemoryUsage": 35.0,
+        "DiskReadOpsPersec": 30.0,
+        "DiskWriteOpsPerSec": 25.0,
+        "NetworkInMBPS": 8.0,
+        "NetworkOutMBPS": 6.0,
+        "StandardSSDDisks": 1.0,
+        "StandardHDDDisks": 0.0,
+        "PremiumDisks": 0.0,
+        "AzureVMReadiness": "Ready",
+        "AzureReadinessIssues": null,
+        "migration_strategy": "Replatform/Refactor",
+        "treatment_option": "Azure Database for PostgreSQL",
+        "detected_COTS": [
+          "PostgreSQL 14"
+        ],
+        "ServerCategory": "Database",
+        "ServerSubCategory": "PostgreSQL",
+        "treatment_option_other": null
+      },
+      {
+        "machine": "PORTAL-WEB-DEV01",
+        "environment": "Development",
+        "OperatingSystem": "Ubuntu 22.04",
+        "ip_address": [
+          "10.203.1.10"
+        ],
+        "StorageGB": 60.0,
+        "MemoryGB": 4.0,
+        "Cores": 2.0,
+        "CPUUsage": 10.0,
+        "MemoryUsage": 25.0,
+        "DiskReadOpsPersec": 15.0,
+        "DiskWriteOpsPerSec": 10.0,
+        "NetworkInMBPS": 3.0,
+        "NetworkOutMBPS": 2.0,
+        "StandardSSDDisks": 1.0,
+        "StandardHDDDisks": 0.0,
+        "PremiumDisks": 0.0,
+        "AzureVMReadiness": "Ready",
+        "AzureReadinessIssues": null,
+        "migration_strategy": "Replatform/Refactor",
+        "treatment_option": "Azure App Service",
+        "detected_COTS": [
+          "Apache Tomcat"
+        ],
+        "ServerCategory": "Web Server",
+        "ServerSubCategory": "Tomcat",
+        "treatment_option_other": null
+      }
+    ],
+    "complexity_metrics": {
+      "no_servers": 7,
+      "no_environments": 3,
+      "max_servers_per_environment": 4,
+      "sql_servers": 0,
+      "non_sql_db_servers": 2,
+      "app_integrations": 2,
+      "high_availability": false,
+      "disaster_recovery": false,
+      "expected_complexity": "Medium Complexity"
+    },
+    "App Mod results": [
+      {
+        "technology": "Java",
+        "summary": {
+          "services_scanned": 4,
+          "spring_boot_apps": 2,
+          "container_ready": true,
+          "database_connections": 1,
+          "cache_present": true
+        },
+        "findings": [
+          {
+            "type": "Framework",
+            "severity": "Low",
+            "description": "Spring Boot 3.x compatible with Azure App Service for Java."
+          },
+          {
+            "type": "Database",
+            "severity": "Low",
+            "description": "PostgreSQL 14 compatible with Azure Database for PostgreSQL."
+          },
+          {
+            "type": "Caching",
+            "severity": "Low",
+            "description": "Redis caching can migrate to Azure Cache for Redis."
+          }
+        ],
+        "compatibility": {
+          "azure_app_service": "FullySupported",
+          "azure_database_postgresql": "FullySupported",
+          "azure_cache_redis": "FullySupported"
+        },
+        "recommended_targets": [
+          "Azure App Service",
+          "Azure Database for PostgreSQL",
+          "Azure Cache for Redis"
+        ],
+        "blockers": []
+      }
+    ]
+  }
+]

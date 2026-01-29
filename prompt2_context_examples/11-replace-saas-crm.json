@@ -24,7 +24,9 @@
         "machine": "CRM-WEB01",
         "environment": "Production",
         "OperatingSystem": "CentOS 6",
-        "ip_address": ["10.60.0.20"],
+        "ip_address": [
+          "10.60.0.20"
+        ],
         "StorageGB": 100.0,
         "MemoryGB": 8.0,
         "Cores": 4.0,
@@ -41,13 +43,18 @@
         "AzureReadinessIssues": "End of life OS (CentOS 6)",
         "migration_strategy": "Replace",
         "treatment_option": "Replace with SaaS (Dynamics 365)",
-        "detected_COTS": ["Custom PHP CRM"]
+        "detected_COTS": [
+          "Custom PHP CRM"
+        ],
+        "treatment_option_other": null
       },
       {
         "machine": "CRM-DB01",
         "environment": "Production",
         "OperatingSystem": "CentOS 6",
-        "ip_address": ["10.60.0.21"],
+        "ip_address": [
+          "10.60.0.21"
+        ],
         "StorageGB": 250.0,
         "MemoryGB": 16.0,
         "Cores": 4.0,
@@ -64,7 +71,10 @@
         "AzureReadinessIssues": "End of life OS (CentOS 6)",
         "migration_strategy": "Replace",
         "treatment_option": "Data migration to SaaS",
-        "detected_COTS": ["MySQL 5.5"]
+        "detected_COTS": [
+          "MySQL 5.5"
+        ],
+        "treatment_option_other": null
       }
     ],
     "App Mod results": [

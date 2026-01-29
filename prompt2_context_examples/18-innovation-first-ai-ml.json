@@ -30,7 +30,9 @@
         "machine": "AI-GPU-01",
         "environment": "Production",
         "OperatingSystem": "Ubuntu 22.04",
-        "ip_address": ["10.150.0.10"],
+        "ip_address": [
+          "10.150.0.10"
+        ],
         "StorageGB": 500.0,
         "MemoryGB": 64.0,
         "Cores": 16.0,
@@ -47,7 +49,11 @@
         "AzureReadinessIssues": null,
         "migration_strategy": "Rebuild",
         "treatment_option": "Cloud-native AI platform",
-        "detected_COTS": ["PyTorch", "LangChain"]
+        "detected_COTS": [
+          "PyTorch",
+          "LangChain"
+        ],
+        "treatment_option_other": null
       }
     ],
     "App Mod results": [

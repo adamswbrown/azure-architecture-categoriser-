@@ -45,7 +45,8 @@
         "detected_COTS": [
           "Java 8",
           "Quartz Scheduler"
-        ]
+        ],
+        "treatment_option_other": null
       }
     ],
     "App Mod results": [

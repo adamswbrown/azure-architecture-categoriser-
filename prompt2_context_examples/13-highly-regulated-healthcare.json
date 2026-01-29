@@ -6,7 +6,11 @@
         "app_type": "Healthcare Application",
         "business_crtiticality": "Critical",
         "treatment": "Replatform",
-        "compliance_requirements": ["HIPAA", "HITRUST", "SOC 2 Type II"]
+        "compliance_requirements": [
+          "HIPAA",
+          "HITRUST",
+          "SOC 2 Type II"
+        ]
       }
     ],
     "detected_technology_running": [
@@ -29,7 +33,9 @@
         "machine": "HEALTH-K8S-01",
         "environment": "Production",
         "OperatingSystem": "Ubuntu 22.04",
-        "ip_address": ["10.100.0.10"],
+        "ip_address": [
+          "10.100.0.10"
+        ],
         "StorageGB": 500.0,
         "MemoryGB": 64.0,
         "Cores": 16.0,
@@ -46,7 +52,11 @@
         "AzureReadinessIssues": null,
         "migration_strategy": "Replatform",
         "treatment_option": "Managed Kubernetes with compliance",
-        "detected_COTS": ["HashiCorp Vault", "PostgreSQL"]
+        "detected_COTS": [
+          "HashiCorp Vault",
+          "PostgreSQL"
+        ],
+        "treatment_option_other": null
       }
     ],
     "App Mod results": [

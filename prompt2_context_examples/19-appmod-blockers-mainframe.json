@@ -23,7 +23,9 @@
         "machine": "MAINFRAME-PROD",
         "environment": "Production",
         "OperatingSystem": "z/OS",
-        "ip_address": ["10.160.0.5"],
+        "ip_address": [
+          "10.160.0.5"
+        ],
         "StorageGB": 5000.0,
         "MemoryGB": 512.0,
         "Cores": 100.0,
@@ -40,7 +42,12 @@
         "AzureReadinessIssues": "Mainframe workload - requires specialized migration",
         "migration_strategy": "Refactor",
         "treatment_option": "Mainframe modernization",
-        "detected_COTS": ["COBOL", "CICS", "DB2"]
+        "detected_COTS": [
+          "COBOL",
+          "CICS",
+          "DB2"
+        ],
+        "treatment_option_other": null
       }
     ],
     "App Mod results": [

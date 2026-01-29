@@ -22,7 +22,9 @@
         "machine": "LEGACY-RPT01",
         "environment": "Production",
         "OperatingSystem": "Windows Server 2008",
-        "ip_address": ["10.50.0.5"],
+        "ip_address": [
+          "10.50.0.5"
+        ],
         "StorageGB": 80.0,
         "MemoryGB": 4.0,
         "Cores": 2.0,
@@ -39,7 +41,11 @@
         "AzureReadinessIssues": "Unsupported OS (Windows Server 2008 EOL)",
         "migration_strategy": "Retire",
         "treatment_option": "Decommission",
-        "detected_COTS": ["Classic ASP", "Microsoft Access"]
+        "detected_COTS": [
+          "Classic ASP",
+          "Microsoft Access"
+        ],
+        "treatment_option_other": null
       }
     ],
     "App Mod results": [

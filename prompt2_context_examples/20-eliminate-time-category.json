@@ -23,7 +23,9 @@
         "machine": "PAYROLL-LEGACY",
         "environment": "Production",
         "OperatingSystem": "Windows XP",
-        "ip_address": ["10.170.0.5"],
+        "ip_address": [
+          "10.170.0.5"
+        ],
         "StorageGB": 40.0,
         "MemoryGB": 2.0,
         "Cores": 1.0,
@@ -40,7 +42,11 @@
         "AzureReadinessIssues": "Unsupported OS (Windows XP), security risk",
         "migration_strategy": "Retire",
         "treatment_option": "Eliminate - replace with new payroll SaaS",
-        "detected_COTS": ["Visual Basic 6", "Crystal Reports"]
+        "detected_COTS": [
+          "Visual Basic 6",
+          "Crystal Reports"
+        ],
+        "treatment_option_other": null
       }
     ],
     "App Mod results": [

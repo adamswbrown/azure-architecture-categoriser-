@@ -1,0 +1,715 @@
+[
+  {
+    "app_overview": [
+      {
+        "application": "SupplyChainPlatform",
+        "app_type": "Enterprise Platform",
+        "business_crtiticality": "Critical",
+        "treatment": "Refactor",
+        "app_function": "Platform Services",
+        "pii_data": "Confidential",
+        "disaster_recovery": "Yes",
+        "high_availability": "Yes",
+        "inherent_risk": "Extreme",
+        "materiality": "Material"
+      }
+    ],
+    "detected_technology_running": [
+      "Java 17",
+      "Spring Boot",
+      "Apache Kafka",
+      "PostgreSQL 15",
+      "MongoDB",
+      "Elasticsearch",
+      "Redis",
+      "Kubernetes",
+      "NGINX"
+    ],
+    "app_approved_azure_services": [
+      {
+        "Kubernetes": "Azure Kubernetes Service",
+        "Kafka": "Azure Event Hubs",
+        "PostgreSQL": "Azure Database for PostgreSQL",
+        "MongoDB": "Azure Cosmos DB",
+        "Elasticsearch": "Azure AI Search",
+        "Redis": "Azure Cache for Redis"
+      }
+    ],
+    "server_details": [
+      {
+        "machine": "SCP-K8S-MASTER-PROD01",
+        "environment": "Production",
+        "OperatingSystem": "Ubuntu 22.04",
+        "ip_address": [
+          "10.220.1.10"
+        ],
+        "StorageGB": 200.0,
+        "MemoryGB": 32.0,
+        "Cores": 8.0,
+        "CPUUsage": 40.0,
+        "MemoryUsage": 55.0,
+        "DiskReadOpsPersec": 100.0,
+        "DiskWriteOpsPerSec": 80.0,
+        "NetworkInMBPS": 80.0,
+        "NetworkOutMBPS": 75.0,
+        "StandardSSDDisks": 2.0,
+        "StandardHDDDisks": 0.0,
+        "PremiumDisks": 0.0,
+        "AzureVMReadiness": "Ready",
+        "AzureReadinessIssues": null,
+        "migration_strategy": "Re-Architect",
+        "treatment_option": "AKS",
+        "detected_COTS": [
+          "Kubernetes"
+        ],
+        "ServerCategory": "Orchestration",
+        "ServerSubCategory": "Kubernetes",
+        "treatment_option_other": null
+      },
+      {
+        "machine": "SCP-K8S-MASTER-PROD02",
+        "environment": "Production",
+        "OperatingSystem": "Ubuntu 22.04",
+        "ip_address": [
+          "10.220.1.11"
+        ],
+        "StorageGB": 200.0,
+        "MemoryGB": 32.0,
+        "Cores": 8.0,
+        "CPUUsage": 38.0,
+        "MemoryUsage": 52.0,
+        "DiskReadOpsPersec": 95.0,
+        "DiskWriteOpsPerSec": 75.0,
+        "NetworkInMBPS": 78.0,
+        "NetworkOutMBPS": 72.0,
+        "StandardSSDDisks": 2.0,
+        "StandardHDDDisks": 0.0,
+        "PremiumDisks": 0.0,
+        "AzureVMReadiness": "Ready",
+        "AzureReadinessIssues": null,
+        "migration_strategy": "Re-Architect",
+        "treatment_option": "AKS",
+        "detected_COTS": [
+          "Kubernetes"
+        ],
+        "ServerCategory": "Orchestration",
+        "ServerSubCategory": "Kubernetes",
+        "treatment_option_other": null
+      },
+      {
+        "machine": "SCP-K8S-MASTER-PROD03",
+        "environment": "Production",
+        "OperatingSystem": "Ubuntu 22.04",
+        "ip_address": [
+          "10.220.1.12"
+        ],
+        "StorageGB": 200.0,
+        "MemoryGB": 32.0,
+        "Cores": 8.0,
+        "CPUUsage": 35.0,
+        "MemoryUsage": 50.0,
+        "DiskReadOpsPersec": 90.0,
+        "DiskWriteOpsPerSec": 70.0,
+        "NetworkInMBPS": 75.0,
+        "NetworkOutMBPS": 70.0,
+        "StandardSSDDisks": 2.0,
+        "StandardHDDDisks": 0.0,
+        "PremiumDisks": 0.0,
+        "AzureVMReadiness": "Ready",
+        "AzureReadinessIssues": null,
+        "migration_strategy": "Re-Architect",
+        "treatment_option": "AKS",
+        "detected_COTS": [
+          "Kubernetes"
+        ],
+        "ServerCategory": "Orchestration",
+        "ServerSubCategory": "Kubernetes",
+        "treatment_option_other": null
+      },
+      {
+        "machine": "SCP-K8S-WORKER-PROD01",
+        "environment": "Production",
+        "OperatingSystem": "Ubuntu 22.04",
+        "ip_address": [
+          "10.220.1.20"
+        ],
+        "StorageGB": 500.0,
+        "MemoryGB": 64.0,
+        "Cores": 16.0,
+        "CPUUsage": 65.0,
+        "MemoryUsage": 70.0,
+        "DiskReadOpsPersec": 200.0,
+        "DiskWriteOpsPerSec": 180.0,
+        "NetworkInMBPS": 150.0,
+        "NetworkOutMBPS": 140.0,
+        "StandardSSDDisks": 0.0,
+        "StandardHDDDisks": 0.0,
+        "PremiumDisks": 4.0,
+        "AzureVMReadiness": "Ready",
+        "AzureReadinessIssues": null,
+        "migration_strategy": "Re-Architect",
+        "treatment_option": "AKS",
+        "detected_COTS": [
+          "Java 17",
+          "Spring Boot"
+        ],
+        "ServerCategory": "Application Server",
+        "ServerSubCategory": "Kubernetes Worker",
+        "treatment_option_other": null
+      },
+      {
+        "machine": "SCP-K8S-WORKER-PROD02",
+        "environment": "Production",
+        "OperatingSystem": "Ubuntu 22.04",
+        "ip_address": [
+          "10.220.1.21"
+        ],
+        "StorageGB": 500.0,
+        "MemoryGB": 64.0,
+        "Cores": 16.0,
+        "CPUUsage": 62.0,
+        "MemoryUsage": 68.0,
+        "DiskReadOpsPersec": 195.0,
+        "DiskWriteOpsPerSec": 175.0,
+        "NetworkInMBPS": 145.0,
+        "NetworkOutMBPS": 135.0,
+        "StandardSSDDisks": 0.0,
+        "StandardHDDDisks": 0.0,
+        "PremiumDisks": 4.0,
+        "AzureVMReadiness": "Ready",
+        "AzureReadinessIssues": null,
+        "migration_strategy": "Re-Architect",
+        "treatment_option": "AKS",
+        "detected_COTS": [
+          "Java 17",
+          "Spring Boot"
+        ],
+        "ServerCategory": "Application Server",
+        "ServerSubCategory": "Kubernetes Worker",
+        "treatment_option_other": null
+      },
+      {
+        "machine": "SCP-K8S-WORKER-PROD03",
+        "environment": "Production",
+        "OperatingSystem": "Ubuntu 22.04",
+        "ip_address": [
+          "10.220.1.22"
+        ],
+        "StorageGB": 500.0,
+        "MemoryGB": 64.0,
+        "Cores": 16.0,
+        "CPUUsage": 60.0,
+        "MemoryUsage": 65.0,
+        "DiskReadOpsPersec": 190.0,
+        "DiskWriteOpsPerSec": 170.0,
+        "NetworkInMBPS": 140.0,
+        "NetworkOutMBPS": 130.0,
+        "StandardSSDDisks": 0.0,
+        "StandardHDDDisks": 0.0,
+        "PremiumDisks": 4.0,
+        "AzureVMReadiness": "Ready",
+        "AzureReadinessIssues": null,
+        "migration_strategy": "Re-Architect",
+        "treatment_option": "AKS",
+        "detected_COTS": [
+          "Java 17",
+          "Spring Boot"
+        ],
+        "ServerCategory": "Application Server",
+        "ServerSubCategory": "Kubernetes Worker",
+        "treatment_option_other": null
+      },
+      {
+        "machine": "SCP-K8S-WORKER-PROD04",
+        "environment": "Production",
+        "OperatingSystem": "Ubuntu 22.04",
+        "ip_address": [
+          "10.220.1.23"
+        ],
+        "StorageGB": 500.0,
+        "MemoryGB": 64.0,
+        "Cores": 16.0,
+        "CPUUsage": 58.0,
+        "MemoryUsage": 63.0,
+        "DiskReadOpsPersec": 185.0,
+        "DiskWriteOpsPerSec": 165.0,
+        "NetworkInMBPS": 138.0,
+        "NetworkOutMBPS": 128.0,
+        "StandardSSDDisks": 0.0,
+        "StandardHDDDisks": 0.0,
+        "PremiumDisks": 4.0,
+        "AzureVMReadiness": "Ready",
+        "AzureReadinessIssues": null,
+        "migration_strategy": "Re-Architect",
+        "treatment_option": "AKS",
+        "detected_COTS": [
+          "Java 17",
+          "Spring Boot"
+        ],
+        "ServerCategory": "Application Server",
+        "ServerSubCategory": "Kubernetes Worker",
+        "treatment_option_other": null
+      },
+      {
+        "machine": "SCP-KAFKA-PROD01",
+        "environment": "Production",
+        "OperatingSystem": "Ubuntu 22.04",
+        "ip_address": [
+          "10.220.1.30"
+        ],
+        "StorageGB": 1000.0,
+        "MemoryGB": 64.0,
+        "Cores": 8.0,
+        "CPUUsage": 50.0,
+        "MemoryUsage": 60.0,
+        "DiskReadOpsPersec": 300.0,
+        "DiskWriteOpsPerSec": 280.0,
+        "NetworkInMBPS": 200.0,
+        "NetworkOutMBPS": 190.0,
+        "StandardSSDDisks": 0.0,
+        "StandardHDDDisks": 0.0,
+        "PremiumDisks": 4.0,
+        "AzureVMReadiness": "Ready",
+        "AzureReadinessIssues": null,
+        "migration_strategy": "Re-Architect",
+        "treatment_option": "Azure Event Hubs",
+        "detected_COTS": [
+          "Apache Kafka"
+        ],
+        "ServerCategory": "Messaging",
+        "ServerSubCategory": "Kafka",
+        "treatment_option_other": null
+      },
+      {
+        "machine": "SCP-KAFKA-PROD02",
+        "environment": "Production",
+        "OperatingSystem": "Ubuntu 22.04",
+        "ip_address": [
+          "10.220.1.31"
+        ],
+        "StorageGB": 1000.0,
+        "MemoryGB": 64.0,
+        "Cores": 8.0,
+        "CPUUsage": 48.0,
+        "MemoryUsage": 58.0,
+        "DiskReadOpsPersec": 290.0,
+        "DiskWriteOpsPerSec": 270.0,
+        "NetworkInMBPS": 195.0,
+        "NetworkOutMBPS": 185.0,
+        "StandardSSDDisks": 0.0,
+        "StandardHDDDisks": 0.0,
+        "PremiumDisks": 4.0,
+        "AzureVMReadiness": "Ready",
+        "AzureReadinessIssues": null,
+        "migration_strategy": "Re-Architect",
+        "treatment_option": "Azure Event Hubs",
+        "detected_COTS": [
+          "Apache Kafka"
+        ],
+        "ServerCategory": "Messaging",
+        "ServerSubCategory": "Kafka",
+        "treatment_option_other": null
+      },
+      {
+        "machine": "SCP-KAFKA-PROD03",
+        "environment": "Production",
+        "OperatingSystem": "Ubuntu 22.04",
+        "ip_address": [
+          "10.220.1.32"
+        ],
+        "StorageGB": 1000.0,
+        "MemoryGB": 64.0,
+        "Cores": 8.0,
+        "CPUUsage": 45.0,
+        "MemoryUsage": 55.0,
+        "DiskReadOpsPersec": 280.0,
+        "DiskWriteOpsPerSec": 260.0,
+        "NetworkInMBPS": 190.0,
+        "NetworkOutMBPS": 180.0,
+        "StandardSSDDisks": 0.0,
+        "StandardHDDDisks": 0.0,
+        "PremiumDisks": 4.0,
+        "AzureVMReadiness": "Ready",
+        "AzureReadinessIssues": null,
+        "migration_strategy": "Re-Architect",
+        "treatment_option": "Azure Event Hubs",
+        "detected_COTS": [
+          "Apache Kafka"
+        ],
+        "ServerCategory": "Messaging",
+        "ServerSubCategory": "Kafka",
+        "treatment_option_other": null
+      },
+      {
+        "machine": "SCP-PGSQL-PROD01",
+        "environment": "Production",
+        "OperatingSystem": "Ubuntu 22.04",
+        "ip_address": [
+          "10.220.1.40"
+        ],
+        "StorageGB": 2000.0,
+        "MemoryGB": 128.0,
+        "Cores": 32.0,
+        "CPUUsage": 55.0,
+        "MemoryUsage": 70.0,
+        "DiskReadOpsPersec": 500.0,
+        "DiskWriteOpsPerSec": 450.0,
+        "NetworkInMBPS": 150.0,
+        "NetworkOutMBPS": 140.0,
+        "StandardSSDDisks": 0.0,
+        "StandardHDDDisks": 0.0,
+        "PremiumDisks": 8.0,
+        "AzureVMReadiness": "Ready",
+        "AzureReadinessIssues": null,
+        "migration_strategy": "Re-Architect",
+        "treatment_option": "Azure Database for PostgreSQL",
+        "detected_COTS": [
+          "PostgreSQL 15"
+        ],
+        "ServerCategory": "Database",
+        "ServerSubCategory": "PostgreSQL",
+        "treatment_option_other": null
+      },
+      {
+        "machine": "SCP-PGSQL-PROD02",
+        "environment": "Production",
+        "OperatingSystem": "Ubuntu 22.04",
+        "ip_address": [
+          "10.220.1.41"
+        ],
+        "StorageGB": 2000.0,
+        "MemoryGB": 128.0,
+        "Cores": 32.0,
+        "CPUUsage": 30.0,
+        "MemoryUsage": 50.0,
+        "DiskReadOpsPersec": 300.0,
+        "DiskWriteOpsPerSec": 250.0,
+        "NetworkInMBPS": 100.0,
+        "NetworkOutMBPS": 90.0,
+        "StandardSSDDisks": 0.0,
+        "StandardHDDDisks": 0.0,
+        "PremiumDisks": 8.0,
+        "AzureVMReadiness": "Ready",
+        "AzureReadinessIssues": null,
+        "migration_strategy": "Re-Architect",
+        "treatment_option": "Azure Database for PostgreSQL (Replica)",
+        "detected_COTS": [
+          "PostgreSQL 15"
+        ],
+        "ServerCategory": "Database",
+        "ServerSubCategory": "PostgreSQL",
+        "treatment_option_other": null
+      },
+      {
+        "machine": "SCP-MONGO-PROD01",
+        "environment": "Production",
+        "OperatingSystem": "Ubuntu 22.04",
+        "ip_address": [
+          "10.220.1.50"
+        ],
+        "StorageGB": 1500.0,
+        "MemoryGB": 64.0,
+        "Cores": 16.0,
+        "CPUUsage": 45.0,
+        "MemoryUsage": 60.0,
+        "DiskReadOpsPersec": 400.0,
+        "DiskWriteOpsPerSec": 350.0,
+        "NetworkInMBPS": 120.0,
+        "NetworkOutMBPS": 110.0,
+        "StandardSSDDisks": 0.0,
+        "StandardHDDDisks": 0.0,
+        "PremiumDisks": 6.0,
+        "AzureVMReadiness": "Ready",
+        "AzureReadinessIssues": null,
+        "migration_strategy": "Re-Architect",
+        "treatment_option": "Azure Cosmos DB",
+        "detected_COTS": [
+          "MongoDB"
+        ],
+        "ServerCategory": "Database",
+        "ServerSubCategory": "MongoDB",
+        "treatment_option_other": null
+      },
+      {
+        "machine": "SCP-MONGO-PROD02",
+        "environment": "Production",
+        "OperatingSystem": "Ubuntu 22.04",
+        "ip_address": [
+          "10.220.1.51"
+        ],
+        "StorageGB": 1500.0,
+        "MemoryGB": 64.0,
+        "Cores": 16.0,
+        "CPUUsage": 42.0,
+        "MemoryUsage": 58.0,
+        "DiskReadOpsPersec": 380.0,
+        "DiskWriteOpsPerSec": 330.0,
+        "NetworkInMBPS": 115.0,
+        "NetworkOutMBPS": 105.0,
+        "StandardSSDDisks": 0.0,
+        "StandardHDDDisks": 0.0,
+        "PremiumDisks": 6.0,
+        "AzureVMReadiness": "Ready",
+        "AzureReadinessIssues": null,
+        "migration_strategy": "Re-Architect",
+        "treatment_option": "Azure Cosmos DB",
+        "detected_COTS": [
+          "MongoDB"
+        ],
+        "ServerCategory": "Database",
+        "ServerSubCategory": "MongoDB",
+        "treatment_option_other": null
+      },
+      {
+        "machine": "SCP-MONGO-PROD03",
+        "environment": "Production",
+        "OperatingSystem": "Ubuntu 22.04",
+        "ip_address": [
+          "10.220.1.52"
+        ],
+        "StorageGB": 1500.0,
+        "MemoryGB": 64.0,
+        "Cores": 16.0,
+        "CPUUsage": 40.0,
+        "MemoryUsage": 55.0,
+        "DiskReadOpsPersec": 360.0,
+        "DiskWriteOpsPerSec": 310.0,
+        "NetworkInMBPS": 110.0,
+        "NetworkOutMBPS": 100.0,
+        "StandardSSDDisks": 0.0,
+        "StandardHDDDisks": 0.0,
+        "PremiumDisks": 6.0,
+        "AzureVMReadiness": "Ready",
+        "AzureReadinessIssues": null,
+        "migration_strategy": "Re-Architect",
+        "treatment_option": "Azure Cosmos DB",
+        "detected_COTS": [
+          "MongoDB"
+        ],
+        "ServerCategory": "Database",
+        "ServerSubCategory": "MongoDB",
+        "treatment_option_other": null
+      },
+      {
+        "machine": "SCP-ES-PROD01",
+        "environment": "Production",
+        "OperatingSystem": "Ubuntu 22.04",
+        "ip_address": [
+          "10.220.1.60"
+        ],
+        "StorageGB": 1000.0,
+        "MemoryGB": 64.0,
+        "Cores": 16.0,
+        "CPUUsage": 50.0,
+        "MemoryUsage": 65.0,
+        "DiskReadOpsPersec": 250.0,
+        "DiskWriteOpsPerSec": 200.0,
+        "NetworkInMBPS": 100.0,
+        "NetworkOutMBPS": 90.0,
+        "StandardSSDDisks": 0.0,
+        "StandardHDDDisks": 0.0,
+        "PremiumDisks": 4.0,
+        "AzureVMReadiness": "Ready",
+        "AzureReadinessIssues": null,
+        "migration_strategy": "Re-Architect",
+        "treatment_option": "Azure AI Search",
+        "detected_COTS": [
+          "Elasticsearch"
+        ],
+        "ServerCategory": "Search",
+        "ServerSubCategory": "Elasticsearch",
+        "treatment_option_other": null
+      },
+      {
+        "machine": "SCP-ES-PROD02",
+        "environment": "Production",
+        "OperatingSystem": "Ubuntu 22.04",
+        "ip_address": [
+          "10.220.1.61"
+        ],
+        "StorageGB": 1000.0,
+        "MemoryGB": 64.0,
+        "Cores": 16.0,
+        "CPUUsage": 48.0,
+        "MemoryUsage": 62.0,
+        "DiskReadOpsPersec": 240.0,
+        "DiskWriteOpsPerSec": 190.0,
+        "NetworkInMBPS": 95.0,
+        "NetworkOutMBPS": 85.0,
+        "StandardSSDDisks": 0.0,
+        "StandardHDDDisks": 0.0,
+        "PremiumDisks": 4.0,
+        "AzureVMReadiness": "Ready",
+        "AzureReadinessIssues": null,
+        "migration_strategy": "Re-Architect",
+        "treatment_option": "Azure AI Search",
+        "detected_COTS": [
+          "Elasticsearch"
+        ],
+        "ServerCategory": "Search",
+        "ServerSubCategory": "Elasticsearch",
+        "treatment_option_other": null
+      },
+      {
+        "machine": "SCP-REDIS-PROD01",
+        "environment": "Production",
+        "OperatingSystem": "Ubuntu 22.04",
+        "ip_address": [
+          "10.220.1.70"
+        ],
+        "StorageGB": 100.0,
+        "MemoryGB": 64.0,
+        "Cores": 8.0,
+        "CPUUsage": 30.0,
+        "MemoryUsage": 80.0,
+        "DiskReadOpsPersec": 50.0,
+        "DiskWriteOpsPerSec": 40.0,
+        "NetworkInMBPS": 80.0,
+        "NetworkOutMBPS": 75.0,
+        "StandardSSDDisks": 1.0,
+        "StandardHDDDisks": 0.0,
+        "PremiumDisks": 0.0,
+        "AzureVMReadiness": "Ready",
+        "AzureReadinessIssues": null,
+        "migration_strategy": "Re-Architect",
+        "treatment_option": "Azure Cache for Redis",
+        "detected_COTS": [
+          "Redis"
+        ],
+        "ServerCategory": "Cache",
+        "ServerSubCategory": "Redis",
+        "treatment_option_other": null
+      },
+      {
+        "machine": "SCP-NGINX-PROD01",
+        "environment": "Production",
+        "OperatingSystem": "Ubuntu 22.04",
+        "ip_address": [
+          "10.220.1.80"
+        ],
+        "StorageGB": 80.0,
+        "MemoryGB": 8.0,
+        "Cores": 4.0,
+        "CPUUsage": 35.0,
+        "MemoryUsage": 40.0,
+        "DiskReadOpsPersec": 30.0,
+        "DiskWriteOpsPerSec": 20.0,
+        "NetworkInMBPS": 200.0,
+        "NetworkOutMBPS": 190.0,
+        "StandardSSDDisks": 1.0,
+        "StandardHDDDisks": 0.0,
+        "PremiumDisks": 0.0,
+        "AzureVMReadiness": "Ready",
+        "AzureReadinessIssues": null,
+        "migration_strategy": "Re-Architect",
+        "treatment_option": "Azure Application Gateway",
+        "detected_COTS": [
+          "NGINX"
+        ],
+        "ServerCategory": "Load Balancer",
+        "ServerSubCategory": "NGINX",
+        "treatment_option_other": null
+      },
+      {
+        "machine": "SCP-NGINX-PROD02",
+        "environment": "Production",
+        "OperatingSystem": "Ubuntu 22.04",
+        "ip_address": [
+          "10.220.1.81"
+        ],
+        "StorageGB": 80.0,
+        "MemoryGB": 8.0,
+        "Cores": 4.0,
+        "CPUUsage": 32.0,
+        "MemoryUsage": 38.0,
+        "DiskReadOpsPersec": 28.0,
+        "DiskWriteOpsPerSec": 18.0,
+        "NetworkInMBPS": 195.0,
+        "NetworkOutMBPS": 185.0,
+        "StandardSSDDisks": 1.0,
+        "StandardHDDDisks": 0.0,
+        "PremiumDisks": 0.0,
+        "AzureVMReadiness": "Ready",
+        "AzureReadinessIssues": null,
+        "migration_strategy": "Re-Architect",
+        "treatment_option": "Azure Application Gateway",
+        "detected_COTS": [
+          "NGINX"
+        ],
+        "ServerCategory": "Load Balancer",
+        "ServerSubCategory": "NGINX",
+        "treatment_option_other": null
+      }
+    ],
+    "complexity_metrics": {
+      "no_servers": 21,
+      "no_environments": 1,
+      "max_servers_per_environment": 21,
+      "sql_servers": 0,
+      "non_sql_db_servers": 7,
+      "app_integrations": 12,
+      "high_availability": true,
+      "disaster_recovery": true,
+      "app_criticality": "Critical",
+      "data_classification": "Confidential",
+      "inherent_risk": "Extreme",
+      "materiality": "Material",
+      "rearchitect_flag": true,
+      "expected_complexity": "Very High Complexity"
+    },
+    "App Mod results": [
+      {
+        "technology": "Java",
+        "summary": {
+          "services_scanned": 15,
+          "spring_boot_apps": 12,
+          "microservices_detected": true,
+          "container_ready": true,
+          "externalized_configuration": true,
+          "ci_cd_present": true,
+          "database_connections": 7,
+          "messaging_present": true,
+          "search_engine_present": true,
+          "cache_present": true
+        },
+        "findings": [
+          {
+            "type": "Architecture",
+            "severity": "Medium",
+            "description": "Complex microservices architecture requires careful AKS planning."
+          },
+          {
+            "type": "Database",
+            "severity": "Medium",
+            "description": "Multiple database technologies (PostgreSQL, MongoDB) require separate migration tracks."
+          },
+          {
+            "type": "Messaging",
+            "severity": "Medium",
+            "description": "Kafka cluster migration to Event Hubs requires topic partitioning review."
+          },
+          {
+            "type": "Search",
+            "severity": "Medium",
+            "description": "Elasticsearch to Azure AI Search requires index schema migration."
+          }
+        ],
+        "compatibility": {
+          "azure_kubernetes_service": "FullySupported",
+          "azure_event_hubs": "Supported",
+          "azure_database_postgresql": "FullySupported",
+          "azure_cosmos_db": "Supported"
+        },
+        "recommended_targets": [
+          "Azure Kubernetes Service",
+          "Azure Event Hubs",
+          "Azure Database for PostgreSQL (Hyperscale)",
+          "Azure Cosmos DB",
+          "Azure AI Search",
+          "Azure Cache for Redis"
+        ],
+        "blockers": []
+      }
+    ]
+  }
+]

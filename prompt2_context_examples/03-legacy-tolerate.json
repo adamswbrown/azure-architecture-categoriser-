@@ -41,7 +41,8 @@
         "treatment_option": "Keep as-is",
         "detected_COTS": [
           "Microsoft Access"
-        ]
+        ],
+        "treatment_option_other": null
       }
     ],
     "App Mod results": [

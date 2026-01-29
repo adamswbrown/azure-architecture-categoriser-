@@ -27,7 +27,9 @@
         "machine": "STARTUP-WEB01",
         "environment": "Production",
         "OperatingSystem": "Ubuntu 22.04",
-        "ip_address": ["10.140.0.5"],
+        "ip_address": [
+          "10.140.0.5"
+        ],
         "StorageGB": 20.0,
         "MemoryGB": 2.0,
         "Cores": 1.0,
@@ -44,7 +46,11 @@
         "AzureReadinessIssues": null,
         "migration_strategy": "Replatform",
         "treatment_option": "Serverless/consumption pricing",
-        "detected_COTS": ["Node.js", "MongoDB"]
+        "detected_COTS": [
+          "Node.js",
+          "MongoDB"
+        ],
+        "treatment_option_other": null
       }
     ],
     "App Mod results": [

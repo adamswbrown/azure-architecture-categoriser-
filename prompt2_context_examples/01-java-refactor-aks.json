@@ -50,7 +50,8 @@
           "Java 11",
           "Spring Boot",
           "Apache Tomcat"
-        ]
+        ],
+        "treatment_option_other": null
       }
     ],
     "App Mod results": [

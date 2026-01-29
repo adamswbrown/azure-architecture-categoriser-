@@ -51,7 +51,8 @@
           "Java 21",
           "Kafka",
           "OpenTelemetry"
-        ]
+        ],
+        "treatment_option_other": null
       }
     ],
     "App Mod results": [

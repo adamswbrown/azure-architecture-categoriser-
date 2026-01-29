@@ -28,7 +28,9 @@
         "machine": "ERP-FIN01",
         "environment": "Production",
         "OperatingSystem": "Windows Server 2019",
-        "ip_address": ["10.120.0.20"],
+        "ip_address": [
+          "10.120.0.20"
+        ],
         "StorageGB": 300.0,
         "MemoryGB": 32.0,
         "Cores": 8.0,
@@ -45,7 +47,11 @@
         "AzureReadinessIssues": null,
         "migration_strategy": "Replatform",
         "treatment_option": "Managed PaaS",
-        "detected_COTS": ["SQL Server 2019", "SSRS"]
+        "detected_COTS": [
+          "SQL Server 2019",
+          "SSRS"
+        ],
+        "treatment_option_other": null
       }
     ],
     "App Mod results": [

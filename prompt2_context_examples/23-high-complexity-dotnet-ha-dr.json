@@ -1,0 +1,459 @@
+[
+  {
+    "app_overview": [
+      {
+        "application": "OrderManagementSystem",
+        "app_type": "Enterprise Application",
+        "business_crtiticality": "High",
+        "treatment": "Replatform",
+        "app_function": "Business Critical",
+        "pii_data": "Customer and Personal",
+        "disaster_recovery": "Yes",
+        "high_availability": "Yes",
+        "inherent_risk": "Heightened"
+      }
+    ],
+    "detected_technology_running": [
+      "ASP.NET Core 8",
+      "C#",
+      "SQL Server 2022",
+      "SQL Server Always On",
+      "Windows Server 2022",
+      "IIS 10",
+      "RabbitMQ",
+      "Redis"
+    ],
+    "app_approved_azure_services": [
+      {
+        "ASP.NET Core": "Azure App Service",
+        "SQL Server": "Azure SQL Managed Instance",
+        "RabbitMQ": "Azure Service Bus",
+        "Redis": "Azure Cache for Redis"
+      }
+    ],
+    "server_details": [
+      {
+        "machine": "OMS-WEB-PROD01",
+        "environment": "Production",
+        "OperatingSystem": "Windows Server 2022",
+        "ip_address": [
+          "10.210.1.10"
+        ],
+        "StorageGB": 120.0,
+        "MemoryGB": 16.0,
+        "Cores": 8.0,
+        "CPUUsage": 45.0,
+        "MemoryUsage": 55.0,
+        "DiskReadOpsPersec": 80.0,
+        "DiskWriteOpsPerSec": 60.0,
+        "NetworkInMBPS": 50.0,
+        "NetworkOutMBPS": 45.0,
+        "StandardSSDDisks": 1.0,
+        "StandardHDDDisks": 0.0,
+        "PremiumDisks": 1.0,
+        "AzureVMReadiness": "Ready",
+        "AzureReadinessIssues": null,
+        "migration_strategy": "Replatform/Refactor",
+        "treatment_option": "Azure App Service",
+        "detected_COTS": [
+          "IIS 10"
+        ],
+        "ServerCategory": "Web Server",
+        "ServerSubCategory": "IIS",
+        "treatment_option_other": null
+      },
+      {
+        "machine": "OMS-WEB-PROD02",
+        "environment": "Production",
+        "OperatingSystem": "Windows Server 2022",
+        "ip_address": [
+          "10.210.1.11"
+        ],
+        "StorageGB": 120.0,
+        "MemoryGB": 16.0,
+        "Cores": 8.0,
+        "CPUUsage": 40.0,
+        "MemoryUsage": 50.0,
+        "DiskReadOpsPersec": 75.0,
+        "DiskWriteOpsPerSec": 55.0,
+        "NetworkInMBPS": 48.0,
+        "NetworkOutMBPS": 42.0,
+        "StandardSSDDisks": 1.0,
+        "StandardHDDDisks": 0.0,
+        "PremiumDisks": 1.0,
+        "AzureVMReadiness": "Ready",
+        "AzureReadinessIssues": null,
+        "migration_strategy": "Replatform/Refactor",
+        "treatment_option": "Azure App Service",
+        "detected_COTS": [
+          "IIS 10"
+        ],
+        "ServerCategory": "Web Server",
+        "ServerSubCategory": "IIS",
+        "treatment_option_other": null
+      },
+      {
+        "machine": "OMS-APP-PROD01",
+        "environment": "Production",
+        "OperatingSystem": "Windows Server 2022",
+        "ip_address": [
+          "10.210.1.20"
+        ],
+        "StorageGB": 150.0,
+        "MemoryGB": 32.0,
+        "Cores": 8.0,
+        "CPUUsage": 50.0,
+        "MemoryUsage": 60.0,
+        "DiskReadOpsPersec": 100.0,
+        "DiskWriteOpsPerSec": 80.0,
+        "NetworkInMBPS": 60.0,
+        "NetworkOutMBPS": 55.0,
+        "StandardSSDDisks": 2.0,
+        "StandardHDDDisks": 0.0,
+        "PremiumDisks": 1.0,
+        "AzureVMReadiness": "Ready",
+        "AzureReadinessIssues": null,
+        "migration_strategy": "Replatform/Refactor",
+        "treatment_option": "Azure App Service",
+        "detected_COTS": [
+          "ASP.NET Core 8"
+        ],
+        "ServerCategory": "Application Server",
+        "ServerSubCategory": ".NET",
+        "treatment_option_other": null
+      },
+      {
+        "machine": "OMS-APP-PROD02",
+        "environment": "Production",
+        "OperatingSystem": "Windows Server 2022",
+        "ip_address": [
+          "10.210.1.21"
+        ],
+        "StorageGB": 150.0,
+        "MemoryGB": 32.0,
+        "Cores": 8.0,
+        "CPUUsage": 48.0,
+        "MemoryUsage": 58.0,
+        "DiskReadOpsPersec": 95.0,
+        "DiskWriteOpsPerSec": 75.0,
+        "NetworkInMBPS": 58.0,
+        "NetworkOutMBPS": 52.0,
+        "StandardSSDDisks": 2.0,
+        "StandardHDDDisks": 0.0,
+        "PremiumDisks": 1.0,
+        "AzureVMReadiness": "Ready",
+        "AzureReadinessIssues": null,
+        "migration_strategy": "Replatform/Refactor",
+        "treatment_option": "Azure App Service",
+        "detected_COTS": [
+          "ASP.NET Core 8"
+        ],
+        "ServerCategory": "Application Server",
+        "ServerSubCategory": ".NET",
+        "treatment_option_other": null
+      },
+      {
+        "machine": "OMS-SQL-PROD01",
+        "environment": "Production",
+        "OperatingSystem": "Windows Server 2022",
+        "ip_address": [
+          "10.210.1.30"
+        ],
+        "StorageGB": 1000.0,
+        "MemoryGB": 128.0,
+        "Cores": 16.0,
+        "CPUUsage": 55.0,
+        "MemoryUsage": 70.0,
+        "DiskReadOpsPersec": 300.0,
+        "DiskWriteOpsPerSec": 250.0,
+        "NetworkInMBPS": 100.0,
+        "NetworkOutMBPS": 90.0,
+        "StandardSSDDisks": 0.0,
+        "StandardHDDDisks": 0.0,
+        "PremiumDisks": 4.0,
+        "AzureVMReadiness": "Ready",
+        "AzureReadinessIssues": null,
+        "migration_strategy": "Replatform/Refactor",
+        "treatment_option": "Azure SQL Managed Instance",
+        "detected_COTS": [
+          "SQL Server 2022"
+        ],
+        "ServerCategory": "Database",
+        "ServerSubCategory": "SQL Server",
+        "treatment_option_other": null
+      },
+      {
+        "machine": "OMS-SQL-PROD02",
+        "environment": "Production",
+        "OperatingSystem": "Windows Server 2022",
+        "ip_address": [
+          "10.210.1.31"
+        ],
+        "StorageGB": 1000.0,
+        "MemoryGB": 128.0,
+        "Cores": 16.0,
+        "CPUUsage": 25.0,
+        "MemoryUsage": 45.0,
+        "DiskReadOpsPersec": 150.0,
+        "DiskWriteOpsPerSec": 120.0,
+        "NetworkInMBPS": 80.0,
+        "NetworkOutMBPS": 70.0,
+        "StandardSSDDisks": 0.0,
+        "StandardHDDDisks": 0.0,
+        "PremiumDisks": 4.0,
+        "AzureVMReadiness": "Ready",
+        "AzureReadinessIssues": null,
+        "migration_strategy": "Replatform/Refactor",
+        "treatment_option": "Azure SQL Managed Instance (Secondary)",
+        "detected_COTS": [
+          "SQL Server 2022 Always On"
+        ],
+        "ServerCategory": "Database",
+        "ServerSubCategory": "SQL Server",
+        "treatment_option_other": null
+      },
+      {
+        "machine": "OMS-MQ-PROD01",
+        "environment": "Production",
+        "OperatingSystem": "Ubuntu 22.04",
+        "ip_address": [
+          "10.210.1.40"
+        ],
+        "StorageGB": 100.0,
+        "MemoryGB": 16.0,
+        "Cores": 4.0,
+        "CPUUsage": 30.0,
+        "MemoryUsage": 50.0,
+        "DiskReadOpsPersec": 60.0,
+        "DiskWriteOpsPerSec": 50.0,
+        "NetworkInMBPS": 40.0,
+        "NetworkOutMBPS": 38.0,
+        "StandardSSDDisks": 1.0,
+        "StandardHDDDisks": 0.0,
+        "PremiumDisks": 0.0,
+        "AzureVMReadiness": "Ready",
+        "AzureReadinessIssues": null,
+        "migration_strategy": "Replatform/Refactor",
+        "treatment_option": "Azure Service Bus",
+        "detected_COTS": [
+          "RabbitMQ"
+        ],
+        "ServerCategory": "Messaging",
+        "ServerSubCategory": "RabbitMQ",
+        "treatment_option_other": null
+      },
+      {
+        "machine": "OMS-CACHE-PROD01",
+        "environment": "Production",
+        "OperatingSystem": "Ubuntu 22.04",
+        "ip_address": [
+          "10.210.1.50"
+        ],
+        "StorageGB": 50.0,
+        "MemoryGB": 32.0,
+        "Cores": 4.0,
+        "CPUUsage": 25.0,
+        "MemoryUsage": 75.0,
+        "DiskReadOpsPersec": 40.0,
+        "DiskWriteOpsPerSec": 35.0,
+        "NetworkInMBPS": 50.0,
+        "NetworkOutMBPS": 48.0,
+        "StandardSSDDisks": 1.0,
+        "StandardHDDDisks": 0.0,
+        "PremiumDisks": 0.0,
+        "AzureVMReadiness": "Ready",
+        "AzureReadinessIssues": null,
+        "migration_strategy": "Replatform/Refactor",
+        "treatment_option": "Azure Cache for Redis",
+        "detected_COTS": [
+          "Redis"
+        ],
+        "ServerCategory": "Cache",
+        "ServerSubCategory": "Redis",
+        "treatment_option_other": null
+      },
+      {
+        "machine": "OMS-WEB-UAT01",
+        "environment": "UAT",
+        "OperatingSystem": "Windows Server 2022",
+        "ip_address": [
+          "10.211.1.10"
+        ],
+        "StorageGB": 80.0,
+        "MemoryGB": 8.0,
+        "Cores": 4.0,
+        "CPUUsage": 20.0,
+        "MemoryUsage": 35.0,
+        "DiskReadOpsPersec": 30.0,
+        "DiskWriteOpsPerSec": 25.0,
+        "NetworkInMBPS": 10.0,
+        "NetworkOutMBPS": 8.0,
+        "StandardSSDDisks": 1.0,
+        "StandardHDDDisks": 0.0,
+        "PremiumDisks": 0.0,
+        "AzureVMReadiness": "Ready",
+        "AzureReadinessIssues": null,
+        "migration_strategy": "Replatform/Refactor",
+        "treatment_option": "Azure App Service",
+        "detected_COTS": [
+          "IIS 10"
+        ],
+        "ServerCategory": "Web Server",
+        "ServerSubCategory": "IIS",
+        "treatment_option_other": null
+      },
+      {
+        "machine": "OMS-SQL-UAT01",
+        "environment": "UAT",
+        "OperatingSystem": "Windows Server 2022",
+        "ip_address": [
+          "10.211.1.30"
+        ],
+        "StorageGB": 500.0,
+        "MemoryGB": 32.0,
+        "Cores": 8.0,
+        "CPUUsage": 15.0,
+        "MemoryUsage": 40.0,
+        "DiskReadOpsPersec": 50.0,
+        "DiskWriteOpsPerSec": 40.0,
+        "NetworkInMBPS": 20.0,
+        "NetworkOutMBPS": 18.0,
+        "StandardSSDDisks": 2.0,
+        "StandardHDDDisks": 0.0,
+        "PremiumDisks": 0.0,
+        "AzureVMReadiness": "Ready",
+        "AzureReadinessIssues": null,
+        "migration_strategy": "Replatform/Refactor",
+        "treatment_option": "Azure SQL Database",
+        "detected_COTS": [
+          "SQL Server 2022"
+        ],
+        "ServerCategory": "Database",
+        "ServerSubCategory": "SQL Server",
+        "treatment_option_other": null
+      },
+      {
+        "machine": "OMS-WEB-DEV01",
+        "environment": "Development",
+        "OperatingSystem": "Windows Server 2022",
+        "ip_address": [
+          "10.212.1.10"
+        ],
+        "StorageGB": 60.0,
+        "MemoryGB": 4.0,
+        "Cores": 2.0,
+        "CPUUsage": 10.0,
+        "MemoryUsage": 25.0,
+        "DiskReadOpsPersec": 15.0,
+        "DiskWriteOpsPerSec": 10.0,
+        "NetworkInMBPS": 5.0,
+        "NetworkOutMBPS": 4.0,
+        "StandardSSDDisks": 1.0,
+        "StandardHDDDisks": 0.0,
+        "PremiumDisks": 0.0,
+        "AzureVMReadiness": "Ready",
+        "AzureReadinessIssues": null,
+        "migration_strategy": "Replatform/Refactor",
+        "treatment_option": "Azure App Service",
+        "detected_COTS": [
+          "IIS 10"
+        ],
+        "ServerCategory": "Web Server",
+        "ServerSubCategory": "IIS",
+        "treatment_option_other": null
+      },
+      {
+        "machine": "OMS-SQL-DEV01",
+        "environment": "Development",
+        "OperatingSystem": "Windows Server 2022",
+        "ip_address": [
+          "10.212.1.30"
+        ],
+        "StorageGB": 200.0,
+        "MemoryGB": 16.0,
+        "Cores": 4.0,
+        "CPUUsage": 8.0,
+        "MemoryUsage": 30.0,
+        "DiskReadOpsPersec": 20.0,
+        "DiskWriteOpsPerSec": 15.0,
+        "NetworkInMBPS": 8.0,
+        "NetworkOutMBPS": 6.0,
+        "StandardSSDDisks": 1.0,
+        "StandardHDDDisks": 0.0,
+        "PremiumDisks": 0.0,
+        "AzureVMReadiness": "Ready",
+        "AzureReadinessIssues": null,
+        "migration_strategy": "Replatform/Refactor",
+        "treatment_option": "Azure SQL Database",
+        "detected_COTS": [
+          "SQL Server 2022"
+        ],
+        "ServerCategory": "Database",
+        "ServerSubCategory": "SQL Server",
+        "treatment_option_other": null
+      }
+    ],
+    "complexity_metrics": {
+      "no_servers": 12,
+      "no_environments": 3,
+      "max_servers_per_environment": 8,
+      "sql_servers": 4,
+      "non_sql_db_servers": 0,
+      "app_integrations": 5,
+      "high_availability": true,
+      "disaster_recovery": true,
+      "app_criticality": "High",
+      "data_classification": "Customer and Personal",
+      "expected_complexity": "High Complexity"
+    },
+    "App Mod results": [
+      {
+        "technology": ".NET",
+        "summary": {
+          "services_scanned": 6,
+          "dotnet_core_apps": 4,
+          "container_ready": true,
+          "database_connections": 4,
+          "messaging_present": true,
+          "cache_present": true,
+          "ha_configured": true,
+          "dr_configured": true
+        },
+        "findings": [
+          {
+            "type": "Framework",
+            "severity": "Low",
+            "description": "ASP.NET Core 8 fully compatible with Azure App Service."
+          },
+          {
+            "type": "Database",
+            "severity": "Medium",
+            "description": "SQL Server Always On requires Azure SQL MI for feature parity."
+          },
+          {
+            "type": "Messaging",
+            "severity": "Low",
+            "description": "RabbitMQ can migrate to Azure Service Bus."
+          },
+          {
+            "type": "HA/DR",
+            "severity": "Medium",
+            "description": "High availability and DR configuration requires zone-redundant deployment."
+          }
+        ],
+        "compatibility": {
+          "azure_app_service": "FullySupported",
+          "azure_sql_managed_instance": "FullySupported",
+          "azure_service_bus": "FullySupported"
+        },
+        "recommended_targets": [
+          "Azure App Service (Zone Redundant)",
+          "Azure SQL Managed Instance",
+          "Azure Service Bus",
+          "Azure Cache for Redis"
+        ],
+        "blockers": []
+      }
+    ]
+  }
+]

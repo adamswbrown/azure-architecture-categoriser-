@@ -37,7 +37,9 @@
         "machine": "BANK-K8S-PROD-01",
         "environment": "Production",
         "OperatingSystem": "Ubuntu 22.04",
-        "ip_address": ["10.130.0.10"],
+        "ip_address": [
+          "10.130.0.10"
+        ],
         "StorageGB": 2000.0,
         "MemoryGB": 256.0,
         "Cores": 64.0,
@@ -54,7 +56,13 @@
         "AzureReadinessIssues": null,
         "migration_strategy": "Refactor",
         "treatment_option": "Cloud-native with SRE practices",
-        "detected_COTS": ["Prometheus", "Grafana", "Jaeger", "ArgoCD"]
+        "detected_COTS": [
+          "Prometheus",
+          "Grafana",
+          "Jaeger",
+          "ArgoCD"
+        ],
+        "treatment_option_other": null
       }
     ],
     "App Mod results": [

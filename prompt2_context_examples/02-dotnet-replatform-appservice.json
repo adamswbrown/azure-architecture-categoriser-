@@ -46,7 +46,8 @@
         "detected_COTS": [
           "Microsoft IIS",
           "ASP.NET Framework 4.7"
-        ]
+        ],
+        "treatment_option_other": null
       },
       {
         "machine": "FINDB01",
@@ -73,7 +74,8 @@
         "treatment_option": "SQL MI",
         "detected_COTS": [
           "Microsoft SQL Server 2017"
-        ]
+        ],
+        "treatment_option_other": null
       }
     ],
     "App Mod results": [

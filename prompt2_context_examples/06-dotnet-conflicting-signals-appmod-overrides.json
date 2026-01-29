@@ -45,7 +45,8 @@
         "detected_COTS": [
           "ASP.NET Framework 4.8",
           "Microsoft IIS"
-        ]
+        ],
+        "treatment_option_other": null
       }
     ],
     "App Mod results": [

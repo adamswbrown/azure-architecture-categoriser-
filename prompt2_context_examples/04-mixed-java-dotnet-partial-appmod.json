@@ -51,7 +51,8 @@
           "Java 17",
           "Spring Boot",
           "Nginx"
-        ]
+        ],
+        "treatment_option_other": null
       },
       {
         "machine": "CUSTWEB01",
@@ -78,7 +79,8 @@
         "treatment_option": "Modernize",
         "detected_COTS": [
           "ASP.NET Core 6"
-        ]
+        ],
+        "treatment_option_other": null
       },
       {
         "machine": "CUSTDB01",
@@ -106,7 +108,8 @@
         "detected_COTS": [
           "Microsoft SQL Server 2019",
           "Redis"
-        ]
+        ],
+        "treatment_option_other": null
       }
     ],
     "App Mod results": [

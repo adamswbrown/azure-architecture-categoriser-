@@ -27,7 +27,9 @@
         "machine": "MFG-CTRL01",
         "environment": "Production",
         "OperatingSystem": "Windows Server 2022",
-        "ip_address": ["192.168.1.10"],
+        "ip_address": [
+          "192.168.1.10"
+        ],
         "StorageGB": 500.0,
         "MemoryGB": 32.0,
         "Cores": 8.0,
@@ -44,7 +46,12 @@
         "AzureReadinessIssues": null,
         "migration_strategy": "Retain",
         "treatment_option": "Hybrid with Azure Arc",
-        "detected_COTS": ["SCADA", "OPC-UA", "Siemens PLC Integration"]
+        "detected_COTS": [
+          "SCADA",
+          "OPC-UA",
+          "Siemens PLC Integration"
+        ],
+        "treatment_option_other": null
       }
     ],
     "App Mod results": [

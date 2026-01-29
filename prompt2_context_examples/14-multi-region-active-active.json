@@ -33,7 +33,9 @@
         "machine": "TRADE-K8S-EAST-01",
         "environment": "Production",
         "OperatingSystem": "Ubuntu 22.04",
-        "ip_address": ["10.110.0.10"],
+        "ip_address": [
+          "10.110.0.10"
+        ],
         "StorageGB": 1000.0,
         "MemoryGB": 128.0,
         "Cores": 32.0,
@@ -50,13 +52,20 @@
         "AzureReadinessIssues": null,
         "migration_strategy": "Refactor",
         "treatment_option": "Multi-region active-active",
-        "detected_COTS": ["Apache Kafka", "Redis", "PostgreSQL"]
+        "detected_COTS": [
+          "Apache Kafka",
+          "Redis",
+          "PostgreSQL"
+        ],
+        "treatment_option_other": null
       },
       {
         "machine": "TRADE-K8S-WEST-01",
         "environment": "Production",
         "OperatingSystem": "Ubuntu 22.04",
-        "ip_address": ["10.111.0.10"],
+        "ip_address": [
+          "10.111.0.10"
+        ],
         "StorageGB": 1000.0,
         "MemoryGB": 128.0,
         "Cores": 32.0,
@@ -73,7 +82,12 @@
         "AzureReadinessIssues": null,
         "migration_strategy": "Refactor",
         "treatment_option": "Multi-region active-active",
-        "detected_COTS": ["Apache Kafka", "Redis", "PostgreSQL"]
+        "detected_COTS": [
+          "Apache Kafka",
+          "Redis",
+          "PostgreSQL"
+        ],
+        "treatment_option_other": null
       }
     ],
     "App Mod results": [

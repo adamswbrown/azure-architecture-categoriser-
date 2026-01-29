@@ -25,7 +25,9 @@
         "machine": "INVSVC01",
         "environment": "Production",
         "OperatingSystem": "Windows Server 2016",
-        "ip_address": ["10.40.0.15"],
+        "ip_address": [
+          "10.40.0.15"
+        ],
         "StorageGB": 200.0,
         "MemoryGB": 16.0,
         "Cores": 4.0,
@@ -42,13 +44,19 @@
         "AzureReadinessIssues": null,
         "migration_strategy": "Rehost",
         "treatment_option": "Lift and Shift to Azure VM",
-        "detected_COTS": ["Microsoft IIS", "SQL Server 2016"]
+        "detected_COTS": [
+          "Microsoft IIS",
+          "SQL Server 2016"
+        ],
+        "treatment_option_other": null
       },
       {
         "machine": "INVSVC02",
         "environment": "Production",
         "OperatingSystem": "Windows Server 2016",
-        "ip_address": ["10.40.0.16"],
+        "ip_address": [
+          "10.40.0.16"
+        ],
         "StorageGB": 150.0,
         "MemoryGB": 8.0,
         "Cores": 2.0,
@@ -65,7 +73,10 @@
         "AzureReadinessIssues": null,
         "migration_strategy": "Rehost",
         "treatment_option": "Lift and Shift to Azure VM",
-        "detected_COTS": ["Microsoft IIS"]
+        "detected_COTS": [
+          "Microsoft IIS"
+        ],
+        "treatment_option_other": null
       }
     ],
     "App Mod results": [

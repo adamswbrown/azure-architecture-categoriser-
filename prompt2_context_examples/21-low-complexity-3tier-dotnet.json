@@ -1,0 +1,161 @@
+[
+  {
+    "app_overview": [
+      {
+        "application": "DepartmentBudgetTracker",
+        "app_type": "Web Application",
+        "business_crtiticality": "Low",
+        "treatment": "Replatform",
+        "app_function": "Internal Tool"
+      }
+    ],
+    "detected_technology_running": [
+      "ASP.NET Core 6",
+      "C#",
+      "SQL Server 2019",
+      "Windows Server 2022",
+      "IIS 10"
+    ],
+    "app_approved_azure_services": [
+      {
+        "ASP.NET Core": "Azure App Service",
+        "SQL Server": "Azure SQL Database"
+      }
+    ],
+    "server_details": [
+      {
+        "machine": "BUDGET-WEB01",
+        "environment": "Production",
+        "OperatingSystem": "Windows Server 2022",
+        "ip_address": [
+          "10.200.1.10"
+        ],
+        "StorageGB": 80.0,
+        "MemoryGB": 8.0,
+        "Cores": 4.0,
+        "CPUUsage": 25.0,
+        "MemoryUsage": 40.0,
+        "DiskReadOpsPersec": 30.0,
+        "DiskWriteOpsPerSec": 20.0,
+        "NetworkInMBPS": 10.0,
+        "NetworkOutMBPS": 8.0,
+        "StandardSSDDisks": 1.0,
+        "StandardHDDDisks": 0.0,
+        "PremiumDisks": 0.0,
+        "AzureVMReadiness": "Ready",
+        "AzureReadinessIssues": null,
+        "migration_strategy": "Replatform/Refactor",
+        "treatment_option": "Azure App Service",
+        "detected_COTS": [
+          "IIS 10"
+        ],
+        "ServerCategory": "Web Server",
+        "ServerSubCategory": "IIS",
+        "treatment_option_other": null
+      },
+      {
+        "machine": "BUDGET-APP01",
+        "environment": "Production",
+        "OperatingSystem": "Windows Server 2022",
+        "ip_address": [
+          "10.200.1.11"
+        ],
+        "StorageGB": 80.0,
+        "MemoryGB": 8.0,
+        "Cores": 4.0,
+        "CPUUsage": 20.0,
+        "MemoryUsage": 35.0,
+        "DiskReadOpsPersec": 25.0,
+        "DiskWriteOpsPerSec": 15.0,
+        "NetworkInMBPS": 8.0,
+        "NetworkOutMBPS": 6.0,
+        "StandardSSDDisks": 1.0,
+        "StandardHDDDisks": 0.0,
+        "PremiumDisks": 0.0,
+        "AzureVMReadiness": "Ready",
+        "AzureReadinessIssues": null,
+        "migration_strategy": "Replatform/Refactor",
+        "treatment_option": "Azure App Service",
+        "detected_COTS": [
+          "ASP.NET Core 6"
+        ],
+        "ServerCategory": "Application Server",
+        "ServerSubCategory": ".NET",
+        "treatment_option_other": null
+      },
+      {
+        "machine": "BUDGET-SQL01",
+        "environment": "Production",
+        "OperatingSystem": "Windows Server 2022",
+        "ip_address": [
+          "10.200.1.12"
+        ],
+        "StorageGB": 200.0,
+        "MemoryGB": 16.0,
+        "Cores": 4.0,
+        "CPUUsage": 15.0,
+        "MemoryUsage": 45.0,
+        "DiskReadOpsPersec": 50.0,
+        "DiskWriteOpsPerSec": 40.0,
+        "NetworkInMBPS": 15.0,
+        "NetworkOutMBPS": 12.0,
+        "StandardSSDDisks": 2.0,
+        "StandardHDDDisks": 0.0,
+        "PremiumDisks": 0.0,
+        "AzureVMReadiness": "Ready",
+        "AzureReadinessIssues": null,
+        "migration_strategy": "Replatform/Refactor",
+        "treatment_option": "Azure SQL Database",
+        "detected_COTS": [
+          "SQL Server 2019"
+        ],
+        "ServerCategory": "Database",
+        "ServerSubCategory": "SQL Server",
+        "treatment_option_other": null
+      }
+    ],
+    "complexity_metrics": {
+      "no_servers": 3,
+      "no_environments": 1,
+      "max_servers_per_environment": 3,
+      "sql_servers": 1,
+      "non_sql_db_servers": 0,
+      "app_integrations": 0,
+      "high_availability": false,
+      "disaster_recovery": false,
+      "expected_complexity": "Low Complexity"
+    },
+    "App Mod results": [
+      {
+        "technology": ".NET",
+        "summary": {
+          "services_scanned": 2,
+          "dotnet_core_apps": 1,
+          "container_ready": true,
+          "database_connections": 1
+        },
+        "findings": [
+          {
+            "type": "Framework",
+            "severity": "Low",
+            "description": "ASP.NET Core 6 fully compatible with Azure App Service."
+          },
+          {
+            "type": "Database",
+            "severity": "Low",
+            "description": "SQL Server 2019 compatible with Azure SQL Database."
+          }
+        ],
+        "compatibility": {
+          "azure_app_service": "FullySupported",
+          "azure_sql_database": "FullySupported"
+        },
+        "recommended_targets": [
+          "Azure App Service",
+          "Azure SQL Database"
+        ],
+        "blockers": []
+      }
+    ]
+  }
+]

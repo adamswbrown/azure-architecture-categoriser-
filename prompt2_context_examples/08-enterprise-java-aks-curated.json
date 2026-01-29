@@ -33,7 +33,9 @@
         "machine": "K8S-PAYMENT-01",
         "environment": "Production",
         "OperatingSystem": "Ubuntu 22.04",
-        "ip_address": ["10.80.0.10"],
+        "ip_address": [
+          "10.80.0.10"
+        ],
         "StorageGB": 500.0,
         "MemoryGB": 64.0,
         "Cores": 16.0,
@@ -50,7 +52,12 @@
         "AzureReadinessIssues": null,
         "migration_strategy": "Refactor",
         "treatment_option": "Containerize, Kubernetes",
-        "detected_COTS": ["Java 17", "Spring Boot", "Kubernetes"]
+        "detected_COTS": [
+          "Java 17",
+          "Spring Boot",
+          "Kubernetes"
+        ],
+        "treatment_option_other": null
       }
     ],
     "App Mod results": [
