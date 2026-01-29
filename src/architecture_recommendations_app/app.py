@@ -335,6 +335,71 @@ def _render_sidebar() -> None:
                     set_state('refresh_catalog_requested', True)
                     st.rerun()
 
+                # Load different catalog options (inside expander)
+                st.markdown("**Load Different Catalog**")
+
+                uploaded_catalog_inner = st.file_uploader(
+                    "Upload catalog JSON",
+                    type=['json'],
+                    key="catalog_upload_inner",
+                    help="Upload a custom architecture-catalog.json file"
+                )
+
+                if uploaded_catalog_inner is not None:
+                    try:
+                        catalog_data = json.load(uploaded_catalog_inner)
+                        if isinstance(catalog_data, dict) and 'architectures' in catalog_data:
+                            arch_count = len(catalog_data['architectures'])
+                        elif isinstance(catalog_data, list):
+                            arch_count = len(catalog_data)
+                        else:
+                            st.error("Invalid catalog format")
+                            return
+
+                        temp_dir = Path(tempfile.gettempdir())
+                        temp_catalog = temp_dir / "uploaded-architecture-catalog.json"
+                        uploaded_catalog_inner.seek(0)
+                        with open(temp_catalog, 'w', encoding='utf-8') as f:
+                            json.dump(catalog_data, f, indent=2)
+
+                        set_state('catalog_path', str(temp_catalog))
+                        set_state('catalog_source', 'user_selected')
+                        st.success(f"Loaded catalog with {arch_count} architectures")
+                        set_state('scoring_result', None)
+                        set_state('questions', None)
+                        st.rerun()
+
+                    except json.JSONDecodeError:
+                        st.error("Invalid JSON file")
+                    except Exception as e:
+                        st.error(f"Error loading catalog: {e}")
+
+                catalog_input_inner = st.text_input(
+                    "Or enter catalog path",
+                    placeholder="/path/to/architecture-catalog.json",
+                    key="catalog_path_input_inner",
+                    help="Full path to an architecture catalog JSON file"
+                )
+
+                if catalog_input_inner and st.button("Load Catalog", use_container_width=True, key="load_catalog_inner"):
+                    if Path(catalog_input_inner).exists():
+                        set_state('catalog_path', catalog_input_inner)
+                        set_state('catalog_source', 'user_selected')
+                        set_state('scoring_result', None)
+                        set_state('questions', None)
+                        st.success("Catalog loaded!")
+                        st.rerun()
+                    else:
+                        st.error("File not found")
+
+                if get_state('catalog_source') == 'user_selected':
+                    if st.button("Reset to Auto-detect", use_container_width=True, key="reset_catalog_inner"):
+                        set_state('catalog_path', None)
+                        set_state('catalog_source', None)
+                        set_state('scoring_result', None)
+                        set_state('questions', None)
+                        st.rerun()
+
         else:
             st.warning("No catalog found")
 
@@ -343,82 +408,6 @@ def _render_sidebar() -> None:
             if st.button("Generate Catalog", type="primary", use_container_width=True,
                         key="generate_catalog_btn"):
                 set_state('refresh_catalog_requested', True)
-                st.rerun()
-
-        st.markdown("---")
-
-        # Custom catalog selection
-        st.subheader("Load Different Catalog")
-
-        uploaded_catalog = st.file_uploader(
-            "Upload catalog JSON",
-            type=['json'],
-            key="catalog_upload",
-            help="Upload a custom architecture-catalog.json file"
-        )
-
-        if uploaded_catalog is not None:
-            try:
-                # Validate it's a valid catalog
-                catalog_data = json.load(uploaded_catalog)
-                if isinstance(catalog_data, dict) and 'architectures' in catalog_data:
-                    arch_count = len(catalog_data['architectures'])
-                elif isinstance(catalog_data, list):
-                    arch_count = len(catalog_data)
-                else:
-                    st.error("Invalid catalog format")
-                    return
-
-                # Save to temp location
-                temp_dir = Path(tempfile.gettempdir())
-                temp_catalog = temp_dir / "uploaded-architecture-catalog.json"
-
-                # Reset file position and save
-                uploaded_catalog.seek(0)
-                with open(temp_catalog, 'w', encoding='utf-8') as f:
-                    json.dump(catalog_data, f, indent=2)
-
-                set_state('catalog_path', str(temp_catalog))
-                set_state('catalog_source', 'user_selected')
-                st.success(f"Loaded catalog with {arch_count} architectures")
-
-                # Clear any existing results since catalog changed
-                set_state('scoring_result', None)
-                set_state('questions', None)
-
-                st.rerun()
-
-            except json.JSONDecodeError:
-                st.error("Invalid JSON file")
-            except Exception as e:
-                st.error(f"Error loading catalog: {e}")
-
-        # Or specify a path
-        catalog_input = st.text_input(
-            "Or enter catalog path",
-            placeholder="/path/to/architecture-catalog.json",
-            key="catalog_path_input",
-            help="Full path to an architecture catalog JSON file"
-        )
-
-        if catalog_input and st.button("Load Catalog", use_container_width=True):
-            if Path(catalog_input).exists():
-                set_state('catalog_path', catalog_input)
-                set_state('catalog_source', 'user_selected')
-                set_state('scoring_result', None)
-                set_state('questions', None)
-                st.success("Catalog loaded!")
-                st.rerun()
-            else:
-                st.error("File not found")
-
-        # Reset to auto-detect
-        if get_state('catalog_source') == 'user_selected':
-            if st.button("Reset to Auto-detect", use_container_width=True):
-                set_state('catalog_path', None)
-                set_state('catalog_source', None)
-                set_state('scoring_result', None)
-                set_state('questions', None)
                 st.rerun()
 
         st.markdown("---")

@@ -141,13 +141,16 @@ def _render_recommendation_card(rec: ArchitectureRecommendation, is_primary: boo
                     unsafe_allow_html=True
                 )
 
-            # Architecture diagram (if available) - constrained width for primary
+            # Architecture diagram (if available) - centered, constrained width for primary
             if rec.diagram_url:
                 st.markdown("")  # Spacer
                 try:
-                    # Use expander to keep diagram accessible but not dominating
+                    # Use expander with centered image
                     with st.expander("View Architecture Diagram", expanded=True):
-                        st.image(rec.diagram_url, width=500)
+                        # Center the image using columns
+                        col1, col2, col3 = st.columns([1, 4, 1])
+                        with col2:
+                            st.image(rec.diagram_url, use_container_width=True)
                 except Exception:
                     st.caption("_Architecture diagram unavailable_")
 
