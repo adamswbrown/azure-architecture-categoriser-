@@ -18,8 +18,11 @@ A complete solution for matching applications to Azure architecture patterns bas
 # Install
 pip install -e ".[recommendations-app]"
 
-# Run
-streamlit run src/architecture_recommendations_app/app.py
+# Run (macOS/Linux)
+./bin/start-recommendations-app.sh
+
+# Run (Windows PowerShell)
+.\bin\start-recommendations-app.ps1
 ```
 
 Upload your Dr. Migrate context file and get architecture recommendations instantly.
@@ -134,6 +137,9 @@ pip install -e ".[dev]"
 
 ```
 azure-architecture-recommender/
+├── bin/                           # Launcher scripts
+│   ├── start-recommendations-app.sh/.ps1
+│   └── start-catalog-builder-gui.sh/.ps1
 ├── src/                           # Source code
 │   ├── catalog_builder/           # Catalog generation CLI
 │   ├── catalog_builder_gui/       # Catalog Builder GUI
@@ -145,7 +151,6 @@ azure-architecture-recommender/
 ├── tests/                         # Tests
 │   └── fixtures/                  # Test data
 ├── examples/                      # Example files
-├── scripts/                       # Utility scripts
 └── architecture-catalog.json      # Generated catalog
 ```
 
