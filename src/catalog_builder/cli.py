@@ -467,5 +467,177 @@ def stats(catalog: Path):
         console.print(f"  {count:3d} × {service}")
 
 
+@main.command(name='list-filters')
+@click.option(
+    '--repo-path',
+    type=click.Path(exists=True, file_okay=False, path_type=Path),
+    required=True,
+    help='Path to the architecture-center repository clone'
+)
+@click.option(
+    '--type', 'filter_type',
+    type=click.Choice(['all', 'categories', 'products', 'topics']),
+    default='all',
+    help='Type of filters to list'
+)
+@click.option(
+    '--min-count',
+    type=int,
+    default=1,
+    help='Minimum document count to show a filter value'
+)
+def list_filters(repo_path: Path, filter_type: str, min_count: int):
+    """List available filter values from the repository.
+
+    Scans YML files to show available categories, products, and topics
+    with document counts. Use this to discover valid filter values.
+
+    Products support prefix matching: --product azure matches all azure-* products.
+
+    Example:
+        catalog-builder list-filters --repo-path ./architecture-center
+        catalog-builder list-filters --repo-path ./repo --type products --min-count 5
+    """
+    from collections import Counter
+    import yaml
+
+    console.print(f"\n[bold blue]Scanning Filter Values[/bold blue]")
+    console.print(f"Repository: {repo_path}\n")
+
+    categories: Counter = Counter()
+    products: Counter = Counter()
+    topics: Counter = Counter()
+
+    # Scan all YML files
+    docs_path = repo_path / "docs"
+    if not docs_path.exists():
+        console.print("[red]Error:[/red] docs/ directory not found")
+        sys.exit(1)
+
+    yml_files = list(docs_path.rglob("*.yml"))
+    console.print(f"Scanning {len(yml_files)} YML files...")
+
+    for yml_file in yml_files:
+        try:
+            with open(yml_file, 'r', encoding='utf-8') as f:
+                content = f.read()
+
+            # Skip non-architecture YML files
+            if not content.startswith('### YamlMime:Architecture'):
+                continue
+
+            # Parse YAML (skip the first line)
+            lines = content.split('\n', 1)
+            if len(lines) > 1:
+                data = yaml.safe_load(lines[1])
+                if data:
+                    # Extract categories
+                    if 'azureCategories' in data:
+                        for cat in data['azureCategories']:
+                            if isinstance(cat, str):
+                                categories[cat] += 1
+
+                    # Extract products
+                    if 'products' in data:
+                        for prod in data['products']:
+                            if isinstance(prod, str):
+                                products[prod] += 1
+
+                    # Extract topic from metadata
+                    if 'metadata' in data and isinstance(data['metadata'], dict):
+                        topic = data['metadata'].get('ms.topic')
+                        if topic:
+                            topics[topic] += 1
+
+        except Exception:
+            continue
+
+    # Display results
+    if filter_type in ('all', 'categories'):
+        _print_filter_table(
+            "Azure Categories",
+            categories,
+            min_count,
+            "Use with: --category <value>"
+        )
+
+    if filter_type in ('all', 'products'):
+        # Group products by prefix for hierarchical view
+        _print_filter_table(
+            "Azure Products",
+            products,
+            min_count,
+            "Use with: --product <value> (prefix matching: 'azure' matches all 'azure-*')"
+        )
+
+        # Show product prefixes summary
+        if filter_type == 'products':
+            _print_product_prefixes(products)
+
+    if filter_type in ('all', 'topics'):
+        _print_filter_table(
+            "Topics (ms.topic)",
+            topics,
+            min_count,
+            "Use with: --topic <value>"
+        )
+
+    # Print summary
+    console.print(f"\n[bold]Summary[/bold]")
+    console.print(f"  Unique categories: {len(categories)}")
+    console.print(f"  Unique products: {len(products)}")
+    console.print(f"  Unique topics: {len(topics)}")
+
+
+def _print_filter_table(title: str, counter, min_count: int, hint: str):
+    """Print a table of filter values with counts."""
+    from collections import Counter
+    filtered = [(k, v) for k, v in counter.items() if v >= min_count]
+    if not filtered:
+        console.print(f"\n[bold]{title}[/bold]: (none with count >= {min_count})")
+        return
+
+    console.print(f"\n[bold]{title}[/bold] ({len(filtered)} values)")
+    console.print(f"[dim]{hint}[/dim]")
+
+    table = Table(show_header=True, header_style="bold")
+    table.add_column("Value", style="cyan")
+    table.add_column("Count", justify="right")
+
+    for value, count in sorted(filtered, key=lambda x: (-x[1], x[0])):
+        table.add_row(value, str(count))
+
+    console.print(table)
+
+
+def _print_product_prefixes(products):
+    """Show product prefix groupings for hierarchical filtering."""
+    from collections import Counter
+
+    prefixes: Counter = Counter()
+    for product in products:
+        # Extract prefix (first part before hyphen)
+        if '-' in product:
+            prefix = product.split('-')[0]
+            prefixes[prefix] += products[product]
+        else:
+            prefixes[product] += products[product]
+
+    console.print(f"\n[bold]Product Prefixes (for hierarchical filtering)[/bold]")
+    console.print("[dim]Use --product <prefix> to match all products starting with that prefix[/dim]")
+
+    table = Table(show_header=True, header_style="bold")
+    table.add_column("Prefix", style="cyan")
+    table.add_column("Matches", justify="right")
+    table.add_column("Example Products")
+
+    for prefix, count in sorted(prefixes.items(), key=lambda x: (-x[1], x[0]))[:15]:
+        # Find example products
+        examples = [p for p in products if p.startswith(prefix)][:3]
+        table.add_row(prefix, str(count), ", ".join(examples))
+
+    console.print(table)
+
+
 if __name__ == '__main__':
     main()

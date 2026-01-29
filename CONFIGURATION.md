@@ -586,4 +586,63 @@ catalog-builder build-catalog --repo-path ./repo --config catalog-config.yaml
 # Build with auto-discovered config
 # (searches for catalog-config.yaml in current directory)
 catalog-builder build-catalog --repo-path ./repo
+
+# List available filter values from repository
+catalog-builder list-filters --repo-path ./repo
+
+# List only products with minimum 5 documents
+catalog-builder list-filters --repo-path ./repo --type products --min-count 5
+
+# List only categories
+catalog-builder list-filters --repo-path ./repo --type categories
 ```
+
+---
+
+## Hierarchical Product Filtering
+
+Products support **prefix matching** for hierarchical filtering, similar to the Azure Architecture Center browse page.
+
+### How It Works
+
+When you specify `--product azure`, it matches ALL products starting with `azure-`:
+
+```bash
+# Matches: azure-kubernetes-service, azure-app-service, azure-functions, etc.
+catalog-builder build-catalog --repo-path ./repo --product azure
+
+# Matches: azure-sql-database, azure-sql-managed-instance
+catalog-builder build-catalog --repo-path ./repo --product azure-sql
+
+# Exact match only
+catalog-builder build-catalog --repo-path ./repo --product azure-kubernetes-service
+```
+
+### Product Prefix Examples
+
+| Prefix | Matches |
+|--------|---------|
+| `azure` | All Azure services (azure-*, ~140 products) |
+| `azure-sql` | azure-sql-database, azure-sql-managed-instance, azure-sql-virtual-machines |
+| `azure-virtual` | azure-virtual-machines, azure-virtual-network, azure-virtual-desktop |
+| `azure-container` | azure-container-apps, azure-container-instances, azure-container-registry |
+| `power` | power-apps, power-automate, power-bi, power-platform |
+| `defender` | defender-for-cloud, defender-identity, defender-office365 |
+
+### Discovering Available Filters
+
+Use `list-filters` to see all available values:
+
+```bash
+# Show all categories, products, and topics with counts
+catalog-builder list-filters --repo-path ./architecture-center
+
+# Show products grouped by prefix
+catalog-builder list-filters --repo-path ./repo --type products
+```
+
+Output includes:
+- **Azure Categories**: Top-level workload types (web, containers, databases, etc.)
+- **Azure Products**: Specific services with document counts
+- **Product Prefixes**: Hierarchical groupings for prefix matching
+- **Topics**: ms.topic values (reference-architecture, example-scenario, etc.)

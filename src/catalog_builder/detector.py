@@ -168,14 +168,41 @@ class ArchitectureDetector:
                 if not any(cat in filters.allowed_categories for cat in doc_categories):
                     return f"Categories {doc_categories} not in allowed list"
 
-        # Check allowed products (if specified)
+        # Check allowed products (if specified) - supports prefix matching
+        # e.g., "azure" matches "azure-kubernetes-service", "azure-app-service", etc.
         if filters.allowed_products:
             doc_products = doc.arch_metadata.products
             if doc_products:
-                if not any(prod in filters.allowed_products for prod in doc_products):
+                if not self._product_matches_filter(doc_products, filters.allowed_products):
                     return f"Products not in allowed list"
 
         return None
+
+    def _product_matches_filter(
+        self,
+        doc_products: list[str],
+        allowed_products: list[str]
+    ) -> bool:
+        """Check if any document product matches allowed products.
+
+        Supports both exact matching and prefix matching:
+        - Exact: "azure-app-service" matches "azure-app-service"
+        - Prefix: "azure" matches "azure-app-service", "azure-kubernetes-service", etc.
+        """
+        for doc_product in doc_products:
+            for allowed in allowed_products:
+                # Exact match
+                if doc_product == allowed:
+                    return True
+                # Prefix match: allowed is a prefix of doc_product
+                # e.g., "azure" matches "azure-kubernetes-service"
+                if doc_product.startswith(allowed + '-'):
+                    return True
+                # Also match if allowed is the doc_product prefix
+                # e.g., "azure-kubernetes" matches "azure-kubernetes-service"
+                if doc_product.startswith(allowed):
+                    return True
+        return False
 
     def _find_diagrams(self, doc: ParsedDocument) -> list[str]:
         """Find architecture diagrams in the document."""
