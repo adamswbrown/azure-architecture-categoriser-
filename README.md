@@ -85,6 +85,58 @@ In the Recommendations App:
 
 ---
 
+## Docker (Recommended for End Users)
+
+The easiest way to run the application is via Docker - no Python installation required.
+
+### Quick Start with Docker
+
+```bash
+# Pull and run the container
+docker run -p 8501:8501 -p 8502:8502 ghcr.io/adamswbrown/azure-architecture-categoriser-:latest
+```
+
+Then open:
+- **Recommendations App**: http://localhost:8501
+- **Catalog Builder**: http://localhost:8502
+
+### Using Docker Compose
+
+```bash
+# Clone the repo (for docker-compose.yml)
+git clone https://github.com/adamswbrown/azure-architecture-categoriser-.git
+cd azure-architecture-categoriser-
+
+# Start services
+docker compose up -d
+
+# View logs
+docker compose logs -f
+
+# Stop
+docker compose down
+```
+
+### Building Locally
+
+```bash
+# Build the image
+docker build -t azure-architecture-categoriser .
+
+# Run it
+docker run -p 8501:8501 -p 8502:8502 azure-architecture-categoriser
+```
+
+### What's Included in the Container
+
+- Python 3.11 runtime
+- All dependencies (Streamlit, ReportLab, etc.)
+- Both applications (Recommendations + Catalog Builder)
+- Pre-built architecture catalog
+- Git (for catalog updates)
+
+---
+
 ## Alternative: CLI for Automation
 
 For scripting, CI/CD pipelines, or batch processing, use the CLI directly:

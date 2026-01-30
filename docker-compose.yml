@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  azure-architecture-categoriser:
+    image: ghcr.io/adamswbrown/azure-architecture-categoriser-:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8501:8501"  # Recommendations App
+      - "8502:8502"  # Catalog Builder
+    volumes:
+      # Mount custom catalog (optional - image includes default catalog)
+      # - ./my-custom-catalog.json:/app/architecture-catalog.json:ro
+      # Persist cloned repos between restarts
+      - catalog-repos:/home/appuser/.cache
+    environment:
+      - STREAMLIT_SERVER_HEADLESS=true
+      - STREAMLIT_BROWSER_GATHER_USAGE_STATS=false
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8501/_stcore/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+
+volumes:
+  catalog-repos:
