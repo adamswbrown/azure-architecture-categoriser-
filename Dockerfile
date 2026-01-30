@@ -1,7 +1,7 @@
 # Azure Architecture Categoriser
 # Multi-stage build for smaller image size
 
-FROM python:3.11-slim as builder
+FROM python:3.11-slim AS builder
 
 WORKDIR /app
 
@@ -10,8 +10,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     gcc \
     && rm -rf /var/lib/apt/lists/*
 
-# Copy project files
-COPY pyproject.toml .
+# Copy project files (README.md required by pyproject.toml)
+COPY pyproject.toml README.md ./
 COPY src/ src/
 
 # Install the package with all dependencies
