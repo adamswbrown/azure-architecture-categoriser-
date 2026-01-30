@@ -308,26 +308,15 @@ azure-architecture-recommender/
 
 ## Version
 
-**v1.2** - Recommendations App release:
-- Customer-facing Streamlit web application
-- 3-step wizard flow (Upload → Questions → Results)
-- PDF report generation
-- Light theme with Azure branding
+**Current: v1.1.0** (2026-01-30)
 
-**v1.3** - Reference Architecture Focus:
-- Default catalog now includes only reference architectures (~50)
-- Example scenarios and solution ideas excluded by default
-- Improved "No Strong Matches" handling with actionable guidance
+Latest features:
+- Docker containerization with multi-platform support
+- Security hardening (XSS, SSRF, secure temp files)
+- Improved scoring for cloud-native and modernization scenarios
+- Compact catalog details UI
 
-**v1.1** - Architecture Scorer release:
-- Interactive CLI with clarification questions
-- Confidence level calculations
-- Programmatic API
-
-**v1.0** - Initial release:
-- Initial catalog with 171 architectures (references + examples)
-- Clean Azure services extraction
-- Quality differentiation (curated vs example_only)
+See [CHANGELOG.md](CHANGELOG.md) for full release history.
 
 ## License
 
