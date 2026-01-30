@@ -652,12 +652,11 @@ def _render_step_indicator(current: int) -> None:
 def _render_step1_upload(catalog_path: str) -> None:
     """Step 1: Upload file and review application summary."""
     st.title("Azure Architecture Recommendations")
-    st.markdown("Upload your application context to receive tailored architecture recommendations.")
+    st.caption("Upload your application context to receive tailored architecture recommendations.")
 
     _render_step_indicator(1)
 
-    st.markdown("---")
-    st.subheader("Step 1: Upload Your Context File")
+    st.markdown("")  # Small spacer
 
     # Upload section
     uploaded_file = render_upload_section()
@@ -690,12 +689,10 @@ def _render_step1_upload(catalog_path: str) -> None:
         if not data:
             return
 
-        st.markdown("---")
+        st.markdown("")  # Spacer
 
         # Show file summary
         _render_file_summary(data)
-
-        st.markdown("---")
 
         # Get questions for next step (cache them)
         if get_state('questions') is None:
@@ -860,89 +857,122 @@ def _reset_and_restart() -> None:
 
 
 def _render_file_summary(data: list) -> None:
-    """Render a summary of the uploaded file contents."""
-    st.subheader("Application Summary")
-
+    """Render a compact summary of the uploaded file contents."""
     if not data or not data[0]:
         st.warning("No data found in context file")
         return
 
     context = data[0]
 
-    # Application overview
+    # Application overview - compact table style
     if context.get("app_overview"):
         overview = context["app_overview"][0] if context["app_overview"] else {}
 
-        col1, col2, col3, col4 = st.columns(4)
+        app_name = overview.get("application", "Unknown")
+        app_type = overview.get("app_type", "Unknown")
+        criticality = overview.get("business_crtiticality", overview.get("business_criticality", "Unknown"))
+        treatment = overview.get("treatment", "Unknown")
 
-        with col1:
-            app_name = overview.get("application", "Unknown")
-            st.metric("Application", app_name)
+        # Compact card-style display
+        st.markdown(
+            f"""
+            <div style="background:#f8f9fa; border-radius:8px; padding:1rem; margin-bottom:1rem;">
+                <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:1rem; text-align:center;">
+                    <div>
+                        <div style="color:#666; font-size:0.75rem; text-transform:uppercase; margin-bottom:0.25rem;">Application</div>
+                        <div style="font-weight:600; font-size:0.95rem;">{app_name}</div>
+                    </div>
+                    <div>
+                        <div style="color:#666; font-size:0.75rem; text-transform:uppercase; margin-bottom:0.25rem;">Type</div>
+                        <div style="font-weight:600; font-size:0.95rem;">{app_type[:25]}{'...' if len(app_type) > 25 else ''}</div>
+                    </div>
+                    <div>
+                        <div style="color:#666; font-size:0.75rem; text-transform:uppercase; margin-bottom:0.25rem;">Criticality</div>
+                        <div style="font-weight:600; font-size:0.95rem;">{criticality}</div>
+                    </div>
+                    <div>
+                        <div style="color:#666; font-size:0.75rem; text-transform:uppercase; margin-bottom:0.25rem;">Treatment</div>
+                        <div style="font-weight:600; font-size:0.95rem; color:#0078D4;">{treatment.title() if treatment else 'Unknown'}</div>
+                    </div>
+                </div>
+            </div>
+            """,
+            unsafe_allow_html=True
+        )
 
-        with col2:
-            app_type = overview.get("app_type", "Unknown")
-            st.metric("Type", app_type)
-
-        with col3:
-            criticality = overview.get("business_crtiticality", overview.get("business_criticality", "Unknown"))
-            st.metric("Criticality", criticality)
-
-        with col4:
-            treatment = overview.get("treatment", "Unknown")
-            st.metric("Treatment", treatment.title() if treatment else "Unknown")
-
-    # Technologies detected
+    # Technologies detected - as styled tags
     technologies = context.get("detected_technology_running", [])
     if technologies:
-        st.markdown("**Detected Technologies:**")
-        # Show as tags/chips
-        tech_str = " • ".join(technologies[:10])
-        if len(technologies) > 10:
-            tech_str += f" • ... and {len(technologies) - 10} more"
-        st.markdown(tech_str)
+        tech_tags = "".join([
+            f'<span style="display:inline-block; background:#e8f4fd; color:#0078D4; '
+            f'padding:0.2rem 0.5rem; margin:0.15rem; border-radius:4px; font-size:0.8rem;">{tech}</span>'
+            for tech in technologies[:12]
+        ])
+        if len(technologies) > 12:
+            tech_tags += f'<span style="display:inline-block; color:#666; padding:0.2rem 0.5rem; font-size:0.8rem;">+{len(technologies) - 12} more</span>'
 
-    # Server summary
+        st.markdown(
+            f"""
+            <div style="margin-bottom:1rem;">
+                <div style="color:#666; font-size:0.75rem; text-transform:uppercase; margin-bottom:0.5rem;">Detected Technologies</div>
+                <div>{tech_tags}</div>
+            </div>
+            """,
+            unsafe_allow_html=True
+        )
+
+    # Server summary - inline compact
     servers = context.get("server_details", [])
     if servers:
-        col1, col2, col3 = st.columns(3)
-        with col1:
-            st.metric("Servers", len(servers))
-
-        # Count environments
         envs = set(s.get("environment", "Unknown") for s in servers)
-        with col2:
-            st.metric("Environments", ", ".join(envs) if envs else "Unknown")
-
-        # Count by OS
         os_list = [s.get("OperatingSystem", "Unknown") for s in servers]
         windows_count = sum(1 for os in os_list if os and "windows" in os.lower())
         linux_count = len(servers) - windows_count
-        with col3:
-            os_summary = []
-            if windows_count:
-                os_summary.append(f"{windows_count} Windows")
-            if linux_count:
-                os_summary.append(f"{linux_count} Linux")
-            st.metric("Operating Systems", ", ".join(os_summary) if os_summary else "Unknown")
 
-    # App Mod results summary
+        os_parts = []
+        if windows_count:
+            os_parts.append(f"{windows_count} Windows")
+        if linux_count:
+            os_parts.append(f"{linux_count} Linux")
+
+        st.markdown(
+            f"""
+            <div style="display:flex; gap:2rem; color:#666; font-size:0.85rem; margin-bottom:1rem;">
+                <span><strong>{len(servers)}</strong> Server{'s' if len(servers) != 1 else ''}</span>
+                <span><strong>{', '.join(envs)}</strong> Environment{'s' if len(envs) != 1 else ''}</span>
+                <span><strong>{', '.join(os_parts) if os_parts else 'Unknown'}</strong></span>
+            </div>
+            """,
+            unsafe_allow_html=True
+        )
+
+    # App Mod results summary - collapsible
     app_mod = context.get("App Mod results", [])
     if app_mod:
-        with st.expander("App Modernization Assessment"):
+        with st.expander("App Modernization Assessment", expanded=False):
             for result in app_mod:
                 tech = result.get("technology", "Unknown")
-                st.markdown(f"**{tech}**")
-
                 summary = result.get("summary", {})
-                if summary:
-                    container_ready = summary.get("container_ready", False)
-                    modernization_feasible = summary.get("modernization_feasible", False)
-                    st.markdown(f"- Container Ready: {'Yes' if container_ready else 'No'}")
-                    st.markdown(f"- Modernization Feasible: {'Yes' if modernization_feasible else 'No'}")
-
                 recommended = result.get("recommended_targets", [])
-                if recommended:
-                    st.markdown(f"- Recommended Targets: {', '.join(recommended)}")
+
+                container_ready = summary.get("container_ready", False)
+                modernization_feasible = summary.get("modernization_feasible", False)
+
+                badges = []
+                if container_ready:
+                    badges.append('<span style="background:#DFF6DD; color:#107C10; padding:0.15rem 0.4rem; border-radius:3px; font-size:0.75rem; margin-right:0.3rem;">Container Ready</span>')
+                if modernization_feasible:
+                    badges.append('<span style="background:#DFF6DD; color:#107C10; padding:0.15rem 0.4rem; border-radius:3px; font-size:0.75rem; margin-right:0.3rem;">Modernization Feasible</span>')
+
+                targets_str = f" &rarr; {', '.join(recommended)}" if recommended else ""
+
+                st.markdown(
+                    f"""<div style="margin-bottom:0.5rem;">
+                        <strong>{tech}</strong>{targets_str}
+                        <div>{''.join(badges)}</div>
+                    </div>""",
+                    unsafe_allow_html=True
+                )
 
 
 def _get_questions(data: list, catalog_path: str) -> list:

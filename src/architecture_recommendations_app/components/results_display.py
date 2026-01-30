@@ -13,11 +13,11 @@ QUALITY_LABELS = {
     "example_only": ("Example", "#E6E6E6", "#666"),
 }
 
-# Confidence level styling
+# Confidence level styling - base descriptions
 CONFIDENCE_STYLES = {
     "High": ("#107C10", "Strong match with clear requirements"),
-    "Medium": ("#FFB900", "Good match - consider answering questions for better accuracy"),
-    "Low": ("#D83B01", "Limited data - answering questions will improve recommendations"),
+    "Medium": ("#FFB900", "Good match based on available data"),
+    "Low": ("#D83B01", "Limited data - answering questions may improve recommendations"),
 }
 
 
@@ -45,54 +45,54 @@ def render_results(result: ScoringResult) -> None:
 
 
 def _render_summary(result: ScoringResult) -> None:
-    """Render the summary section with metrics."""
+    """Render a compact summary section."""
     summary = result.summary
 
-    st.subheader("Analysis Summary")
-
     # Get confidence styling
-    conf_color, conf_help = CONFIDENCE_STYLES.get(
+    conf_color, _ = CONFIDENCE_STYLES.get(
         summary.confidence_level,
-        ("#666", "Confidence level based on data quality")
+        ("#666", "")
     )
 
-    # Primary metrics - larger, cleaner display
-    col1, col2, col3, col4 = st.columns(4)
+    # Compact metrics row using CSS grid
+    st.markdown(
+        f"""
+        <div style="background:#f8f9fa; border-radius:8px; padding:0.75rem 1rem; margin-bottom:1rem;">
+            <div style="display:grid; grid-template-columns:2fr 1fr 1fr 1fr; gap:1rem; align-items:center;">
+                <div>
+                    <span style="color:#666; font-size:0.7rem; text-transform:uppercase;">Application</span><br/>
+                    <span style="font-weight:600; font-size:1.1rem;">{result.application_name}</span>
+                </div>
+                <div style="text-align:center;">
+                    <span style="color:#666; font-size:0.7rem; text-transform:uppercase;">Confidence</span><br/>
+                    <span style="font-weight:600; font-size:1.1rem; color:{conf_color};">{summary.confidence_level}</span>
+                </div>
+                <div style="text-align:center;">
+                    <span style="color:#666; font-size:0.7rem; text-transform:uppercase;">Recommendations</span><br/>
+                    <span style="font-weight:600; font-size:1.1rem;">{len(result.recommendations)}</span>
+                </div>
+                <div style="text-align:center;">
+                    <span style="color:#666; font-size:0.7rem; text-transform:uppercase;">Evaluated</span><br/>
+                    <span style="font-weight:600; font-size:1.1rem;">{result.catalog_architecture_count}</span>
+                </div>
+            </div>
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
 
-    with col1:
-        st.markdown(f"**Application**")
-        st.markdown(f"### {result.application_name}")
-
-    with col2:
-        st.markdown(f"**Match Confidence**")
-        st.markdown(
-            f'<h3 style="color:{conf_color}; margin:0;">{summary.confidence_level}</h3>',
-            unsafe_allow_html=True
-        )
-        st.caption(conf_help)
-
-    with col3:
-        st.markdown("**Recommendations**")
-        st.markdown(f"### {len(result.recommendations)}")
-
-    with col4:
-        st.markdown("**Architectures Evaluated**")
-        st.markdown(f"### {result.catalog_architecture_count}")
-
-    st.markdown("")  # Spacer
-
-    # Key insights in expanders for cleaner look
+    # Key insights as collapsed expanders side by side
     col1, col2 = st.columns(2)
 
     with col1:
         if summary.key_drivers:
-            with st.expander("**Key Drivers** - Why these recommendations", expanded=True):
+            with st.expander("Key Drivers - Why these recommendations", expanded=False):
                 for driver in summary.key_drivers[:4]:
                     st.markdown(f"- {driver}")
 
     with col2:
         if summary.key_risks:
-            with st.expander("**Key Considerations** - Things to review", expanded=True):
+            with st.expander("Key Considerations - Things to review", expanded=False):
                 for risk in summary.key_risks[:4]:
                     st.markdown(f"- {risk}")
 
@@ -186,7 +186,13 @@ def _render_recommendation_card(rec: ArchitectureRecommendation, is_primary: boo
                         st.markdown(f"**Supporting:** {', '.join(rec.supporting_services[:8])}")
 
             if rec.learn_url:
-                st.link_button("Learn more on Microsoft Docs", rec.learn_url)
+                st.markdown(
+                    f'<a href="{rec.learn_url}" target="_blank" style="display:inline-block; '
+                    f'background:#0078D4; color:white; padding:0.5rem 1rem; border-radius:4px; '
+                    f'text-decoration:none; font-weight:500; margin-top:0.5rem;">'
+                    f'Learn more on Microsoft Docs &rarr;</a>',
+                    unsafe_allow_html=True
+                )
 
         else:
             # Alternative recommendation - compact card
@@ -225,6 +231,12 @@ def _render_recommendation_card(rec: ArchitectureRecommendation, is_primary: boo
                     services += f" +{len(rec.core_services) - 4} more"
                 st.caption(f"Services: {services}")
 
-            # Learn more link
+            # Learn more link - styled as visible button
             if rec.learn_url:
-                st.markdown(f"[View details]({rec.learn_url})")
+                st.markdown(
+                    f'<a href="{rec.learn_url}" target="_blank" style="display:inline-block; '
+                    f'background:#0078D4; color:white; padding:0.3rem 0.6rem; border-radius:4px; '
+                    f'text-decoration:none; font-size:0.85rem; margin-top:0.3rem;">'
+                    f'View details &rarr;</a>',
+                    unsafe_allow_html=True
+                )
