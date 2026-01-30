@@ -46,6 +46,15 @@ CATEGORY_TO_DOMAIN = {
     'media': WorkloadDomain.WEB,
 }
 
+# Mapping from ms.custom arb-* values to architecture families
+ARB_TO_FAMILY = {
+    'arb-web': ArchitectureFamily.PAAS,
+    'arb-data': ArchitectureFamily.DATA,
+    'arb-containers': ArchitectureFamily.CLOUD_NATIVE,
+    'arb-hybrid': ArchitectureFamily.IAAS,
+    'arb-aiml': ArchitectureFamily.DATA,
+}
+
 
 class ArchitectureClassifier:
     """Provides AI-assisted classification suggestions for architectures.
@@ -90,12 +99,16 @@ class ArchitectureClassifier:
         all_services = entry.core_services + entry.supporting_services
 
         # Suggest architecture family
-        family = self._suggest_family(content, all_services, doc)
+        family, family_source = self._suggest_family(content, all_services, doc)
         if family:
             entry.family = family
+            # Use CURATED confidence when family comes from yml_metadata (arb-* values)
+            confidence = (ExtractionConfidence.CURATED
+                         if family_source == "yml_metadata"
+                         else ExtractionConfidence.AI_SUGGESTED)
             entry.family_confidence = ClassificationMeta(
-                confidence=ExtractionConfidence.AI_SUGGESTED,
-                source="content_analysis"
+                confidence=confidence,
+                source=family_source
             )
 
         # Suggest runtime models (improved - never returns unknown)
@@ -207,10 +220,21 @@ class ArchitectureClassifier:
         content: str,
         services: list[str],
         doc: ParsedDocument
-    ) -> Optional[ArchitectureFamily]:
-        """Suggest architecture family based on content and services."""
+    ) -> tuple[Optional[ArchitectureFamily], str]:
+        """Suggest architecture family based on content and services.
+
+        Returns:
+            Tuple of (family, source) where source indicates the primary data source.
+        """
+        # Priority 1: Check ms.custom arb-* values from yml metadata (most reliable)
+        for custom_value in doc.arch_metadata.ms_custom:
+            custom_lower = custom_value.lower().strip()
+            if custom_lower in ARB_TO_FAMILY:
+                return ARB_TO_FAMILY[custom_lower], "yml_metadata"
+
         config = self._get_config()
         scores: dict[str, int] = {}
+        source = "content_analysis"
 
         # Score based on keywords
         for family, keywords in config.family_keywords.items():
@@ -223,15 +247,19 @@ class ArchitectureClassifier:
 
         if 'kubernetes' in service_lower or 'container' in service_lower:
             scores['cloud_native'] = scores.get('cloud_native', 0) + 3
+            source = "service_inference"
 
         if 'virtual machine' in service_lower:
             scores['iaas'] = scores.get('iaas', 0) + 2
+            source = "service_inference"
 
         if 'app service' in service_lower or 'functions' in service_lower:
             scores['paas'] = scores.get('paas', 0) + 2
+            source = "service_inference"
 
         if 'synapse' in service_lower or 'data factory' in service_lower:
             scores['data'] = scores.get('data', 0) + 2
+            source = "service_inference"
 
         # Boost based on yml products
         for product in doc.arch_metadata.products:
@@ -246,10 +274,10 @@ class ArchitectureClassifier:
         if scores:
             best = max(scores, key=scores.get)
             try:
-                return ArchitectureFamily(best)
+                return ArchitectureFamily(best), source
             except ValueError:
                 pass
-        return None
+        return None, "none"
 
     def _suggest_runtime_models(
         self,
@@ -602,13 +630,18 @@ class ArchitectureClassifier:
             scores['replatform'] = scores.get('replatform', 0) + 1.5
             source = "service_inference"
 
-        # Boost from YML metadata (ms.collection: migration)
-        ms_collections = doc.frontmatter.get('ms.collection', [])
-        if isinstance(ms_collections, str):
-            ms_collections = [ms_collections]
-        if 'migration' in [c.lower() for c in ms_collections]:
-            scores['rehost'] = scores.get('rehost', 0) + 1
-            scores['replatform'] = scores.get('replatform', 0) + 1
+        # Boost from YML metadata (ms.collection values)
+        ms_collections = doc.arch_metadata.ms_collection
+        collections_lower = [c.lower() for c in ms_collections]
+
+        if 'migration' in collections_lower:
+            scores['rehost'] = scores.get('rehost', 0) + 2
+            scores['replatform'] = scores.get('replatform', 0) + 2
+            source = "yml_metadata"
+
+        if 'onprem-to-azure' in collections_lower:
+            scores['rehost'] = scores.get('rehost', 0) + 1.5
+            scores['replatform'] = scores.get('replatform', 0) + 1.5
             source = "yml_metadata"
 
         # Include architecture family hints

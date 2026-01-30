@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "generated_at": "2026-01-30T11:52:10.346060",
+  "generated_at": "2026-01-30T12:17:46.237851",
   "source_repo": "/Users/adambrown/architecture-center",
   "source_commit": "06e0d0868e6f59645fdfac6a64048cb0dc57ce5e",
   "generation_settings": {
@@ -9,10 +9,10 @@
     ],
     "allowed_products": [],
     "allowed_categories": [],
-    "require_architecture_yml": false,
+    "require_architecture_yml": true,
     "exclude_examples": true
   },
-  "total_architectures": 51,
+  "total_architectures": 43,
   "architectures": [
     {
       "architecture_id": "ai-ml-architecture-baseline-microsoft-foundry-chat-content",
@@ -34,17 +34,17 @@
       "browse_categories": [
         "Architecture",
         "Reference",
-        "Security",
+        "AI + Machine Learning",
         "Networking",
         "Web",
-        "AI + Machine Learning"
+        "Security"
       ],
       "family": "paas",
       "family_confidence": {
         "confidence": "ai_suggested",
-        "source": "content_analysis"
+        "source": "service_inference"
       },
-      "workload_domain": "security",
+      "workload_domain": "ai",
       "workload_domain_confidence": {
         "confidence": "curated",
         "source": "yml_metadata"
@@ -180,17 +180,17 @@
       "browse_categories": [
         "Architecture",
         "Reference",
-        "Security",
+        "AI + Machine Learning",
         "Networking",
         "Web",
-        "AI + Machine Learning"
+        "Security"
       ],
       "family": "paas",
       "family_confidence": {
         "confidence": "ai_suggested",
-        "source": "content_analysis"
+        "source": "service_inference"
       },
-      "workload_domain": "security",
+      "workload_domain": "ai",
       "workload_domain_confidence": {
         "confidence": "curated",
         "source": "yml_metadata"
@@ -317,16 +317,16 @@
       "browse_categories": [
         "Architecture",
         "Reference",
-        "Security",
+        "AI + Machine Learning",
         "Web",
-        "AI + Machine Learning"
+        "Security"
       ],
       "family": "paas",
       "family_confidence": {
         "confidence": "ai_suggested",
-        "source": "content_analysis"
+        "source": "service_inference"
       },
-      "workload_domain": "security",
+      "workload_domain": "ai",
       "workload_domain_confidence": {
         "confidence": "curated",
         "source": "yml_metadata"
@@ -438,17 +438,17 @@
       "browse_categories": [
         "Architecture",
         "Reference",
-        "Security",
-        "Networking",
         "Databases",
-        "Storage"
+        "Networking",
+        "Storage",
+        "Security"
       ],
       "family": "foundation",
       "family_confidence": {
         "confidence": "ai_suggested",
-        "source": "content_analysis"
+        "source": "service_inference"
       },
-      "workload_domain": "security",
+      "workload_domain": "data",
       "workload_domain_confidence": {
         "confidence": "curated",
         "source": "yml_metadata"
@@ -570,8 +570,8 @@
       ],
       "family": "data",
       "family_confidence": {
-        "confidence": "ai_suggested",
-        "source": "content_analysis"
+        "confidence": "curated",
+        "source": "yml_metadata"
       },
       "workload_domain": "data",
       "workload_domain_confidence": {
@@ -663,112 +663,6 @@
       "extraction_warnings": []
     },
     {
-      "architecture_id": "example-scenario-blue-green-spring-blue-green-spring-content",
-      "name": "Highly Available App Service Web Application",
-      "pattern_name": "Highly Available App Service Web Application",
-      "pattern_name_confidence": {
-        "confidence": "ai_suggested",
-        "source": "title_and_services"
-      },
-      "description": "This article describes a high-availability blue/green deployment solution for applications on Azure Spring Apps.",
-      "source_repo_path": "docs/example-scenario/blue-green-spring/blue-green-spring-content.md",
-      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/example-scenario/blue-green-spring/blue-green-spring",
-      "browse_tags": [],
-      "browse_categories": [
-        "Architecture"
-      ],
-      "family": "paas",
-      "family_confidence": {
-        "confidence": "ai_suggested",
-        "source": "content_analysis"
-      },
-      "workload_domain": "integration",
-      "workload_domain_confidence": {
-        "confidence": "ai_suggested",
-        "source": "content_analysis"
-      },
-      "expected_runtime_models": [
-        "mixed"
-      ],
-      "runtime_models_confidence": {
-        "confidence": "ai_suggested",
-        "source": "content_analysis"
-      },
-      "expected_characteristics": {
-        "containers": "optional",
-        "stateless": "optional",
-        "devops_required": true,
-        "ci_cd_required": true,
-        "private_networking_required": false
-      },
-      "supported_treatments": [
-        "refactor",
-        "replatform"
-      ],
-      "treatments_confidence": {
-        "confidence": "ai_suggested",
-        "source": "service_inference"
-      },
-      "supported_time_categories": [
-        "invest",
-        "migrate"
-      ],
-      "time_categories_confidence": {
-        "confidence": "ai_suggested",
-        "source": "treatment_inference"
-      },
-      "availability_models": [
-        "multi_region_active_passive"
-      ],
-      "availability_confidence": {
-        "confidence": "ai_suggested",
-        "source": "content_analysis"
-      },
-      "security_level": "basic",
-      "security_level_confidence": {
-        "confidence": "ai_suggested",
-        "source": "default"
-      },
-      "operating_model_required": "devops",
-      "operating_model_confidence": {
-        "confidence": "ai_suggested",
-        "source": "family_inference"
-      },
-      "cost_profile": "cost_minimized",
-      "cost_profile_confidence": {
-        "confidence": "ai_suggested",
-        "source": "content_analysis"
-      },
-      "complexity": {
-        "implementation": "low",
-        "operations": "medium"
-      },
-      "complexity_confidence": {
-        "confidence": "ai_suggested",
-        "source": "heuristic_analysis"
-      },
-      "not_suitable_for": [],
-      "core_services": [
-        "Azure App Service",
-        "Azure Spring Apps"
-      ],
-      "supporting_services": [
-        "Azure Pipelines"
-      ],
-      "services_confidence": {
-        "confidence": "ai_suggested",
-        "source": "content_analysis"
-      },
-      "diagram_assets": [
-        "docs/example-scenario/blue-green-spring/media/blue-green-deployment.svg"
-      ],
-      "last_repo_update": "2026-01-29T06:02:45",
-      "catalog_quality": "ai_suggested",
-      "extraction_warnings": [
-        "No browse tags from YML metadata"
-      ]
-    },
-    {
       "architecture_id": "example-scenario-data-greenfield-lakehouse-fabric-content",
       "name": "Zone-redundant Data Pipeline With Private Networking",
       "pattern_name": "Zone-redundant Data Pipeline With Private Networking",
@@ -785,14 +679,14 @@
       "browse_categories": [
         "Architecture",
         "Reference",
-        "Analytics",
         "Databases",
+        "Analytics",
         "Storage"
       ],
       "family": "data",
       "family_confidence": {
-        "confidence": "ai_suggested",
-        "source": "content_analysis"
+        "confidence": "curated",
+        "source": "yml_metadata"
       },
       "workload_domain": "data",
       "workload_domain_confidence": {
@@ -885,226 +779,6 @@
       "extraction_warnings": []
     },
     {
-      "architecture_id": "example-scenario-hybrid-aks-network-content",
-      "name": "Highly Available AKS Cluster With Ingress And Caching",
-      "pattern_name": "Highly Available AKS Cluster With Ingress And Caching",
-      "pattern_name_confidence": {
-        "confidence": "ai_suggested",
-        "source": "title_and_services"
-      },
-      "description": "This scenario illustrates how to design and implement network concepts for deploying Azure Kubernetes Service (AKS) nodes on AKS clusters.",
-      "source_repo_path": "docs/example-scenario/hybrid/aks-network-content.md",
-      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/example-scenario/hybrid/aks-network",
-      "browse_tags": [],
-      "browse_categories": [
-        "Architecture"
-      ],
-      "family": "cloud_native",
-      "family_confidence": {
-        "confidence": "ai_suggested",
-        "source": "content_analysis"
-      },
-      "workload_domain": "infrastructure",
-      "workload_domain_confidence": {
-        "confidence": "ai_suggested",
-        "source": "content_analysis"
-      },
-      "expected_runtime_models": [
-        "microservices",
-        "batch"
-      ],
-      "runtime_models_confidence": {
-        "confidence": "ai_suggested",
-        "source": "service_inference"
-      },
-      "expected_characteristics": {
-        "containers": "true",
-        "stateless": "true",
-        "devops_required": true,
-        "ci_cd_required": true,
-        "private_networking_required": false
-      },
-      "supported_treatments": [
-        "refactor",
-        "rebuild",
-        "retain"
-      ],
-      "treatments_confidence": {
-        "confidence": "ai_suggested",
-        "source": "service_inference"
-      },
-      "supported_time_categories": [
-        "migrate",
-        "tolerate",
-        "invest"
-      ],
-      "time_categories_confidence": {
-        "confidence": "ai_suggested",
-        "source": "treatment_inference"
-      },
-      "availability_models": [
-        "single_region"
-      ],
-      "availability_confidence": {
-        "confidence": "ai_suggested",
-        "source": "content_analysis"
-      },
-      "security_level": "enterprise",
-      "security_level_confidence": {
-        "confidence": "ai_suggested",
-        "source": "content_analysis"
-      },
-      "operating_model_required": "devops",
-      "operating_model_confidence": {
-        "confidence": "ai_suggested",
-        "source": "family_inference"
-      },
-      "cost_profile": "balanced",
-      "cost_profile_confidence": {
-        "confidence": "ai_suggested",
-        "source": "content_analysis"
-      },
-      "complexity": {
-        "implementation": "high",
-        "operations": "high"
-      },
-      "complexity_confidence": {
-        "confidence": "ai_suggested",
-        "source": "heuristic_analysis"
-      },
-      "not_suitable_for": [],
-      "core_services": [
-        "Azure Kubernetes Service",
-        "Azure Load Balancer"
-      ],
-      "supporting_services": [
-        "Azure Active Directory",
-        "Azure Arc",
-        "Azure Backup",
-        "Azure Monitor",
-        "Azure Policy",
-        "Azure Resource Manager",
-        "Microsoft Entra ID"
-      ],
-      "services_confidence": {
-        "confidence": "ai_suggested",
-        "source": "content_analysis"
-      },
-      "diagram_assets": [
-        "docs/example-scenario/hybrid/media/aks-network.svg"
-      ],
-      "last_repo_update": "2026-01-29T06:02:45",
-      "catalog_quality": "ai_suggested",
-      "extraction_warnings": [
-        "No browse tags from YML metadata"
-      ]
-    },
-    {
-      "architecture_id": "example-scenario-iot-measure-control-loop-content",
-      "name": "IOT Solution With Global Load Balancing",
-      "pattern_name": "IOT Solution With Global Load Balancing",
-      "pattern_name_confidence": {
-        "confidence": "ai_suggested",
-        "source": "title_and_services"
-      },
-      "description": "This article provides an overview of the measure and control process loop architecture, characteristics, and components.",
-      "source_repo_path": "docs/example-scenario/iot/measure-control-loop-content.md",
-      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/example-scenario/iot/measure-control-loop",
-      "browse_tags": [],
-      "browse_categories": [
-        "Architecture"
-      ],
-      "family": "specialized",
-      "family_confidence": {
-        "confidence": "ai_suggested",
-        "source": "content_analysis"
-      },
-      "workload_domain": "integration",
-      "workload_domain_confidence": {
-        "confidence": "ai_suggested",
-        "source": "content_analysis"
-      },
-      "expected_runtime_models": [
-        "n_tier"
-      ],
-      "runtime_models_confidence": {
-        "confidence": "ai_suggested",
-        "source": "heuristic_fallback"
-      },
-      "expected_characteristics": {
-        "containers": "optional",
-        "stateless": "optional",
-        "devops_required": true,
-        "ci_cd_required": true,
-        "private_networking_required": false
-      },
-      "supported_treatments": [
-        "replatform",
-        "refactor"
-      ],
-      "treatments_confidence": {
-        "confidence": "ai_suggested",
-        "source": "family_heuristic"
-      },
-      "supported_time_categories": [
-        "invest",
-        "migrate"
-      ],
-      "time_categories_confidence": {
-        "confidence": "ai_suggested",
-        "source": "treatment_inference"
-      },
-      "availability_models": [
-        "single_region"
-      ],
-      "availability_confidence": {
-        "confidence": "ai_suggested",
-        "source": "content_analysis"
-      },
-      "security_level": "basic",
-      "security_level_confidence": {
-        "confidence": "ai_suggested",
-        "source": "default"
-      },
-      "operating_model_required": "sre",
-      "operating_model_confidence": {
-        "confidence": "ai_suggested",
-        "source": "content_analysis"
-      },
-      "cost_profile": "innovation_first",
-      "cost_profile_confidence": {
-        "confidence": "ai_suggested",
-        "source": "content_analysis"
-      },
-      "complexity": {
-        "implementation": "low",
-        "operations": "low"
-      },
-      "complexity_confidence": {
-        "confidence": "ai_suggested",
-        "source": "heuristic_analysis"
-      },
-      "not_suitable_for": [],
-      "core_services": [
-        "Azure Front Door"
-      ],
-      "supporting_services": [
-        "Azure Monitor"
-      ],
-      "services_confidence": {
-        "confidence": "ai_suggested",
-        "source": "content_analysis"
-      },
-      "diagram_assets": [
-        "docs/example-scenario/iot/media/measure-and-control.svg"
-      ],
-      "last_repo_update": "2026-01-29T06:02:45",
-      "catalog_quality": "ai_suggested",
-      "extraction_warnings": [
-        "No browse tags from YML metadata"
-      ]
-    },
-    {
       "architecture_id": "high-availability-reference-architecture-traffic-m-4a444f88",
       "name": "Highly Available Architecture Notes With Private Networking",
       "pattern_name": "Highly Available Architecture Notes With Private Networking",
@@ -1129,7 +803,7 @@
       "family": "cloud_native",
       "family_confidence": {
         "confidence": "ai_suggested",
-        "source": "content_analysis"
+        "source": "service_inference"
       },
       "workload_domain": "infrastructure",
       "workload_domain_confidence": {
@@ -1255,10 +929,10 @@
         "Management",
         "Hybrid"
       ],
-      "family": "cloud_native",
+      "family": "iaas",
       "family_confidence": {
-        "confidence": "ai_suggested",
-        "source": "content_analysis"
+        "confidence": "curated",
+        "source": "yml_metadata"
       },
       "workload_domain": "infrastructure",
       "workload_domain_confidence": {
@@ -1266,8 +940,7 @@
         "source": "yml_metadata"
       },
       "expected_runtime_models": [
-        "microservices",
-        "batch"
+        "mixed"
       ],
       "runtime_models_confidence": {
         "confidence": "ai_suggested",
@@ -1283,8 +956,7 @@
       "supported_treatments": [
         "replatform",
         "refactor",
-        "retain",
-        "rebuild"
+        "retain"
       ],
       "treatments_confidence": {
         "confidence": "ai_suggested",
@@ -1376,10 +1048,10 @@
         "Databases",
         "Hybrid"
       ],
-      "family": "cloud_native",
+      "family": "iaas",
       "family_confidence": {
-        "confidence": "ai_suggested",
-        "source": "content_analysis"
+        "confidence": "curated",
+        "source": "yml_metadata"
       },
       "workload_domain": "data",
       "workload_domain_confidence": {
@@ -1387,7 +1059,8 @@
         "source": "yml_metadata"
       },
       "expected_runtime_models": [
-        "microservices"
+        "microservices",
+        "n_tier"
       ],
       "runtime_models_confidence": {
         "confidence": "ai_suggested",
@@ -1401,10 +1074,10 @@
         "private_networking_required": false
       },
       "supported_treatments": [
+        "rehost",
         "replatform",
         "refactor",
-        "retain",
-        "rebuild"
+        "retain"
       ],
       "treatments_confidence": {
         "confidence": "ai_suggested",
@@ -1611,8 +1284,8 @@
       ],
       "family": "iaas",
       "family_confidence": {
-        "confidence": "ai_suggested",
-        "source": "content_analysis"
+        "confidence": "curated",
+        "source": "yml_metadata"
       },
       "workload_domain": "data",
       "workload_domain_confidence": {
@@ -1734,10 +1407,10 @@
         "Management",
         "Hybrid"
       ],
-      "family": "cloud_native",
+      "family": "iaas",
       "family_confidence": {
-        "confidence": "ai_suggested",
-        "source": "content_analysis"
+        "confidence": "curated",
+        "source": "yml_metadata"
       },
       "workload_domain": "infrastructure",
       "workload_domain_confidence": {
@@ -1762,8 +1435,7 @@
         "replatform",
         "refactor",
         "retain",
-        "rehost",
-        "rebuild"
+        "rehost"
       ],
       "treatments_confidence": {
         "confidence": "ai_suggested",
@@ -1871,10 +1543,10 @@
         "Management",
         "Hybrid"
       ],
-      "family": "cloud_native",
+      "family": "iaas",
       "family_confidence": {
-        "confidence": "ai_suggested",
-        "source": "content_analysis"
+        "confidence": "curated",
+        "source": "yml_metadata"
       },
       "workload_domain": "infrastructure",
       "workload_domain_confidence": {
@@ -1882,7 +1554,8 @@
         "source": "yml_metadata"
       },
       "expected_runtime_models": [
-        "microservices"
+        "microservices",
+        "n_tier"
       ],
       "runtime_models_confidence": {
         "confidence": "ai_suggested",
@@ -1897,8 +1570,7 @@
       },
       "supported_treatments": [
         "retain",
-        "refactor",
-        "rebuild"
+        "refactor"
       ],
       "treatments_confidence": {
         "confidence": "ai_suggested",
@@ -1924,7 +1596,7 @@
         "confidence": "ai_suggested",
         "source": "content_analysis"
       },
-      "operating_model_required": "devops",
+      "operating_model_required": "traditional_it",
       "operating_model_confidence": {
         "confidence": "ai_suggested",
         "source": "family_inference"
@@ -1996,8 +1668,8 @@
       ],
       "family": "iaas",
       "family_confidence": {
-        "confidence": "ai_suggested",
-        "source": "content_analysis"
+        "confidence": "curated",
+        "source": "yml_metadata"
       },
       "workload_domain": "infrastructure",
       "workload_domain_confidence": {
@@ -2111,10 +1783,10 @@
         "Storage",
         "Hybrid"
       ],
-      "family": "cloud_native",
+      "family": "iaas",
       "family_confidence": {
-        "confidence": "ai_suggested",
-        "source": "content_analysis"
+        "confidence": "curated",
+        "source": "yml_metadata"
       },
       "workload_domain": "data",
       "workload_domain_confidence": {
@@ -2122,7 +1794,8 @@
         "source": "yml_metadata"
       },
       "expected_runtime_models": [
-        "microservices"
+        "n_tier",
+        "monolith"
       ],
       "runtime_models_confidence": {
         "confidence": "ai_suggested",
@@ -2136,6 +1809,7 @@
         "private_networking_required": true
       },
       "supported_treatments": [
+        "rehost",
         "retain"
       ],
       "treatments_confidence": {
@@ -2143,6 +1817,7 @@
         "source": "service_inference"
       },
       "supported_time_categories": [
+        "migrate",
         "tolerate"
       ],
       "time_categories_confidence": {
@@ -2161,7 +1836,7 @@
         "confidence": "ai_suggested",
         "source": "content_analysis"
       },
-      "operating_model_required": "devops",
+      "operating_model_required": "sre",
       "operating_model_confidence": {
         "confidence": "ai_suggested",
         "source": "family_inference"
@@ -2222,13 +1897,13 @@
         "Architecture",
         "Reference",
         "Management",
-        "Hybrid",
-        "Monitoring"
+        "Monitoring",
+        "Hybrid"
       ],
       "family": "iaas",
       "family_confidence": {
-        "confidence": "ai_suggested",
-        "source": "content_analysis"
+        "confidence": "curated",
+        "source": "yml_metadata"
       },
       "workload_domain": "infrastructure",
       "workload_domain_confidence": {
@@ -2352,7 +2027,7 @@
       "family": "cloud_native",
       "family_confidence": {
         "confidence": "ai_suggested",
-        "source": "content_analysis"
+        "source": "service_inference"
       },
       "workload_domain": "infrastructure",
       "workload_domain_confidence": {
@@ -2477,15 +2152,15 @@
       "browse_categories": [
         "Architecture",
         "Reference",
-        "Integration",
-        "Databases"
+        "Databases",
+        "Integration"
       ],
       "family": "cloud_native",
       "family_confidence": {
         "confidence": "ai_suggested",
-        "source": "content_analysis"
+        "source": "service_inference"
       },
-      "workload_domain": "integration",
+      "workload_domain": "data",
       "workload_domain_confidence": {
         "confidence": "curated",
         "source": "yml_metadata"
@@ -2513,7 +2188,7 @@
       ],
       "treatments_confidence": {
         "confidence": "ai_suggested",
-        "source": "service_inference"
+        "source": "yml_metadata"
       },
       "supported_time_categories": [
         "invest",
@@ -2728,14 +2403,14 @@
       "browse_categories": [
         "Architecture",
         "Reference",
-        "Aks",
         "Containers",
+        "Aks",
         "Kubernetes"
       ],
       "family": "cloud_native",
       "family_confidence": {
-        "confidence": "ai_suggested",
-        "source": "content_analysis"
+        "confidence": "curated",
+        "source": "yml_metadata"
       },
       "workload_domain": "infrastructure",
       "workload_domain_confidence": {
@@ -2877,8 +2552,8 @@
       ],
       "family": "cloud_native",
       "family_confidence": {
-        "confidence": "ai_suggested",
-        "source": "content_analysis"
+        "confidence": "curated",
+        "source": "yml_metadata"
       },
       "workload_domain": "infrastructure",
       "workload_domain_confidence": {
@@ -3005,8 +2680,8 @@
       ],
       "family": "cloud_native",
       "family_confidence": {
-        "confidence": "ai_suggested",
-        "source": "content_analysis"
+        "confidence": "curated",
+        "source": "yml_metadata"
       },
       "workload_domain": "infrastructure",
       "workload_domain_confidence": {
@@ -3110,573 +2785,6 @@
       "extraction_warnings": []
     },
     {
-      "architecture_id": "reference-architectures-containers-aks-mission-cri-25ec0bb5",
-      "name": "Mission-critical Data Platform For Mission-critical Workloads With Active-active",
-      "pattern_name": "Mission-critical Data Platform For Mission-critical Workloads With Active-active",
-      "pattern_name_confidence": {
-        "confidence": "ai_suggested",
-        "source": "title_and_services"
-      },
-      "description": "Data decisions for the architecture of a mission-critical workload on Azure.",
-      "source_repo_path": "docs/reference-architectures/containers/aks-mission-critical/mission-critical-data-platform.md",
-      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/reference-architectures/containers/aks-mission-critical/mission-critical-data-platform",
-      "browse_tags": [],
-      "browse_categories": [
-        "Architecture",
-        "Reference"
-      ],
-      "family": "cloud_native",
-      "family_confidence": {
-        "confidence": "ai_suggested",
-        "source": "content_analysis"
-      },
-      "workload_domain": "integration",
-      "workload_domain_confidence": {
-        "confidence": "ai_suggested",
-        "source": "content_analysis"
-      },
-      "expected_runtime_models": [
-        "event_driven",
-        "microservices"
-      ],
-      "runtime_models_confidence": {
-        "confidence": "ai_suggested",
-        "source": "service_inference"
-      },
-      "expected_characteristics": {
-        "containers": "optional",
-        "stateless": "false",
-        "devops_required": true,
-        "ci_cd_required": true,
-        "private_networking_required": false
-      },
-      "supported_treatments": [
-        "replatform"
-      ],
-      "treatments_confidence": {
-        "confidence": "ai_suggested",
-        "source": "service_inference"
-      },
-      "supported_time_categories": [
-        "invest",
-        "migrate"
-      ],
-      "time_categories_confidence": {
-        "confidence": "ai_suggested",
-        "source": "complexity_heuristic"
-      },
-      "availability_models": [
-        "multi_region_active_active",
-        "multi_region_active_passive",
-        "zone_redundant"
-      ],
-      "availability_confidence": {
-        "confidence": "ai_suggested",
-        "source": "content_analysis"
-      },
-      "security_level": "basic",
-      "security_level_confidence": {
-        "confidence": "ai_suggested",
-        "source": "default"
-      },
-      "operating_model_required": "sre",
-      "operating_model_confidence": {
-        "confidence": "ai_suggested",
-        "source": "family_inference"
-      },
-      "cost_profile": "scale_optimized",
-      "cost_profile_confidence": {
-        "confidence": "ai_suggested",
-        "source": "content_analysis"
-      },
-      "complexity": {
-        "implementation": "medium",
-        "operations": "high"
-      },
-      "complexity_confidence": {
-        "confidence": "ai_suggested",
-        "source": "heuristic_analysis"
-      },
-      "not_suitable_for": [],
-      "core_services": [
-        "Azure Cosmos DB",
-        "Azure Event Hubs",
-        "Azure Service Bus"
-      ],
-      "supporting_services": [
-        "Azure Monitor"
-      ],
-      "services_confidence": {
-        "confidence": "ai_suggested",
-        "source": "content_analysis"
-      },
-      "diagram_assets": [],
-      "last_repo_update": "2026-01-29T06:02:45",
-      "catalog_quality": "ai_suggested",
-      "extraction_warnings": [
-        "No architecture diagrams found",
-        "No browse tags from YML metadata"
-      ]
-    },
-    {
-      "architecture_id": "reference-architectures-containers-aks-mission-cri-e4f6ec70",
-      "name": "Mission-critical Deployment And Testing For Mission-critical Workloads",
-      "pattern_name": "Mission-critical Deployment And Testing For Mission-critical Workloads",
-      "pattern_name_confidence": {
-        "confidence": "ai_suggested",
-        "source": "title_and_services"
-      },
-      "description": "Reference architecture for a workload that is accessed over a public endpoint without extra dependencies to other company resources - Deployment and Testing.",
-      "source_repo_path": "docs/reference-architectures/containers/aks-mission-critical/mission-critical-deploy-test.md",
-      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/reference-architectures/containers/aks-mission-critical/mission-critical-deploy-test",
-      "browse_tags": [],
-      "browse_categories": [
-        "Architecture",
-        "Reference"
-      ],
-      "family": "cloud_native",
-      "family_confidence": {
-        "confidence": "ai_suggested",
-        "source": "content_analysis"
-      },
-      "workload_domain": "integration",
-      "workload_domain_confidence": {
-        "confidence": "ai_suggested",
-        "source": "content_analysis"
-      },
-      "expected_runtime_models": [
-        "mixed"
-      ],
-      "runtime_models_confidence": {
-        "confidence": "ai_suggested",
-        "source": "service_inference"
-      },
-      "expected_characteristics": {
-        "containers": "true",
-        "stateless": "optional",
-        "devops_required": true,
-        "ci_cd_required": true,
-        "private_networking_required": false
-      },
-      "supported_treatments": [
-        "replatform",
-        "refactor",
-        "rebuild"
-      ],
-      "treatments_confidence": {
-        "confidence": "ai_suggested",
-        "source": "service_inference"
-      },
-      "supported_time_categories": [
-        "invest",
-        "migrate"
-      ],
-      "time_categories_confidence": {
-        "confidence": "ai_suggested",
-        "source": "treatment_inference"
-      },
-      "availability_models": [
-        "single_region"
-      ],
-      "availability_confidence": {
-        "confidence": "ai_suggested",
-        "source": "content_analysis"
-      },
-      "security_level": "enterprise",
-      "security_level_confidence": {
-        "confidence": "ai_suggested",
-        "source": "content_analysis"
-      },
-      "operating_model_required": "devops",
-      "operating_model_confidence": {
-        "confidence": "ai_suggested",
-        "source": "family_inference"
-      },
-      "cost_profile": "scale_optimized",
-      "cost_profile_confidence": {
-        "confidence": "ai_suggested",
-        "source": "content_analysis"
-      },
-      "complexity": {
-        "implementation": "high",
-        "operations": "high"
-      },
-      "complexity_confidence": {
-        "confidence": "ai_suggested",
-        "source": "heuristic_analysis"
-      },
-      "not_suitable_for": [],
-      "core_services": [
-        "Azure Cosmos DB",
-        "Azure Event Hubs",
-        "Azure Front Door",
-        "Azure Kubernetes Service",
-        "Azure Load Balancer"
-      ],
-      "supporting_services": [
-        "Application Insights",
-        "Azure DNS",
-        "Azure Key Vault",
-        "Azure Log Analytics",
-        "Azure Monitor",
-        "Azure Pipelines"
-      ],
-      "services_confidence": {
-        "confidence": "ai_suggested",
-        "source": "content_analysis"
-      },
-      "diagram_assets": [
-        "docs/reference-architectures/containers/aks-mission-critical/images/mission-critical-ref-flowchart.png",
-        "docs/reference-architectures/containers/aks-mission-critical/images/deployment-pipeline-prod.png"
-      ],
-      "last_repo_update": "2026-01-29T06:02:45",
-      "catalog_quality": "ai_suggested",
-      "extraction_warnings": [
-        "No browse tags from YML metadata"
-      ]
-    },
-    {
-      "architecture_id": "reference-architectures-containers-aks-mission-cri-ac26a678",
-      "name": "Mission-critical Health Modeling For Mission-critical Workloads",
-      "pattern_name": "Mission-critical Health Modeling For Mission-critical Workloads",
-      "pattern_name_confidence": {
-        "confidence": "ai_suggested",
-        "source": "title_and_services"
-      },
-      "description": "Reference architecture for a workload that is accessed over a public endpoint without extra dependencies to other company resources - Health modeling.",
-      "source_repo_path": "docs/reference-architectures/containers/aks-mission-critical/mission-critical-health-modeling.md",
-      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/reference-architectures/containers/aks-mission-critical/mission-critical-health-modeling",
-      "browse_tags": [],
-      "browse_categories": [
-        "Architecture",
-        "Reference"
-      ],
-      "family": "cloud_native",
-      "family_confidence": {
-        "confidence": "ai_suggested",
-        "source": "content_analysis"
-      },
-      "workload_domain": "integration",
-      "workload_domain_confidence": {
-        "confidence": "ai_suggested",
-        "source": "content_analysis"
-      },
-      "expected_runtime_models": [
-        "mixed"
-      ],
-      "runtime_models_confidence": {
-        "confidence": "ai_suggested",
-        "source": "service_inference"
-      },
-      "expected_characteristics": {
-        "containers": "true",
-        "stateless": "true",
-        "devops_required": true,
-        "ci_cd_required": true,
-        "private_networking_required": false
-      },
-      "supported_treatments": [
-        "replatform",
-        "refactor",
-        "rebuild"
-      ],
-      "treatments_confidence": {
-        "confidence": "ai_suggested",
-        "source": "service_inference"
-      },
-      "supported_time_categories": [
-        "invest"
-      ],
-      "time_categories_confidence": {
-        "confidence": "ai_suggested",
-        "source": "treatment_inference"
-      },
-      "availability_models": [
-        "single_region"
-      ],
-      "availability_confidence": {
-        "confidence": "ai_suggested",
-        "source": "content_analysis"
-      },
-      "security_level": "enterprise",
-      "security_level_confidence": {
-        "confidence": "ai_suggested",
-        "source": "content_analysis"
-      },
-      "operating_model_required": "devops",
-      "operating_model_confidence": {
-        "confidence": "ai_suggested",
-        "source": "family_inference"
-      },
-      "cost_profile": "scale_optimized",
-      "cost_profile_confidence": {
-        "confidence": "ai_suggested",
-        "source": "service_inference"
-      },
-      "complexity": {
-        "implementation": "high",
-        "operations": "high"
-      },
-      "complexity_confidence": {
-        "confidence": "ai_suggested",
-        "source": "heuristic_analysis"
-      },
-      "not_suitable_for": [],
-      "core_services": [
-        "Azure Blob Storage",
-        "Azure Container Registry",
-        "Azure Cosmos DB",
-        "Azure Event Hubs",
-        "Azure Front Door",
-        "Azure Functions",
-        "Azure Kubernetes Service"
-      ],
-      "supporting_services": [
-        "Application Insights",
-        "Azure DNS",
-        "Azure Key Vault",
-        "Azure Log Analytics",
-        "Azure Monitor",
-        "Microsoft Entra ID"
-      ],
-      "services_confidence": {
-        "confidence": "ai_suggested",
-        "source": "content_analysis"
-      },
-      "diagram_assets": [],
-      "last_repo_update": "2026-01-29T06:02:45",
-      "catalog_quality": "ai_suggested",
-      "extraction_warnings": [
-        "No architecture diagrams found",
-        "No browse tags from YML metadata"
-      ]
-    },
-    {
-      "architecture_id": "reference-architectures-containers-aks-mission-cri-ebb909b9",
-      "name": "Mission-critical Networking And Connectivity For Mission-critical Workloads",
-      "pattern_name": "Mission-critical Networking And Connectivity For Mission-critical Workloads",
-      "pattern_name_confidence": {
-        "confidence": "ai_suggested",
-        "source": "title_and_services"
-      },
-      "description": "Networking decisions for the architecture of a mission-critical workload on Azure.",
-      "source_repo_path": "docs/reference-architectures/containers/aks-mission-critical/mission-critical-networking.md",
-      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/reference-architectures/containers/aks-mission-critical/mission-critical-networking",
-      "browse_tags": [],
-      "browse_categories": [
-        "Architecture",
-        "Reference"
-      ],
-      "family": "paas",
-      "family_confidence": {
-        "confidence": "ai_suggested",
-        "source": "content_analysis"
-      },
-      "workload_domain": "infrastructure",
-      "workload_domain_confidence": {
-        "confidence": "ai_suggested",
-        "source": "content_analysis"
-      },
-      "expected_runtime_models": [
-        "event_driven",
-        "n_tier"
-      ],
-      "runtime_models_confidence": {
-        "confidence": "ai_suggested",
-        "source": "service_inference"
-      },
-      "expected_characteristics": {
-        "containers": "optional",
-        "stateless": "true",
-        "devops_required": true,
-        "ci_cd_required": true,
-        "private_networking_required": true
-      },
-      "supported_treatments": [
-        "replatform"
-      ],
-      "treatments_confidence": {
-        "confidence": "ai_suggested",
-        "source": "service_inference"
-      },
-      "supported_time_categories": [
-        "migrate"
-      ],
-      "time_categories_confidence": {
-        "confidence": "ai_suggested",
-        "source": "complexity_heuristic"
-      },
-      "availability_models": [
-        "single_region"
-      ],
-      "availability_confidence": {
-        "confidence": "ai_suggested",
-        "source": "content_analysis"
-      },
-      "security_level": "enterprise",
-      "security_level_confidence": {
-        "confidence": "ai_suggested",
-        "source": "content_analysis"
-      },
-      "operating_model_required": "sre",
-      "operating_model_confidence": {
-        "confidence": "ai_suggested",
-        "source": "family_inference"
-      },
-      "cost_profile": "innovation_first",
-      "cost_profile_confidence": {
-        "confidence": "ai_suggested",
-        "source": "service_inference"
-      },
-      "complexity": {
-        "implementation": "medium",
-        "operations": "low"
-      },
-      "complexity_confidence": {
-        "confidence": "ai_suggested",
-        "source": "heuristic_analysis"
-      },
-      "not_suitable_for": [],
-      "core_services": [
-        "Azure Front Door",
-        "Azure Functions",
-        "Azure Load Balancer"
-      ],
-      "supporting_services": [
-        "Azure Key Vault",
-        "Azure Monitor"
-      ],
-      "services_confidence": {
-        "confidence": "ai_suggested",
-        "source": "content_analysis"
-      },
-      "diagram_assets": [
-        "docs/reference-architectures/containers/aks-mission-critical/images/network-diagram-all-standard.png",
-        "docs/reference-architectures/containers/aks-mission-critical/images/network-diagram-ingress-standard.png",
-        "docs/reference-architectures/containers/aks-mission-critical/images/network-diagram-vnet-paas-dependencies-standard.png",
-        "docs/reference-architectures/containers/aks-mission-critical/images/network-diagram-ingress.png",
-        "docs/reference-architectures/containers/aks-mission-critical/images/network-diagram-vnet-paas-dependencies.png"
-      ],
-      "last_repo_update": "2026-01-29T06:02:45",
-      "catalog_quality": "ai_suggested",
-      "extraction_warnings": [
-        "No browse tags from YML metadata"
-      ]
-    },
-    {
-      "architecture_id": "reference-architectures-containers-aks-mission-cri-e5b53e4d",
-      "name": "Mission-critical Operations For Mission-critical Workloads",
-      "pattern_name": "Mission-critical Operations For Mission-critical Workloads",
-      "pattern_name_confidence": {
-        "confidence": "ai_suggested",
-        "source": "title_and_services"
-      },
-      "description": "Guidance for operations for the architecture of a mission-critical workload on Azure.",
-      "source_repo_path": "docs/reference-architectures/containers/aks-mission-critical/mission-critical-operations.md",
-      "learn_url": "https://learn.microsoft.com/en-us/azure/architecture/reference-architectures/containers/aks-mission-critical/mission-critical-operations",
-      "browse_tags": [],
-      "browse_categories": [
-        "Architecture",
-        "Reference"
-      ],
-      "family": "cloud_native",
-      "family_confidence": {
-        "confidence": "ai_suggested",
-        "source": "content_analysis"
-      },
-      "workload_domain": "integration",
-      "workload_domain_confidence": {
-        "confidence": "ai_suggested",
-        "source": "content_analysis"
-      },
-      "expected_runtime_models": [
-        "microservices",
-        "event_driven"
-      ],
-      "runtime_models_confidence": {
-        "confidence": "ai_suggested",
-        "source": "service_inference"
-      },
-      "expected_characteristics": {
-        "containers": "true",
-        "stateless": "true",
-        "devops_required": true,
-        "ci_cd_required": true,
-        "private_networking_required": false
-      },
-      "supported_treatments": [
-        "refactor",
-        "rebuild",
-        "replatform"
-      ],
-      "treatments_confidence": {
-        "confidence": "ai_suggested",
-        "source": "service_inference"
-      },
-      "supported_time_categories": [
-        "invest"
-      ],
-      "time_categories_confidence": {
-        "confidence": "ai_suggested",
-        "source": "treatment_inference"
-      },
-      "availability_models": [
-        "single_region"
-      ],
-      "availability_confidence": {
-        "confidence": "ai_suggested",
-        "source": "content_analysis"
-      },
-      "security_level": "enterprise",
-      "security_level_confidence": {
-        "confidence": "ai_suggested",
-        "source": "content_analysis"
-      },
-      "operating_model_required": "devops",
-      "operating_model_confidence": {
-        "confidence": "ai_suggested",
-        "source": "family_inference"
-      },
-      "cost_profile": "scale_optimized",
-      "cost_profile_confidence": {
-        "confidence": "ai_suggested",
-        "source": "content_analysis"
-      },
-      "complexity": {
-        "implementation": "medium",
-        "operations": "medium"
-      },
-      "complexity_confidence": {
-        "confidence": "ai_suggested",
-        "source": "heuristic_analysis"
-      },
-      "not_suitable_for": [],
-      "core_services": [
-        "Azure Cosmos DB",
-        "Azure Event Hubs",
-        "Azure Front Door",
-        "Azure Kubernetes Service",
-        "Azure Service Bus"
-      ],
-      "supporting_services": [
-        "Azure Key Vault",
-        "Azure Monitor",
-        "Azure Pipelines"
-      ],
-      "services_confidence": {
-        "confidence": "ai_suggested",
-        "source": "content_analysis"
-      },
-      "diagram_assets": [
-        "docs/reference-architectures/containers/aks-mission-critical/images/mission-critical-operations-dependabot.png"
-      ],
-      "last_repo_update": "2026-01-29T06:02:45",
-      "catalog_quality": "ai_suggested",
-      "extraction_warnings": [
-        "No browse tags from YML metadata"
-      ]
-    },
-    {
       "architecture_id": "reference-architectures-data-stream-processing-dat-dbaced7b",
       "name": "Event-driven System",
       "pattern_name": "Event-driven System",
@@ -3697,13 +2805,13 @@
       "browse_categories": [
         "Architecture",
         "Reference",
-        "Analytics",
-        "Databases"
+        "Databases",
+        "Analytics"
       ],
-      "family": "iaas",
+      "family": "data",
       "family_confidence": {
-        "confidence": "ai_suggested",
-        "source": "content_analysis"
+        "confidence": "curated",
+        "source": "yml_metadata"
       },
       "workload_domain": "data",
       "workload_domain_confidence": {
@@ -3711,7 +2819,8 @@
         "source": "yml_metadata"
       },
       "expected_runtime_models": [
-        "mixed"
+        "batch",
+        "event_driven"
       ],
       "runtime_models_confidence": {
         "confidence": "ai_suggested",
@@ -3732,8 +2841,7 @@
         "source": "service_inference"
       },
       "supported_time_categories": [
-        "migrate",
-        "tolerate"
+        "migrate"
       ],
       "time_categories_confidence": {
         "confidence": "ai_suggested",
@@ -3754,7 +2862,7 @@
       "operating_model_required": "devops",
       "operating_model_confidence": {
         "confidence": "ai_suggested",
-        "source": "family_inference"
+        "source": "content_analysis"
       },
       "cost_profile": "innovation_first",
       "cost_profile_confidence": {
@@ -3813,13 +2921,13 @@
       "browse_categories": [
         "Architecture",
         "Reference",
-        "Analytics",
-        "Databases"
+        "Databases",
+        "Analytics"
       ],
-      "family": "paas",
+      "family": "data",
       "family_confidence": {
-        "confidence": "ai_suggested",
-        "source": "content_analysis"
+        "confidence": "curated",
+        "source": "yml_metadata"
       },
       "workload_domain": "data",
       "workload_domain_confidence": {
@@ -3827,7 +2935,8 @@
         "source": "yml_metadata"
       },
       "expected_runtime_models": [
-        "mixed"
+        "event_driven",
+        "batch"
       ],
       "runtime_models_confidence": {
         "confidence": "ai_suggested",
@@ -3870,7 +2979,7 @@
       "operating_model_required": "devops",
       "operating_model_confidence": {
         "confidence": "ai_suggested",
-        "source": "family_inference"
+        "source": "content_analysis"
       },
       "cost_profile": "scale_optimized",
       "cost_profile_confidence": {
@@ -3934,14 +3043,14 @@
       "browse_categories": [
         "Architecture",
         "Reference",
-        "Hybrid",
         "Networking",
+        "Hybrid",
         "Security"
       ],
       "family": "iaas",
       "family_confidence": {
         "confidence": "ai_suggested",
-        "source": "content_analysis"
+        "source": "service_inference"
       },
       "workload_domain": "infrastructure",
       "workload_domain_confidence": {
@@ -4058,16 +3167,16 @@
       "browse_categories": [
         "Architecture",
         "Reference",
-        "Integration",
         "Management",
+        "Integration",
         "Developer Tools"
       ],
       "family": "paas",
       "family_confidence": {
         "confidence": "ai_suggested",
-        "source": "content_analysis"
+        "source": "service_inference"
       },
-      "workload_domain": "integration",
+      "workload_domain": "infrastructure",
       "workload_domain_confidence": {
         "confidence": "curated",
         "source": "yml_metadata"
@@ -4181,8 +3290,8 @@
       ],
       "family": "iaas",
       "family_confidence": {
-        "confidence": "ai_suggested",
-        "source": "content_analysis"
+        "confidence": "curated",
+        "source": "yml_metadata"
       },
       "workload_domain": "infrastructure",
       "workload_domain_confidence": {
@@ -4296,10 +3405,10 @@
         "Networking",
         "Hybrid"
       ],
-      "family": "foundation",
+      "family": "iaas",
       "family_confidence": {
-        "confidence": "manual_required",
-        "source": null
+        "confidence": "curated",
+        "source": "yml_metadata"
       },
       "workload_domain": "infrastructure",
       "workload_domain_confidence": {
@@ -4307,11 +3416,12 @@
         "source": "yml_metadata"
       },
       "expected_runtime_models": [
-        "n_tier"
+        "n_tier",
+        "monolith"
       ],
       "runtime_models_confidence": {
         "confidence": "ai_suggested",
-        "source": "heuristic_fallback"
+        "source": "content_analysis"
       },
       "expected_characteristics": {
         "containers": "optional",
@@ -4349,7 +3459,7 @@
       "operating_model_required": "sre",
       "operating_model_confidence": {
         "confidence": "ai_suggested",
-        "source": "content_analysis"
+        "source": "family_inference"
       },
       "cost_profile": "scale_optimized",
       "cost_profile_confidence": {
@@ -4760,7 +3870,7 @@
       "family": "iaas",
       "family_confidence": {
         "confidence": "ai_suggested",
-        "source": "content_analysis"
+        "source": "service_inference"
       },
       "workload_domain": "security",
       "workload_domain_confidence": {
@@ -4877,7 +3987,7 @@
       "family": "data",
       "family_confidence": {
         "confidence": "ai_suggested",
-        "source": "content_analysis"
+        "source": "service_inference"
       },
       "workload_domain": "data",
       "workload_domain_confidence": {
@@ -4906,7 +4016,7 @@
       ],
       "treatments_confidence": {
         "confidence": "ai_suggested",
-        "source": "service_inference"
+        "source": "yml_metadata"
       },
       "supported_time_categories": [
         "invest",
@@ -5001,7 +4111,7 @@
       "family": "iaas",
       "family_confidence": {
         "confidence": "ai_suggested",
-        "source": "content_analysis"
+        "source": "service_inference"
       },
       "workload_domain": "infrastructure",
       "workload_domain_confidence": {
@@ -5030,7 +4140,7 @@
       ],
       "treatments_confidence": {
         "confidence": "ai_suggested",
-        "source": "service_inference"
+        "source": "yml_metadata"
       },
       "supported_time_categories": [
         "migrate",
@@ -5125,7 +4235,7 @@
       "family": "iaas",
       "family_confidence": {
         "confidence": "ai_suggested",
-        "source": "content_analysis"
+        "source": "service_inference"
       },
       "workload_domain": "infrastructure",
       "workload_domain_confidence": {
@@ -5243,7 +4353,7 @@
       "family": "iaas",
       "family_confidence": {
         "confidence": "ai_suggested",
-        "source": "content_analysis"
+        "source": "service_inference"
       },
       "workload_domain": "data",
       "workload_domain_confidence": {
@@ -5367,7 +4477,7 @@
       "family": "iaas",
       "family_confidence": {
         "confidence": "ai_suggested",
-        "source": "content_analysis"
+        "source": "service_inference"
       },
       "workload_domain": "data",
       "workload_domain_confidence": {
@@ -5486,13 +4596,13 @@
         "Architecture",
         "Reference",
         "Networking",
-        "Migration",
-        "Compute"
+        "Compute",
+        "Migration"
       ],
       "family": "iaas",
       "family_confidence": {
         "confidence": "ai_suggested",
-        "source": "content_analysis"
+        "source": "service_inference"
       },
       "workload_domain": "infrastructure",
       "workload_domain_confidence": {
@@ -5623,10 +4733,10 @@
         "Web",
         "Security"
       ],
-      "family": "cloud_native",
+      "family": "paas",
       "family_confidence": {
-        "confidence": "ai_suggested",
-        "source": "content_analysis"
+        "confidence": "curated",
+        "source": "yml_metadata"
       },
       "workload_domain": "web",
       "workload_domain_confidence": {
@@ -5651,8 +4761,7 @@
       "supported_treatments": [
         "replatform",
         "refactor",
-        "retain",
-        "rebuild"
+        "retain"
       ],
       "treatments_confidence": {
         "confidence": "ai_suggested",
@@ -5755,8 +4864,8 @@
       ],
       "family": "paas",
       "family_confidence": {
-        "confidence": "ai_suggested",
-        "source": "content_analysis"
+        "confidence": "curated",
+        "source": "yml_metadata"
       },
       "workload_domain": "infrastructure",
       "workload_domain_confidence": {
@@ -5889,8 +4998,8 @@
       ],
       "family": "paas",
       "family_confidence": {
-        "confidence": "ai_suggested",
-        "source": "content_analysis"
+        "confidence": "curated",
+        "source": "yml_metadata"
       },
       "workload_domain": "web",
       "workload_domain_confidence": {
@@ -6012,8 +5121,8 @@
       ],
       "family": "paas",
       "family_confidence": {
-        "confidence": "ai_suggested",
-        "source": "content_analysis"
+        "confidence": "curated",
+        "source": "yml_metadata"
       },
       "workload_domain": "infrastructure",
       "workload_domain_confidence": {
@@ -6137,8 +5246,8 @@
       ],
       "family": "paas",
       "family_confidence": {
-        "confidence": "ai_suggested",
-        "source": "content_analysis"
+        "confidence": "curated",
+        "source": "yml_metadata"
       },
       "workload_domain": "infrastructure",
       "workload_domain_confidence": {

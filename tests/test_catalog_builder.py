@@ -231,9 +231,10 @@ class TestArchitectureClassifier:
             description="Test",
             arch_metadata=ArchitectureMetadata(products=[])
         )
-        family = classifier._suggest_family(content, services, mock_doc)
+        family, source = classifier._suggest_family(content, services, mock_doc)
 
         assert family == ArchitectureFamily.CLOUD_NATIVE
+        assert source in ("service_inference", "content_analysis")
 
 
 class TestCatalogSchema:

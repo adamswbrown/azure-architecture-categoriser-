@@ -192,6 +192,9 @@ class ArchitectureMetadata:
     products: list[str] = field(default_factory=list)  # azure-app-service, azure-kubernetes-service
     thumbnail_url: str = ""
     is_architecture_yml: bool = False  # True if we found a YamlMime:Architecture file
+    # Additional metadata for classification
+    ms_custom: list[str] = field(default_factory=list)  # arb-web, arb-data, arb-containers, etc.
+    ms_collection: list[str] = field(default_factory=list)  # migration, onprem-to-azure, etc.
 
 
 @dataclass
@@ -327,12 +330,30 @@ class MarkdownParser:
         # Get thumbnail
         thumbnail = data.get('thumbnailUrl', '')
 
+        # Extract ms.custom (arb-web, arb-data, arb-containers, etc.)
+        ms_custom = metadata.get('ms.custom', '')
+        if isinstance(ms_custom, str):
+            # ms.custom is typically comma-separated values
+            ms_custom = [c.strip() for c in ms_custom.split(',') if c.strip()]
+        elif not isinstance(ms_custom, list):
+            ms_custom = []
+
+        # Extract ms.collection (migration, onprem-to-azure, etc.)
+        ms_collection = metadata.get('ms.collection', [])
+        if isinstance(ms_collection, str):
+            # Can be comma-separated or single value
+            ms_collection = [c.strip() for c in ms_collection.split(',') if c.strip()]
+        elif not isinstance(ms_collection, list):
+            ms_collection = []
+
         return ArchitectureMetadata(
             ms_topic=ms_topic,
             azure_categories=azure_cats,
             products=products,
             thumbnail_url=thumbnail,
             is_architecture_yml=True,
+            ms_custom=ms_custom,
+            ms_collection=ms_collection,
         )
 
     def parse_yml_file(self, yml_path: Path) -> Optional[ParsedDocument]:
