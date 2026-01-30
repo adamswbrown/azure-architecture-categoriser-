@@ -322,7 +322,7 @@ class TestEnhancedClassifier:
             azure_services_used=["Azure Virtual Machines"]
         )
 
-        treatments = classifier._suggest_treatments_enhanced(entry, content, mock_doc)
+        treatments, source = classifier._suggest_treatments_enhanced(entry, content, mock_doc)
 
         assert Treatment.REHOST in treatments
 
@@ -351,7 +351,7 @@ class TestEnhancedClassifier:
             azure_services_used=["Azure Kubernetes Service"]
         )
 
-        treatments = classifier._suggest_treatments_enhanced(entry, content, mock_doc)
+        treatments, source = classifier._suggest_treatments_enhanced(entry, content, mock_doc)
 
         assert Treatment.REFACTOR in treatments
 
@@ -371,7 +371,7 @@ class TestEnhancedClassifier:
             frontmatter={}
         )
 
-        security_level = classifier._suggest_security_level(content, mock_doc)
+        security_level, source = classifier._suggest_security_level(content, mock_doc)
 
         assert security_level == SecurityLevel.HIGHLY_REGULATED
 
@@ -400,7 +400,7 @@ class TestEnhancedClassifier:
             expected_runtime_models=[RuntimeModel.MICROSERVICES]
         )
 
-        operating_model = classifier._suggest_operating_model_enhanced(entry, content, mock_doc)
+        operating_model, source = classifier._suggest_operating_model_enhanced(entry, content, mock_doc)
 
         assert operating_model == OperatingModel.DEVOPS
 
@@ -421,7 +421,7 @@ class TestEnhancedClassifier:
             azure_services_used=["Azure OpenAI Service", "Azure Cognitive Services"]
         )
 
-        cost_profile = classifier._suggest_cost_profile(content, entry)
+        cost_profile, source = classifier._suggest_cost_profile(content, entry)
 
         assert cost_profile == CostProfile.INNOVATION_FIRST
 
@@ -463,6 +463,6 @@ class TestEnhancedClassifier:
             complexity=Complexity(implementation=ComplexityLevel.HIGH)
         )
 
-        categories = classifier._suggest_time_categories_enhanced(entry, content)
+        categories, source = classifier._suggest_time_categories_enhanced(entry, content)
 
         assert TimeCategory.INVEST in categories

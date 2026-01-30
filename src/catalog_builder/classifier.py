@@ -70,16 +70,21 @@ class ArchitectureClassifier:
         content = (doc.content + ' ' + doc.description + ' ' + doc.title).lower()
 
         # First, try to use yml metadata for domain (most reliable)
-        domain = self._suggest_workload_domain_from_yml(doc)
-        if not domain:
-            domain = self._suggest_workload_domain(content)
-        if domain:
-            entry.workload_domain = domain
-            source = "yml_metadata" if doc.arch_metadata.azure_categories else "content_analysis"
+        domain_from_yml = self._suggest_workload_domain_from_yml(doc)
+        if domain_from_yml:
+            entry.workload_domain = domain_from_yml
             entry.workload_domain_confidence = ClassificationMeta(
-                confidence=ExtractionConfidence.AI_SUGGESTED,
-                source=source
+                confidence=ExtractionConfidence.CURATED,
+                source="yml_metadata"
             )
+        else:
+            domain = self._suggest_workload_domain(content)
+            if domain:
+                entry.workload_domain = domain
+                entry.workload_domain_confidence = ClassificationMeta(
+                    confidence=ExtractionConfidence.AI_SUGGESTED,
+                    source="content_analysis"
+                )
 
         # Combine services for classification (core + supporting)
         all_services = entry.core_services + entry.supporting_services
@@ -121,25 +126,45 @@ class ArchitectureClassifier:
         )
 
         # Enhanced: Suggest operating model using content-based scoring
-        entry.operating_model_required = self._suggest_operating_model_enhanced(
+        entry.operating_model_required, op_source = self._suggest_operating_model_enhanced(
             entry, content, doc
+        )
+        entry.operating_model_confidence = ClassificationMeta(
+            confidence=ExtractionConfidence.AI_SUGGESTED,
+            source=op_source
         )
 
         # Enhanced: Suggest treatments using content-based keyword scoring
-        entry.supported_treatments = self._suggest_treatments_enhanced(
+        entry.supported_treatments, treat_source = self._suggest_treatments_enhanced(
             entry, content, doc
+        )
+        entry.treatments_confidence = ClassificationMeta(
+            confidence=ExtractionConfidence.AI_SUGGESTED,
+            source=treat_source
         )
 
         # Enhanced: Suggest time categories using content-based scoring
-        entry.supported_time_categories = self._suggest_time_categories_enhanced(
+        entry.supported_time_categories, time_source = self._suggest_time_categories_enhanced(
             entry, content
+        )
+        entry.time_categories_confidence = ClassificationMeta(
+            confidence=ExtractionConfidence.AI_SUGGESTED,
+            source=time_source
         )
 
         # New: Suggest security level based on compliance mentions
-        entry.security_level = self._suggest_security_level(content, doc)
+        entry.security_level, sec_source = self._suggest_security_level(content, doc)
+        entry.security_level_confidence = ClassificationMeta(
+            confidence=ExtractionConfidence.AI_SUGGESTED,
+            source=sec_source
+        )
 
         # New: Suggest cost profile based on content and services
-        entry.cost_profile = self._suggest_cost_profile(content, entry)
+        entry.cost_profile, cost_source = self._suggest_cost_profile(content, entry)
+        entry.cost_profile_confidence = ClassificationMeta(
+            confidence=ExtractionConfidence.AI_SUGGESTED,
+            source=cost_source
+        )
 
         # New: Extract not suitable for exclusions
         entry.not_suitable_for = self._extract_not_suitable_for(content, doc)
@@ -529,10 +554,15 @@ class ArchitectureClassifier:
         entry: ArchitectureEntry,
         content: str,
         doc: ParsedDocument
-    ) -> list[Treatment]:
-        """Suggest treatments using content-based keyword scoring."""
+    ) -> tuple[list[Treatment], str]:
+        """Suggest treatments using content-based keyword scoring.
+
+        Returns:
+            Tuple of (treatments, source) where source indicates the primary data source.
+        """
         config = self._get_config()
         scores: dict[str, float] = {}
+        source = "content_analysis"
 
         # Score based on content keywords
         for treatment, keywords in config.treatment_keywords.items():
@@ -549,23 +579,28 @@ class ArchitectureClassifier:
         if 'virtual machine' in services_lower:
             scores['rehost'] = scores.get('rehost', 0) + config.vm_rehost_boost
             scores['retain'] = scores.get('retain', 0) + 1
+            source = "service_inference"
 
         # AKS/Containers suggest refactor
         if any(s in services_lower for s in ['kubernetes', 'container apps', 'container instance']):
             scores['refactor'] = scores.get('refactor', 0) + config.container_refactor_boost
             scores['rebuild'] = scores.get('rebuild', 0) + 1
+            source = "service_inference"
 
         # Managed services suggest replatform
         if any(s in services_lower for s in ['managed instance', 'sql database', 'cosmos']):
             scores['replatform'] = scores.get('replatform', 0) + config.managed_replatform_boost
+            source = "service_inference"
 
         # ExpressRoute/Arc suggest retain/hybrid
         if any(s in services_lower for s in ['expressroute', 'arc', 'vpn gateway']):
             scores['retain'] = scores.get('retain', 0) + config.hybrid_retain_boost
+            source = "service_inference"
 
         # App Service, Functions suggest replatform
         if any(s in services_lower for s in ['app service', 'functions']):
             scores['replatform'] = scores.get('replatform', 0) + 1.5
+            source = "service_inference"
 
         # Boost from YML metadata (ms.collection: migration)
         ms_collections = doc.frontmatter.get('ms.collection', [])
@@ -574,6 +609,7 @@ class ArchitectureClassifier:
         if 'migration' in [c.lower() for c in ms_collections]:
             scores['rehost'] = scores.get('rehost', 0) + 1
             scores['replatform'] = scores.get('replatform', 0) + 1
+            source = "yml_metadata"
 
         # Include architecture family hints
         family_treatments = self._get_family_treatment_hints(entry.family)
@@ -593,8 +629,9 @@ class ArchitectureClassifier:
         # Fallback to family-based if nothing found
         if not treatments:
             treatments = self._suggest_treatments(entry)
+            source = "family_heuristic"
 
-        return treatments
+        return treatments, source
 
     def _get_family_treatment_hints(self, family: ArchitectureFamily) -> list[str]:
         """Get treatment hints based on architecture family."""
@@ -613,10 +650,15 @@ class ArchitectureClassifier:
         self,
         entry: ArchitectureEntry,
         content: str
-    ) -> list[TimeCategory]:
-        """Suggest TIME categories using content-based keyword scoring."""
+    ) -> tuple[list[TimeCategory], str]:
+        """Suggest TIME categories using content-based keyword scoring.
+
+        Returns:
+            Tuple of (categories, source) where source indicates the primary data source.
+        """
         config = self._get_config()
         scores: dict[str, float] = {}
+        source = "content_analysis"
 
         for category, keywords in config.time_category_keywords.items():
             score = sum(1 for kw in keywords if kw in content)
@@ -627,19 +669,24 @@ class ArchitectureClassifier:
         if Treatment.REFACTOR in entry.supported_treatments:
             scores['invest'] = scores.get('invest', 0) + 1.5
             scores['migrate'] = scores.get('migrate', 0) + 1
+            source = "treatment_inference"
 
         if Treatment.REBUILD in entry.supported_treatments:
             scores['invest'] = scores.get('invest', 0) + 2
+            source = "treatment_inference"
 
         if Treatment.REHOST in entry.supported_treatments:
             scores['migrate'] = scores.get('migrate', 0) + 1.5
             scores['tolerate'] = scores.get('tolerate', 0) + 1
+            source = "treatment_inference"
 
         if Treatment.REPLACE in entry.supported_treatments:
             scores['eliminate'] = scores.get('eliminate', 0) + 1.5
+            source = "treatment_inference"
 
         if Treatment.RETAIN in entry.supported_treatments:
             scores['tolerate'] = scores.get('tolerate', 0) + 1.5
+            source = "treatment_inference"
 
         # Complexity influence
         if entry.complexity.implementation == ComplexityLevel.HIGH:
@@ -661,18 +708,24 @@ class ArchitectureClassifier:
         # Fallback
         if not categories:
             categories = self._suggest_time_categories(entry)
+            source = "complexity_heuristic"
 
-        return categories
+        return categories, source
 
     def _suggest_operating_model_enhanced(
         self,
         entry: ArchitectureEntry,
         content: str,
         doc: ParsedDocument
-    ) -> OperatingModel:
-        """Suggest operating model using content-based keyword scoring."""
+    ) -> tuple[OperatingModel, str]:
+        """Suggest operating model using content-based keyword scoring.
+
+        Returns:
+            Tuple of (operating_model, source) where source indicates the primary data source.
+        """
         config = self._get_config()
         scores: dict[str, float] = {}
+        source = "content_analysis"
 
         for model, keywords in config.operating_model_keywords.items():
             score = sum(1 for kw in keywords if kw in content)
@@ -684,15 +737,22 @@ class ArchitectureClassifier:
             prod_lower = product.lower()
             if 'devops' in prod_lower or 'pipeline' in prod_lower:
                 scores['devops'] = scores.get('devops', 0) + 2
+                source = "yml_metadata"
 
         # Architecture family influence
         if entry.family == ArchitectureFamily.CLOUD_NATIVE:
             scores['devops'] = scores.get('devops', 0) + 2
             scores['sre'] = scores.get('sre', 0) + 1
+            if source == "content_analysis":
+                source = "family_inference"
         elif entry.family == ArchitectureFamily.IAAS:
             scores['traditional_it'] = scores.get('traditional_it', 0) + 1
+            if source == "content_analysis":
+                source = "family_inference"
         elif entry.family == ArchitectureFamily.PAAS:
             scores['transitional'] = scores.get('transitional', 0) + 1
+            if source == "content_analysis":
+                source = "family_inference"
 
         # Availability model influence
         if AvailabilityModel.MULTI_REGION_ACTIVE_ACTIVE in entry.availability_models:
@@ -706,21 +766,26 @@ class ArchitectureClassifier:
         if scores:
             best = max(scores, key=scores.get)
             try:
-                return OperatingModel(best)
+                return OperatingModel(best), source
             except ValueError:
                 pass
 
         # Fallback to existing logic
-        return self._suggest_operating_model(entry, content)
+        return self._suggest_operating_model(entry, content), "family_heuristic"
 
     def _suggest_security_level(
         self,
         content: str,
         doc: ParsedDocument
-    ) -> SecurityLevel:
-        """Suggest security level based on compliance mentions and security patterns."""
+    ) -> tuple[SecurityLevel, str]:
+        """Suggest security level based on compliance mentions and security patterns.
+
+        Returns:
+            Tuple of (security_level, source) where source indicates the primary data source.
+        """
         config = self._get_config()
         scores: dict[str, float] = {}
+        source = "content_analysis"
 
         for level, keywords in config.security_level_keywords.items():
             score = sum(1 for kw in keywords if kw in content)
@@ -730,6 +795,7 @@ class ArchitectureClassifier:
         # YML categories boost
         if 'security' in [c.lower() for c in doc.arch_metadata.azure_categories]:
             scores['enterprise'] = scores.get('enterprise', 0) + 1
+            source = "yml_metadata"
 
         # Determine level with priority ordering (most restrictive wins)
         # Uses configurable threshold for regulated levels
@@ -737,25 +803,30 @@ class ArchitectureClassifier:
         for level in priority_order:
             if scores.get(level, 0) >= config.security_score_threshold:
                 try:
-                    return SecurityLevel(level)
+                    return SecurityLevel(level), source
                 except ValueError:
                     pass
 
         # Check for any enterprise-level indicators
         if scores.get('enterprise', 0) >= 1:
-            return SecurityLevel.ENTERPRISE
+            return SecurityLevel.ENTERPRISE, source
 
         # Default to basic
-        return SecurityLevel.BASIC
+        return SecurityLevel.BASIC, "default"
 
     def _suggest_cost_profile(
         self,
         content: str,
         entry: ArchitectureEntry
-    ) -> CostProfile:
-        """Suggest cost profile based on content and service patterns."""
+    ) -> tuple[CostProfile, str]:
+        """Suggest cost profile based on content and service patterns.
+
+        Returns:
+            Tuple of (cost_profile, source) where source indicates the primary data source.
+        """
         config = self._get_config()
         scores: dict[str, float] = {}
+        source = "content_analysis"
 
         for profile, keywords in config.cost_profile_keywords.items():
             score = sum(1 for kw in keywords if kw in content)
@@ -769,12 +840,15 @@ class ArchitectureClassifier:
         if 'premium' in services_lower:
             scores['scale_optimized'] = scores.get('scale_optimized', 0) + 1
             scores['innovation_first'] = scores.get('innovation_first', 0) + 1
+            source = "service_inference"
 
         if any(s in services_lower for s in ['openai', 'cognitive', 'machine learning']):
             scores['innovation_first'] = scores.get('innovation_first', 0) + 2
+            source = "service_inference"
 
         if any(s in services_lower for s in ['functions', 'container apps']):
             scores['cost_minimized'] = scores.get('cost_minimized', 0) + 1
+            source = "service_inference"
 
         # High availability = scale optimized
         if AvailabilityModel.MULTI_REGION_ACTIVE_ACTIVE in entry.availability_models:
@@ -787,11 +861,11 @@ class ArchitectureClassifier:
         if scores:
             best = max(scores, key=scores.get)
             try:
-                return CostProfile(best)
+                return CostProfile(best), source
             except ValueError:
                 pass
 
-        return CostProfile.BALANCED
+        return CostProfile.BALANCED, "default"
 
     def _extract_not_suitable_for(
         self,

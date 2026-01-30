@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "generated_at": "2026-01-30T11:39:53.283478",
+  "generated_at": "2026-01-30T11:52:10.346060",
   "source_repo": "/Users/adambrown/architecture-center",
   "source_commit": "06e0d0868e6f59645fdfac6a64048cb0dc57ce5e",
   "generation_settings": {
@@ -46,7 +46,7 @@
       },
       "workload_domain": "security",
       "workload_domain_confidence": {
-        "confidence": "ai_suggested",
+        "confidence": "curated",
         "source": "yml_metadata"
       },
       "expected_runtime_models": [
@@ -71,7 +71,7 @@
       ],
       "treatments_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "service_inference"
       },
       "supported_time_categories": [
         "invest",
@@ -81,7 +81,7 @@
       ],
       "time_categories_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "treatment_inference"
       },
       "availability_models": [
         "multi_region_active_active",
@@ -95,17 +95,17 @@
       "security_level": "highly_regulated",
       "security_level_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "yml_metadata"
       },
       "operating_model_required": "devops",
       "operating_model_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "family_inference"
       },
       "cost_profile": "innovation_first",
       "cost_profile_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "service_inference"
       },
       "complexity": {
         "implementation": "high",
@@ -192,7 +192,7 @@
       },
       "workload_domain": "security",
       "workload_domain_confidence": {
-        "confidence": "ai_suggested",
+        "confidence": "curated",
         "source": "yml_metadata"
       },
       "expected_runtime_models": [
@@ -217,7 +217,7 @@
       ],
       "treatments_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "service_inference"
       },
       "supported_time_categories": [
         "invest",
@@ -226,7 +226,7 @@
       ],
       "time_categories_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "treatment_inference"
       },
       "availability_models": [
         "zone_redundant"
@@ -238,17 +238,17 @@
       "security_level": "highly_regulated",
       "security_level_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "yml_metadata"
       },
       "operating_model_required": "devops",
       "operating_model_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "family_inference"
       },
       "cost_profile": "innovation_first",
       "cost_profile_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "service_inference"
       },
       "complexity": {
         "implementation": "high",
@@ -328,7 +328,7 @@
       },
       "workload_domain": "security",
       "workload_domain_confidence": {
-        "confidence": "ai_suggested",
+        "confidence": "curated",
         "source": "yml_metadata"
       },
       "expected_runtime_models": [
@@ -352,14 +352,14 @@
       ],
       "treatments_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "service_inference"
       },
       "supported_time_categories": [
         "tolerate"
       ],
       "time_categories_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "treatment_inference"
       },
       "availability_models": [
         "zone_redundant"
@@ -371,17 +371,17 @@
       "security_level": "enterprise",
       "security_level_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "yml_metadata"
       },
       "operating_model_required": "sre",
       "operating_model_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "family_inference"
       },
       "cost_profile": "innovation_first",
       "cost_profile_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "service_inference"
       },
       "complexity": {
         "implementation": "medium",
@@ -438,19 +438,19 @@
       "browse_categories": [
         "Architecture",
         "Reference",
-        "Storage",
         "Security",
         "Networking",
-        "Databases"
+        "Databases",
+        "Storage"
       ],
       "family": "foundation",
       "family_confidence": {
         "confidence": "ai_suggested",
         "source": "content_analysis"
       },
-      "workload_domain": "data",
+      "workload_domain": "security",
       "workload_domain_confidence": {
-        "confidence": "ai_suggested",
+        "confidence": "curated",
         "source": "yml_metadata"
       },
       "expected_runtime_models": [
@@ -474,7 +474,7 @@
       ],
       "treatments_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "service_inference"
       },
       "supported_time_categories": [
         "invest",
@@ -483,7 +483,7 @@
       ],
       "time_categories_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "treatment_inference"
       },
       "availability_models": [
         "multi_region_active_passive",
@@ -496,17 +496,17 @@
       "security_level": "highly_regulated",
       "security_level_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "yml_metadata"
       },
       "operating_model_required": "devops",
       "operating_model_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "content_analysis"
       },
       "cost_profile": "scale_optimized",
       "cost_profile_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "service_inference"
       },
       "complexity": {
         "implementation": "high",
@@ -575,7 +575,7 @@
       },
       "workload_domain": "data",
       "workload_domain_confidence": {
-        "confidence": "ai_suggested",
+        "confidence": "curated",
         "source": "yml_metadata"
       },
       "expected_runtime_models": [
@@ -600,7 +600,7 @@
       ],
       "treatments_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "service_inference"
       },
       "supported_time_categories": [
         "migrate",
@@ -608,7 +608,7 @@
       ],
       "time_categories_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "treatment_inference"
       },
       "availability_models": [
         "single_region"
@@ -620,17 +620,17 @@
       "security_level": "basic",
       "security_level_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "default"
       },
       "operating_model_required": "sre",
       "operating_model_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "content_analysis"
       },
       "cost_profile": "balanced",
       "cost_profile_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "content_analysis"
       },
       "complexity": {
         "implementation": "medium",
@@ -707,7 +707,7 @@
       ],
       "treatments_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "service_inference"
       },
       "supported_time_categories": [
         "invest",
@@ -715,7 +715,7 @@
       ],
       "time_categories_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "treatment_inference"
       },
       "availability_models": [
         "multi_region_active_passive"
@@ -727,17 +727,17 @@
       "security_level": "basic",
       "security_level_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "default"
       },
       "operating_model_required": "devops",
       "operating_model_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "family_inference"
       },
       "cost_profile": "cost_minimized",
       "cost_profile_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "content_analysis"
       },
       "complexity": {
         "implementation": "low",
@@ -785,9 +785,9 @@
       "browse_categories": [
         "Architecture",
         "Reference",
-        "Storage",
         "Analytics",
-        "Databases"
+        "Databases",
+        "Storage"
       ],
       "family": "data",
       "family_confidence": {
@@ -796,7 +796,7 @@
       },
       "workload_domain": "data",
       "workload_domain_confidence": {
-        "confidence": "ai_suggested",
+        "confidence": "curated",
         "source": "yml_metadata"
       },
       "expected_runtime_models": [
@@ -819,14 +819,14 @@
       ],
       "treatments_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "content_analysis"
       },
       "supported_time_categories": [
         "invest"
       ],
       "time_categories_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "treatment_inference"
       },
       "availability_models": [
         "zone_redundant"
@@ -838,17 +838,17 @@
       "security_level": "enterprise",
       "security_level_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "content_analysis"
       },
       "operating_model_required": "sre",
       "operating_model_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "content_analysis"
       },
       "cost_profile": "innovation_first",
       "cost_profile_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "service_inference"
       },
       "complexity": {
         "implementation": "medium",
@@ -931,7 +931,7 @@
       ],
       "treatments_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "service_inference"
       },
       "supported_time_categories": [
         "migrate",
@@ -940,7 +940,7 @@
       ],
       "time_categories_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "treatment_inference"
       },
       "availability_models": [
         "single_region"
@@ -952,17 +952,17 @@
       "security_level": "enterprise",
       "security_level_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "content_analysis"
       },
       "operating_model_required": "devops",
       "operating_model_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "family_inference"
       },
       "cost_profile": "balanced",
       "cost_profile_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "content_analysis"
       },
       "complexity": {
         "implementation": "high",
@@ -1044,7 +1044,7 @@
       ],
       "treatments_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "family_heuristic"
       },
       "supported_time_categories": [
         "invest",
@@ -1052,7 +1052,7 @@
       ],
       "time_categories_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "treatment_inference"
       },
       "availability_models": [
         "single_region"
@@ -1064,17 +1064,17 @@
       "security_level": "basic",
       "security_level_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "default"
       },
       "operating_model_required": "sre",
       "operating_model_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "content_analysis"
       },
       "cost_profile": "innovation_first",
       "cost_profile_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "content_analysis"
       },
       "complexity": {
         "implementation": "low",
@@ -1123,17 +1123,17 @@
       "browse_categories": [
         "Architecture",
         "Reference",
-        "Web",
-        "Networking"
+        "Networking",
+        "Web"
       ],
       "family": "cloud_native",
       "family_confidence": {
         "confidence": "ai_suggested",
         "source": "content_analysis"
       },
-      "workload_domain": "web",
+      "workload_domain": "infrastructure",
       "workload_domain_confidence": {
-        "confidence": "ai_suggested",
+        "confidence": "curated",
         "source": "yml_metadata"
       },
       "expected_runtime_models": [
@@ -1159,7 +1159,7 @@
       ],
       "treatments_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "service_inference"
       },
       "supported_time_categories": [
         "migrate",
@@ -1169,7 +1169,7 @@
       ],
       "time_categories_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "treatment_inference"
       },
       "availability_models": [
         "multi_region_active_active",
@@ -1182,17 +1182,17 @@
       "security_level": "regulated",
       "security_level_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "content_analysis"
       },
       "operating_model_required": "sre",
       "operating_model_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "family_inference"
       },
       "cost_profile": "scale_optimized",
       "cost_profile_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "content_analysis"
       },
       "complexity": {
         "implementation": "high",
@@ -1262,7 +1262,7 @@
       },
       "workload_domain": "infrastructure",
       "workload_domain_confidence": {
-        "confidence": "ai_suggested",
+        "confidence": "curated",
         "source": "yml_metadata"
       },
       "expected_runtime_models": [
@@ -1288,7 +1288,7 @@
       ],
       "treatments_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "service_inference"
       },
       "supported_time_categories": [
         "invest",
@@ -1296,7 +1296,7 @@
       ],
       "time_categories_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "treatment_inference"
       },
       "availability_models": [
         "single_region"
@@ -1308,17 +1308,17 @@
       "security_level": "regulated",
       "security_level_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "content_analysis"
       },
       "operating_model_required": "devops",
       "operating_model_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "family_inference"
       },
       "cost_profile": "innovation_first",
       "cost_profile_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "service_inference"
       },
       "complexity": {
         "implementation": "high",
@@ -1383,7 +1383,7 @@
       },
       "workload_domain": "data",
       "workload_domain_confidence": {
-        "confidence": "ai_suggested",
+        "confidence": "curated",
         "source": "yml_metadata"
       },
       "expected_runtime_models": [
@@ -1408,7 +1408,7 @@
       ],
       "treatments_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "service_inference"
       },
       "supported_time_categories": [
         "invest",
@@ -1417,7 +1417,7 @@
       ],
       "time_categories_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "treatment_inference"
       },
       "availability_models": [
         "single_region"
@@ -1429,17 +1429,17 @@
       "security_level": "regulated",
       "security_level_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "content_analysis"
       },
       "operating_model_required": "devops",
       "operating_model_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "family_inference"
       },
       "cost_profile": "balanced",
       "cost_profile_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "content_analysis"
       },
       "complexity": {
         "implementation": "high",
@@ -1504,7 +1504,7 @@
       },
       "workload_domain": "data",
       "workload_domain_confidence": {
-        "confidence": "ai_suggested",
+        "confidence": "curated",
         "source": "yml_metadata"
       },
       "expected_runtime_models": [
@@ -1526,7 +1526,7 @@
       ],
       "treatments_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "service_inference"
       },
       "supported_time_categories": [
         "migrate",
@@ -1534,7 +1534,7 @@
       ],
       "time_categories_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "treatment_inference"
       },
       "availability_models": [
         "multi_region_active_passive",
@@ -1547,17 +1547,17 @@
       "security_level": "enterprise",
       "security_level_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "content_analysis"
       },
       "operating_model_required": "devops",
       "operating_model_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "family_inference"
       },
       "cost_profile": "scale_optimized",
       "cost_profile_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "content_analysis"
       },
       "complexity": {
         "implementation": "medium",
@@ -1616,7 +1616,7 @@
       },
       "workload_domain": "data",
       "workload_domain_confidence": {
-        "confidence": "ai_suggested",
+        "confidence": "curated",
         "source": "yml_metadata"
       },
       "expected_runtime_models": [
@@ -1640,7 +1640,7 @@
       ],
       "treatments_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "service_inference"
       },
       "supported_time_categories": [
         "invest",
@@ -1650,7 +1650,7 @@
       ],
       "time_categories_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "treatment_inference"
       },
       "availability_models": [
         "single_region"
@@ -1662,17 +1662,17 @@
       "security_level": "regulated",
       "security_level_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "content_analysis"
       },
       "operating_model_required": "traditional_it",
       "operating_model_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "family_inference"
       },
       "cost_profile": "innovation_first",
       "cost_profile_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "content_analysis"
       },
       "complexity": {
         "implementation": "high",
@@ -1741,7 +1741,7 @@
       },
       "workload_domain": "infrastructure",
       "workload_domain_confidence": {
-        "confidence": "ai_suggested",
+        "confidence": "curated",
         "source": "yml_metadata"
       },
       "expected_runtime_models": [
@@ -1767,7 +1767,7 @@
       ],
       "treatments_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "service_inference"
       },
       "supported_time_categories": [
         "invest",
@@ -1776,7 +1776,7 @@
       ],
       "time_categories_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "treatment_inference"
       },
       "availability_models": [
         "multi_region_active_passive"
@@ -1788,17 +1788,17 @@
       "security_level": "highly_regulated",
       "security_level_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "content_analysis"
       },
       "operating_model_required": "devops",
       "operating_model_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "family_inference"
       },
       "cost_profile": "innovation_first",
       "cost_profile_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "service_inference"
       },
       "complexity": {
         "implementation": "high",
@@ -1878,7 +1878,7 @@
       },
       "workload_domain": "infrastructure",
       "workload_domain_confidence": {
-        "confidence": "ai_suggested",
+        "confidence": "curated",
         "source": "yml_metadata"
       },
       "expected_runtime_models": [
@@ -1902,7 +1902,7 @@
       ],
       "treatments_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "service_inference"
       },
       "supported_time_categories": [
         "tolerate",
@@ -1910,7 +1910,7 @@
       ],
       "time_categories_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "treatment_inference"
       },
       "availability_models": [
         "multi_region_active_passive"
@@ -1922,17 +1922,17 @@
       "security_level": "enterprise",
       "security_level_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "content_analysis"
       },
       "operating_model_required": "devops",
       "operating_model_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "family_inference"
       },
       "cost_profile": "innovation_first",
       "cost_profile_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "service_inference"
       },
       "complexity": {
         "implementation": "high",
@@ -2001,7 +2001,7 @@
       },
       "workload_domain": "infrastructure",
       "workload_domain_confidence": {
-        "confidence": "ai_suggested",
+        "confidence": "curated",
         "source": "yml_metadata"
       },
       "expected_runtime_models": [
@@ -2025,7 +2025,7 @@
       ],
       "treatments_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "service_inference"
       },
       "supported_time_categories": [
         "tolerate",
@@ -2033,7 +2033,7 @@
       ],
       "time_categories_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "treatment_inference"
       },
       "availability_models": [
         "single_region"
@@ -2045,17 +2045,17 @@
       "security_level": "enterprise",
       "security_level_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "content_analysis"
       },
       "operating_model_required": "devops",
       "operating_model_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "family_inference"
       },
       "cost_profile": "innovation_first",
       "cost_profile_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "content_analysis"
       },
       "complexity": {
         "implementation": "medium",
@@ -2118,7 +2118,7 @@
       },
       "workload_domain": "data",
       "workload_domain_confidence": {
-        "confidence": "ai_suggested",
+        "confidence": "curated",
         "source": "yml_metadata"
       },
       "expected_runtime_models": [
@@ -2140,14 +2140,14 @@
       ],
       "treatments_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "service_inference"
       },
       "supported_time_categories": [
         "tolerate"
       ],
       "time_categories_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "treatment_inference"
       },
       "availability_models": [
         "multi_region_active_passive"
@@ -2159,17 +2159,17 @@
       "security_level": "enterprise",
       "security_level_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "content_analysis"
       },
       "operating_model_required": "devops",
       "operating_model_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "family_inference"
       },
       "cost_profile": "balanced",
       "cost_profile_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "content_analysis"
       },
       "complexity": {
         "implementation": "medium",
@@ -2221,9 +2221,9 @@
       "browse_categories": [
         "Architecture",
         "Reference",
-        "Monitoring",
         "Management",
-        "Hybrid"
+        "Hybrid",
+        "Monitoring"
       ],
       "family": "iaas",
       "family_confidence": {
@@ -2232,7 +2232,7 @@
       },
       "workload_domain": "infrastructure",
       "workload_domain_confidence": {
-        "confidence": "ai_suggested",
+        "confidence": "curated",
         "source": "yml_metadata"
       },
       "expected_runtime_models": [
@@ -2257,7 +2257,7 @@
       ],
       "treatments_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "service_inference"
       },
       "supported_time_categories": [
         "invest",
@@ -2266,7 +2266,7 @@
       ],
       "time_categories_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "treatment_inference"
       },
       "availability_models": [
         "single_region"
@@ -2278,17 +2278,17 @@
       "security_level": "enterprise",
       "security_level_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "content_analysis"
       },
       "operating_model_required": "devops",
       "operating_model_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "family_inference"
       },
       "cost_profile": "innovation_first",
       "cost_profile_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "service_inference"
       },
       "complexity": {
         "implementation": "high",
@@ -2356,7 +2356,7 @@
       },
       "workload_domain": "infrastructure",
       "workload_domain_confidence": {
-        "confidence": "ai_suggested",
+        "confidence": "curated",
         "source": "yml_metadata"
       },
       "expected_runtime_models": [
@@ -2382,7 +2382,7 @@
       ],
       "treatments_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "service_inference"
       },
       "supported_time_categories": [
         "invest",
@@ -2391,7 +2391,7 @@
       ],
       "time_categories_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "treatment_inference"
       },
       "availability_models": [
         "zone_redundant"
@@ -2403,17 +2403,17 @@
       "security_level": "enterprise",
       "security_level_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "content_analysis"
       },
       "operating_model_required": "devops",
       "operating_model_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "family_inference"
       },
       "cost_profile": "balanced",
       "cost_profile_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "content_analysis"
       },
       "complexity": {
         "implementation": "high",
@@ -2487,7 +2487,7 @@
       },
       "workload_domain": "integration",
       "workload_domain_confidence": {
-        "confidence": "ai_suggested",
+        "confidence": "curated",
         "source": "yml_metadata"
       },
       "expected_runtime_models": [
@@ -2513,7 +2513,7 @@
       ],
       "treatments_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "service_inference"
       },
       "supported_time_categories": [
         "invest",
@@ -2523,7 +2523,7 @@
       ],
       "time_categories_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "treatment_inference"
       },
       "availability_models": [
         "multi_region_active_passive"
@@ -2535,17 +2535,17 @@
       "security_level": "enterprise",
       "security_level_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "content_analysis"
       },
       "operating_model_required": "devops",
       "operating_model_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "family_inference"
       },
       "cost_profile": "innovation_first",
       "cost_profile_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "service_inference"
       },
       "complexity": {
         "implementation": "high",
@@ -2613,7 +2613,7 @@
       },
       "workload_domain": "security",
       "workload_domain_confidence": {
-        "confidence": "ai_suggested",
+        "confidence": "curated",
         "source": "yml_metadata"
       },
       "expected_runtime_models": [
@@ -2636,7 +2636,7 @@
       ],
       "treatments_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "content_analysis"
       },
       "supported_time_categories": [
         "eliminate",
@@ -2644,7 +2644,7 @@
       ],
       "time_categories_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "treatment_inference"
       },
       "availability_models": [
         "single_region"
@@ -2656,17 +2656,17 @@
       "security_level": "enterprise",
       "security_level_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "content_analysis"
       },
       "operating_model_required": "devops",
       "operating_model_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "family_inference"
       },
       "cost_profile": "innovation_first",
       "cost_profile_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "content_analysis"
       },
       "complexity": {
         "implementation": "high",
@@ -2728,9 +2728,9 @@
       "browse_categories": [
         "Architecture",
         "Reference",
+        "Aks",
         "Containers",
-        "Kubernetes",
-        "Aks"
+        "Kubernetes"
       ],
       "family": "cloud_native",
       "family_confidence": {
@@ -2739,7 +2739,7 @@
       },
       "workload_domain": "infrastructure",
       "workload_domain_confidence": {
-        "confidence": "ai_suggested",
+        "confidence": "curated",
         "source": "yml_metadata"
       },
       "expected_runtime_models": [
@@ -2766,7 +2766,7 @@
       ],
       "treatments_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "service_inference"
       },
       "supported_time_categories": [
         "invest",
@@ -2776,7 +2776,7 @@
       ],
       "time_categories_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "treatment_inference"
       },
       "availability_models": [
         "multi_region_active_active",
@@ -2790,17 +2790,17 @@
       "security_level": "regulated",
       "security_level_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "content_analysis"
       },
       "operating_model_required": "devops",
       "operating_model_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "family_inference"
       },
       "cost_profile": "cost_minimized",
       "cost_profile_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "service_inference"
       },
       "complexity": {
         "implementation": "high",
@@ -2882,7 +2882,7 @@
       },
       "workload_domain": "infrastructure",
       "workload_domain_confidence": {
-        "confidence": "ai_suggested",
+        "confidence": "curated",
         "source": "yml_metadata"
       },
       "expected_runtime_models": [
@@ -2906,7 +2906,7 @@
       ],
       "treatments_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "service_inference"
       },
       "supported_time_categories": [
         "invest",
@@ -2914,7 +2914,7 @@
       ],
       "time_categories_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "treatment_inference"
       },
       "availability_models": [
         "single_region"
@@ -2926,17 +2926,17 @@
       "security_level": "highly_regulated",
       "security_level_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "content_analysis"
       },
       "operating_model_required": "devops",
       "operating_model_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "family_inference"
       },
       "cost_profile": "scale_optimized",
       "cost_profile_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "service_inference"
       },
       "complexity": {
         "implementation": "high",
@@ -3010,7 +3010,7 @@
       },
       "workload_domain": "infrastructure",
       "workload_domain_confidence": {
-        "confidence": "ai_suggested",
+        "confidence": "curated",
         "source": "yml_metadata"
       },
       "expected_runtime_models": [
@@ -3034,7 +3034,7 @@
       ],
       "treatments_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "service_inference"
       },
       "supported_time_categories": [
         "invest",
@@ -3042,7 +3042,7 @@
       ],
       "time_categories_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "treatment_inference"
       },
       "availability_models": [
         "single_region"
@@ -3054,17 +3054,17 @@
       "security_level": "enterprise",
       "security_level_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "content_analysis"
       },
       "operating_model_required": "devops",
       "operating_model_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "yml_metadata"
       },
       "cost_profile": "cost_minimized",
       "cost_profile_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "service_inference"
       },
       "complexity": {
         "implementation": "high",
@@ -3155,7 +3155,7 @@
       ],
       "treatments_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "service_inference"
       },
       "supported_time_categories": [
         "invest",
@@ -3163,7 +3163,7 @@
       ],
       "time_categories_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "complexity_heuristic"
       },
       "availability_models": [
         "multi_region_active_active",
@@ -3177,17 +3177,17 @@
       "security_level": "basic",
       "security_level_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "default"
       },
       "operating_model_required": "sre",
       "operating_model_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "family_inference"
       },
       "cost_profile": "scale_optimized",
       "cost_profile_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "content_analysis"
       },
       "complexity": {
         "implementation": "medium",
@@ -3265,7 +3265,7 @@
       ],
       "treatments_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "service_inference"
       },
       "supported_time_categories": [
         "invest",
@@ -3273,7 +3273,7 @@
       ],
       "time_categories_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "treatment_inference"
       },
       "availability_models": [
         "single_region"
@@ -3285,17 +3285,17 @@
       "security_level": "enterprise",
       "security_level_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "content_analysis"
       },
       "operating_model_required": "devops",
       "operating_model_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "family_inference"
       },
       "cost_profile": "scale_optimized",
       "cost_profile_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "content_analysis"
       },
       "complexity": {
         "implementation": "high",
@@ -3382,14 +3382,14 @@
       ],
       "treatments_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "service_inference"
       },
       "supported_time_categories": [
         "invest"
       ],
       "time_categories_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "treatment_inference"
       },
       "availability_models": [
         "single_region"
@@ -3401,17 +3401,17 @@
       "security_level": "enterprise",
       "security_level_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "content_analysis"
       },
       "operating_model_required": "devops",
       "operating_model_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "family_inference"
       },
       "cost_profile": "scale_optimized",
       "cost_profile_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "service_inference"
       },
       "complexity": {
         "implementation": "high",
@@ -3497,14 +3497,14 @@
       ],
       "treatments_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "service_inference"
       },
       "supported_time_categories": [
         "migrate"
       ],
       "time_categories_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "complexity_heuristic"
       },
       "availability_models": [
         "single_region"
@@ -3516,17 +3516,17 @@
       "security_level": "enterprise",
       "security_level_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "content_analysis"
       },
       "operating_model_required": "sre",
       "operating_model_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "family_inference"
       },
       "cost_profile": "innovation_first",
       "cost_profile_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "service_inference"
       },
       "complexity": {
         "implementation": "medium",
@@ -3611,14 +3611,14 @@
       ],
       "treatments_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "service_inference"
       },
       "supported_time_categories": [
         "invest"
       ],
       "time_categories_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "treatment_inference"
       },
       "availability_models": [
         "single_region"
@@ -3630,17 +3630,17 @@
       "security_level": "enterprise",
       "security_level_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "content_analysis"
       },
       "operating_model_required": "devops",
       "operating_model_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "family_inference"
       },
       "cost_profile": "scale_optimized",
       "cost_profile_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "content_analysis"
       },
       "complexity": {
         "implementation": "medium",
@@ -3707,7 +3707,7 @@
       },
       "workload_domain": "data",
       "workload_domain_confidence": {
-        "confidence": "ai_suggested",
+        "confidence": "curated",
         "source": "yml_metadata"
       },
       "expected_runtime_models": [
@@ -3729,7 +3729,7 @@
       ],
       "treatments_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "service_inference"
       },
       "supported_time_categories": [
         "migrate",
@@ -3737,7 +3737,7 @@
       ],
       "time_categories_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "complexity_heuristic"
       },
       "availability_models": [
         "single_region"
@@ -3749,17 +3749,17 @@
       "security_level": "enterprise",
       "security_level_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "content_analysis"
       },
       "operating_model_required": "devops",
       "operating_model_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "family_inference"
       },
       "cost_profile": "innovation_first",
       "cost_profile_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "content_analysis"
       },
       "complexity": {
         "implementation": "medium",
@@ -3823,7 +3823,7 @@
       },
       "workload_domain": "data",
       "workload_domain_confidence": {
-        "confidence": "ai_suggested",
+        "confidence": "curated",
         "source": "yml_metadata"
       },
       "expected_runtime_models": [
@@ -3845,7 +3845,7 @@
       ],
       "treatments_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "service_inference"
       },
       "supported_time_categories": [
         "invest",
@@ -3853,7 +3853,7 @@
       ],
       "time_categories_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "complexity_heuristic"
       },
       "availability_models": [
         "single_region"
@@ -3865,17 +3865,17 @@
       "security_level": "basic",
       "security_level_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "default"
       },
       "operating_model_required": "devops",
       "operating_model_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "family_inference"
       },
       "cost_profile": "scale_optimized",
       "cost_profile_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "service_inference"
       },
       "complexity": {
         "implementation": "high",
@@ -3934,18 +3934,18 @@
       "browse_categories": [
         "Architecture",
         "Reference",
-        "Security",
+        "Hybrid",
         "Networking",
-        "Hybrid"
+        "Security"
       ],
       "family": "iaas",
       "family_confidence": {
         "confidence": "ai_suggested",
         "source": "content_analysis"
       },
-      "workload_domain": "security",
+      "workload_domain": "infrastructure",
       "workload_domain_confidence": {
-        "confidence": "ai_suggested",
+        "confidence": "curated",
         "source": "yml_metadata"
       },
       "expected_runtime_models": [
@@ -3970,7 +3970,7 @@
       ],
       "treatments_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "service_inference"
       },
       "supported_time_categories": [
         "tolerate",
@@ -3978,7 +3978,7 @@
       ],
       "time_categories_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "treatment_inference"
       },
       "availability_models": [
         "single_region"
@@ -3990,17 +3990,17 @@
       "security_level": "regulated",
       "security_level_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "yml_metadata"
       },
       "operating_model_required": "devops",
       "operating_model_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "family_inference"
       },
       "cost_profile": "cost_minimized",
       "cost_profile_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "content_analysis"
       },
       "complexity": {
         "implementation": "medium",
@@ -4058,8 +4058,8 @@
       "browse_categories": [
         "Architecture",
         "Reference",
-        "Management",
         "Integration",
+        "Management",
         "Developer Tools"
       ],
       "family": "paas",
@@ -4067,9 +4067,9 @@
         "confidence": "ai_suggested",
         "source": "content_analysis"
       },
-      "workload_domain": "infrastructure",
+      "workload_domain": "integration",
       "workload_domain_confidence": {
-        "confidence": "ai_suggested",
+        "confidence": "curated",
         "source": "yml_metadata"
       },
       "expected_runtime_models": [
@@ -4093,7 +4093,7 @@
       ],
       "treatments_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "service_inference"
       },
       "supported_time_categories": [
         "invest",
@@ -4101,7 +4101,7 @@
       ],
       "time_categories_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "treatment_inference"
       },
       "availability_models": [
         "multi_region_active_passive"
@@ -4113,17 +4113,17 @@
       "security_level": "enterprise",
       "security_level_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "content_analysis"
       },
       "operating_model_required": "devops",
       "operating_model_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "family_inference"
       },
       "cost_profile": "scale_optimized",
       "cost_profile_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "service_inference"
       },
       "complexity": {
         "implementation": "medium",
@@ -4186,7 +4186,7 @@
       },
       "workload_domain": "infrastructure",
       "workload_domain_confidence": {
-        "confidence": "ai_suggested",
+        "confidence": "curated",
         "source": "yml_metadata"
       },
       "expected_runtime_models": [
@@ -4210,7 +4210,7 @@
       ],
       "treatments_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "service_inference"
       },
       "supported_time_categories": [
         "tolerate",
@@ -4218,7 +4218,7 @@
       ],
       "time_categories_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "treatment_inference"
       },
       "availability_models": [
         "multi_region_active_active"
@@ -4230,17 +4230,17 @@
       "security_level": "regulated",
       "security_level_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "content_analysis"
       },
       "operating_model_required": "sre",
       "operating_model_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "family_inference"
       },
       "cost_profile": "scale_optimized",
       "cost_profile_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "content_analysis"
       },
       "complexity": {
         "implementation": "medium",
@@ -4303,7 +4303,7 @@
       },
       "workload_domain": "infrastructure",
       "workload_domain_confidence": {
-        "confidence": "ai_suggested",
+        "confidence": "curated",
         "source": "yml_metadata"
       },
       "expected_runtime_models": [
@@ -4325,14 +4325,14 @@
       ],
       "treatments_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "service_inference"
       },
       "supported_time_categories": [
         "tolerate"
       ],
       "time_categories_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "treatment_inference"
       },
       "availability_models": [
         "single_region"
@@ -4344,17 +4344,17 @@
       "security_level": "basic",
       "security_level_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "default"
       },
       "operating_model_required": "sre",
       "operating_model_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "content_analysis"
       },
       "cost_profile": "scale_optimized",
       "cost_profile_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "content_analysis"
       },
       "complexity": {
         "implementation": "low",
@@ -4412,7 +4412,7 @@
       },
       "workload_domain": "integration",
       "workload_domain_confidence": {
-        "confidence": "ai_suggested",
+        "confidence": "curated",
         "source": "yml_metadata"
       },
       "expected_runtime_models": [
@@ -4434,14 +4434,14 @@
       ],
       "treatments_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "service_inference"
       },
       "supported_time_categories": [
         "tolerate"
       ],
       "time_categories_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "treatment_inference"
       },
       "availability_models": [
         "zone_redundant"
@@ -4453,17 +4453,17 @@
       "security_level": "enterprise",
       "security_level_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "content_analysis"
       },
       "operating_model_required": "transitional",
       "operating_model_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "content_analysis"
       },
       "cost_profile": "scale_optimized",
       "cost_profile_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "content_analysis"
       },
       "complexity": {
         "implementation": "high",
@@ -4537,7 +4537,7 @@
       },
       "workload_domain": "security",
       "workload_domain_confidence": {
-        "confidence": "ai_suggested",
+        "confidence": "curated",
         "source": "yml_metadata"
       },
       "expected_runtime_models": [
@@ -4560,14 +4560,14 @@
       ],
       "treatments_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "service_inference"
       },
       "supported_time_categories": [
         "tolerate"
       ],
       "time_categories_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "treatment_inference"
       },
       "availability_models": [
         "single_region"
@@ -4579,17 +4579,17 @@
       "security_level": "enterprise",
       "security_level_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "content_analysis"
       },
       "operating_model_required": "devops",
       "operating_model_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "family_inference"
       },
       "cost_profile": "cost_minimized",
       "cost_profile_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "content_analysis"
       },
       "complexity": {
         "implementation": "medium",
@@ -4650,7 +4650,7 @@
       },
       "workload_domain": "security",
       "workload_domain_confidence": {
-        "confidence": "ai_suggested",
+        "confidence": "curated",
         "source": "yml_metadata"
       },
       "expected_runtime_models": [
@@ -4673,14 +4673,14 @@
       ],
       "treatments_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "content_analysis"
       },
       "supported_time_categories": [
         "tolerate"
       ],
       "time_categories_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "treatment_inference"
       },
       "availability_models": [
         "single_region"
@@ -4692,17 +4692,17 @@
       "security_level": "regulated",
       "security_level_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "content_analysis"
       },
       "operating_model_required": "devops",
       "operating_model_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "family_inference"
       },
       "cost_profile": "balanced",
       "cost_profile_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "content_analysis"
       },
       "complexity": {
         "implementation": "medium",
@@ -4764,7 +4764,7 @@
       },
       "workload_domain": "security",
       "workload_domain_confidence": {
-        "confidence": "ai_suggested",
+        "confidence": "curated",
         "source": "yml_metadata"
       },
       "expected_runtime_models": [
@@ -4788,7 +4788,7 @@
       ],
       "treatments_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "service_inference"
       },
       "supported_time_categories": [
         "tolerate",
@@ -4796,7 +4796,7 @@
       ],
       "time_categories_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "treatment_inference"
       },
       "availability_models": [
         "multi_region_active_passive"
@@ -4808,17 +4808,17 @@
       "security_level": "enterprise",
       "security_level_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "content_analysis"
       },
       "operating_model_required": "devops",
       "operating_model_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "family_inference"
       },
       "cost_profile": "innovation_first",
       "cost_profile_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "service_inference"
       },
       "complexity": {
         "implementation": "medium",
@@ -4871,17 +4871,17 @@
       "browse_categories": [
         "Architecture",
         "Reference",
-        "Migration",
-        "Databases"
+        "Databases",
+        "Migration"
       ],
       "family": "data",
       "family_confidence": {
         "confidence": "ai_suggested",
         "source": "content_analysis"
       },
-      "workload_domain": "infrastructure",
+      "workload_domain": "data",
       "workload_domain_confidence": {
-        "confidence": "ai_suggested",
+        "confidence": "curated",
         "source": "yml_metadata"
       },
       "expected_runtime_models": [
@@ -4906,7 +4906,7 @@
       ],
       "treatments_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "service_inference"
       },
       "supported_time_categories": [
         "invest",
@@ -4915,7 +4915,7 @@
       ],
       "time_categories_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "treatment_inference"
       },
       "availability_models": [
         "multi_region_active_active",
@@ -4928,17 +4928,17 @@
       "security_level": "enterprise",
       "security_level_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "content_analysis"
       },
       "operating_model_required": "sre",
       "operating_model_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "content_analysis"
       },
       "cost_profile": "innovation_first",
       "cost_profile_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "service_inference"
       },
       "complexity": {
         "implementation": "high",
@@ -5030,7 +5030,7 @@
       ],
       "treatments_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "service_inference"
       },
       "supported_time_categories": [
         "migrate",
@@ -5039,7 +5039,7 @@
       ],
       "time_categories_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "treatment_inference"
       },
       "availability_models": [
         "multi_region_active_active",
@@ -5052,17 +5052,17 @@
       "security_level": "enterprise",
       "security_level_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "content_analysis"
       },
       "operating_model_required": "sre",
       "operating_model_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "family_inference"
       },
       "cost_profile": "scale_optimized",
       "cost_profile_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "service_inference"
       },
       "complexity": {
         "implementation": "high",
@@ -5129,7 +5129,7 @@
       },
       "workload_domain": "infrastructure",
       "workload_domain_confidence": {
-        "confidence": "ai_suggested",
+        "confidence": "curated",
         "source": "yml_metadata"
       },
       "expected_runtime_models": [
@@ -5153,7 +5153,7 @@
       ],
       "treatments_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "service_inference"
       },
       "supported_time_categories": [
         "migrate",
@@ -5161,7 +5161,7 @@
       ],
       "time_categories_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "treatment_inference"
       },
       "availability_models": [
         "multi_region_active_passive",
@@ -5174,17 +5174,17 @@
       "security_level": "enterprise",
       "security_level_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "content_analysis"
       },
       "operating_model_required": "devops",
       "operating_model_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "family_inference"
       },
       "cost_profile": "innovation_first",
       "cost_profile_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "service_inference"
       },
       "complexity": {
         "implementation": "medium",
@@ -5237,17 +5237,17 @@
       "browse_categories": [
         "Architecture",
         "Reference",
-        "Compute",
-        "Databases"
+        "Databases",
+        "Compute"
       ],
       "family": "iaas",
       "family_confidence": {
         "confidence": "ai_suggested",
         "source": "content_analysis"
       },
-      "workload_domain": "infrastructure",
+      "workload_domain": "data",
       "workload_domain_confidence": {
-        "confidence": "ai_suggested",
+        "confidence": "curated",
         "source": "yml_metadata"
       },
       "expected_runtime_models": [
@@ -5272,7 +5272,7 @@
       ],
       "treatments_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "service_inference"
       },
       "supported_time_categories": [
         "tolerate",
@@ -5280,7 +5280,7 @@
       ],
       "time_categories_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "treatment_inference"
       },
       "availability_models": [
         "multi_region_active_passive",
@@ -5293,17 +5293,17 @@
       "security_level": "enterprise",
       "security_level_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "content_analysis"
       },
       "operating_model_required": "sre",
       "operating_model_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "family_inference"
       },
       "cost_profile": "cost_minimized",
       "cost_profile_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "service_inference"
       },
       "complexity": {
         "implementation": "high",
@@ -5361,17 +5361,17 @@
       "browse_categories": [
         "Architecture",
         "Reference",
-        "Compute",
-        "Databases"
+        "Databases",
+        "Compute"
       ],
       "family": "iaas",
       "family_confidence": {
         "confidence": "ai_suggested",
         "source": "content_analysis"
       },
-      "workload_domain": "infrastructure",
+      "workload_domain": "data",
       "workload_domain_confidence": {
-        "confidence": "ai_suggested",
+        "confidence": "curated",
         "source": "yml_metadata"
       },
       "expected_runtime_models": [
@@ -5395,7 +5395,7 @@
       ],
       "treatments_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "service_inference"
       },
       "supported_time_categories": [
         "tolerate",
@@ -5403,7 +5403,7 @@
       ],
       "time_categories_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "treatment_inference"
       },
       "availability_models": [
         "multi_region_active_passive",
@@ -5416,17 +5416,17 @@
       "security_level": "enterprise",
       "security_level_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "content_analysis"
       },
       "operating_model_required": "traditional_it",
       "operating_model_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "family_inference"
       },
       "cost_profile": "innovation_first",
       "cost_profile_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "content_analysis"
       },
       "complexity": {
         "implementation": "high",
@@ -5485,9 +5485,9 @@
       "browse_categories": [
         "Architecture",
         "Reference",
-        "Compute",
+        "Networking",
         "Migration",
-        "Networking"
+        "Compute"
       ],
       "family": "iaas",
       "family_confidence": {
@@ -5496,7 +5496,7 @@
       },
       "workload_domain": "infrastructure",
       "workload_domain_confidence": {
-        "confidence": "ai_suggested",
+        "confidence": "curated",
         "source": "yml_metadata"
       },
       "expected_runtime_models": [
@@ -5522,7 +5522,7 @@
       ],
       "treatments_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "service_inference"
       },
       "supported_time_categories": [
         "invest",
@@ -5532,7 +5532,7 @@
       ],
       "time_categories_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "treatment_inference"
       },
       "availability_models": [
         "zone_redundant"
@@ -5544,17 +5544,17 @@
       "security_level": "highly_regulated",
       "security_level_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "content_analysis"
       },
       "operating_model_required": "sre",
       "operating_model_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "family_inference"
       },
       "cost_profile": "scale_optimized",
       "cost_profile_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "service_inference"
       },
       "complexity": {
         "implementation": "high",
@@ -5620,17 +5620,17 @@
       "browse_categories": [
         "Architecture",
         "Reference",
-        "Security",
-        "Web"
+        "Web",
+        "Security"
       ],
       "family": "cloud_native",
       "family_confidence": {
         "confidence": "ai_suggested",
         "source": "content_analysis"
       },
-      "workload_domain": "security",
+      "workload_domain": "web",
       "workload_domain_confidence": {
-        "confidence": "ai_suggested",
+        "confidence": "curated",
         "source": "yml_metadata"
       },
       "expected_runtime_models": [
@@ -5656,7 +5656,7 @@
       ],
       "treatments_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "service_inference"
       },
       "supported_time_categories": [
         "invest",
@@ -5664,7 +5664,7 @@
       ],
       "time_categories_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "treatment_inference"
       },
       "availability_models": [
         "multi_region_active_active",
@@ -5677,17 +5677,17 @@
       "security_level": "enterprise",
       "security_level_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "yml_metadata"
       },
       "operating_model_required": "sre",
       "operating_model_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "family_inference"
       },
       "cost_profile": "scale_optimized",
       "cost_profile_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "content_analysis"
       },
       "complexity": {
         "implementation": "high",
@@ -5760,7 +5760,7 @@
       },
       "workload_domain": "infrastructure",
       "workload_domain_confidence": {
-        "confidence": "ai_suggested",
+        "confidence": "curated",
         "source": "yml_metadata"
       },
       "expected_runtime_models": [
@@ -5784,7 +5784,7 @@
       ],
       "treatments_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "service_inference"
       },
       "supported_time_categories": [
         "invest",
@@ -5792,7 +5792,7 @@
       ],
       "time_categories_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "treatment_inference"
       },
       "availability_models": [
         "zone_redundant"
@@ -5804,17 +5804,17 @@
       "security_level": "enterprise",
       "security_level_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "content_analysis"
       },
       "operating_model_required": "devops",
       "operating_model_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "family_inference"
       },
       "cost_profile": "scale_optimized",
       "cost_profile_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "content_analysis"
       },
       "complexity": {
         "implementation": "high",
@@ -5894,7 +5894,7 @@
       },
       "workload_domain": "web",
       "workload_domain_confidence": {
-        "confidence": "ai_suggested",
+        "confidence": "curated",
         "source": "yml_metadata"
       },
       "expected_runtime_models": [
@@ -5917,14 +5917,14 @@
       ],
       "treatments_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "service_inference"
       },
       "supported_time_categories": [
         "invest"
       ],
       "time_categories_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "treatment_inference"
       },
       "availability_models": [
         "multi_region_active_active",
@@ -5938,17 +5938,17 @@
       "security_level": "enterprise",
       "security_level_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "content_analysis"
       },
       "operating_model_required": "devops",
       "operating_model_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "family_inference"
       },
       "cost_profile": "scale_optimized",
       "cost_profile_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "service_inference"
       },
       "complexity": {
         "implementation": "high",
@@ -6017,7 +6017,7 @@
       },
       "workload_domain": "infrastructure",
       "workload_domain_confidence": {
-        "confidence": "ai_suggested",
+        "confidence": "curated",
         "source": "yml_metadata"
       },
       "expected_runtime_models": [
@@ -6040,14 +6040,14 @@
       ],
       "treatments_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "service_inference"
       },
       "supported_time_categories": [
         "invest"
       ],
       "time_categories_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "treatment_inference"
       },
       "availability_models": [
         "zone_redundant"
@@ -6059,17 +6059,17 @@
       "security_level": "enterprise",
       "security_level_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "content_analysis"
       },
       "operating_model_required": "devops",
       "operating_model_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "family_inference"
       },
       "cost_profile": "balanced",
       "cost_profile_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "service_inference"
       },
       "complexity": {
         "implementation": "high",
@@ -6142,7 +6142,7 @@
       },
       "workload_domain": "infrastructure",
       "workload_domain_confidence": {
-        "confidence": "ai_suggested",
+        "confidence": "curated",
         "source": "yml_metadata"
       },
       "expected_runtime_models": [
@@ -6166,7 +6166,7 @@
       ],
       "treatments_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "service_inference"
       },
       "supported_time_categories": [
         "invest",
@@ -6174,7 +6174,7 @@
       ],
       "time_categories_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "treatment_inference"
       },
       "availability_models": [
         "zone_redundant"
@@ -6186,17 +6186,17 @@
       "security_level": "enterprise",
       "security_level_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "content_analysis"
       },
       "operating_model_required": "devops",
       "operating_model_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "family_inference"
       },
       "cost_profile": "scale_optimized",
       "cost_profile_confidence": {
         "confidence": "ai_suggested",
-        "source": null
+        "source": "service_inference"
       },
       "complexity": {
         "implementation": "high",
