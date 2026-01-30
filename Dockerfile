@@ -5,9 +5,11 @@ FROM python:3.11-slim AS builder
 
 WORKDIR /app
 
-# Install build dependencies
+# Install build dependencies (pycairo needs cairo dev libs)
 RUN apt-get update && apt-get install -y --no-install-recommends \
     gcc \
+    libcairo2-dev \
+    pkg-config \
     && rm -rf /var/lib/apt/lists/*
 
 # Copy project files (README.md required by pyproject.toml)
@@ -22,9 +24,11 @@ FROM python:3.11-slim
 
 WORKDIR /app
 
-# Install runtime dependencies (git for catalog updates)
+# Install runtime dependencies (git for catalog updates, libcairo2 for PDF generation)
 RUN apt-get update && apt-get install -y --no-install-recommends \
     git \
+    libcairo2 \
+    curl \
     && rm -rf /var/lib/apt/lists/* \
     && useradd --create-home --shell /bin/bash appuser
 
