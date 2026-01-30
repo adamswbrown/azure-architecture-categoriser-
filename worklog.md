@@ -1,5 +1,77 @@
 # Azure Architecture Recommender - Work Log
 
+## 2026-01-30
+
+### Session: UX Polish & PDF Enhancements
+
+**Goal:** Improve visual density, add missing features to PDF reports, handle edge cases.
+
+**Changes Made:**
+
+#### 1. Visual Density Improvements (Step 1 & Step 3)
+
+**Step 1 (Upload):**
+- Replaced oversized `st.subheader()` with compact CSS grid layout
+- Reduced font sizes and removed redundant labels
+- Technologies displayed as styled tags instead of plain list
+- Server summary inline instead of separate metric cards
+
+**Step 3 (Results):**
+- Compact summary section using CSS grid (4-column layout)
+- Changed confidence message for "Medium" from "consider answering questions" to "Good match based on available data"
+- Made Learn more links visually prominent as styled blue buttons
+- Collapsed Key Drivers and Key Considerations by default
+
+#### 2. Architecture Diagram Sizing
+
+- **Web UI:** Changed column ratio from `[1, 4, 1]` to `[1, 2, 1]` for smaller primary diagram
+- **PDF:** Added SVG support using `svglib` library (Azure Architecture Center uses SVG diagrams)
+
+#### 3. User Answers Display
+
+- **Web UI:** Added "Your Answers" expander showing answered clarification questions
+- **PDF Report:** Added "Your Answers" section before recommendations
+
+#### 4. Sidebar Improvements
+
+- Collapsed "Catalog Details" expander by default (`expanded=False`)
+
+#### 5. No Recommendations Handling (Option 5)
+
+When scoring returns zero recommendations, the app now shows:
+- ⚠️ Warning banner explaining no strong matches found
+- **What we understood** - Key drivers from context file
+- **Possible reasons** - Common explanations for low scores
+- **Suggestions** - Actionable steps to improve results:
+  - Answer unanswered questions (if any)
+  - Review context file
+  - Browse Azure Architecture Center manually
+  - Contact Azure specialist
+
+#### 6. Sample Data Location
+
+- Moved sample context files from `tests/fixtures/context_files/` to `examples/context_files/`
+- Updated all references in tests, scripts, and documentation
+
+**Files Modified:**
+```
+src/architecture_recommendations_app/
+├── app.py                        # Sidebar collapse, pass has_unanswered_questions
+├── components/
+│   ├── results_display.py        # No-matches UI, smaller diagram, user answers
+│   ├── pdf_generator.py          # SVG support, user answers section
+│   └── upload_section.py         # Simplified layout
+```
+
+**Dependencies Added:**
+- `svglib>=1.5.0` - SVG to ReportLab conversion for PDF diagrams
+
+**Documentation Updated:**
+- `docs/recommendations-app.md` - Added "No Strong Matches" section, PDF features
+- `worklog.md` - This entry
+
+---
+
 ## 2026-01-29
 
 ### Session: Documentation & GitHub Issues

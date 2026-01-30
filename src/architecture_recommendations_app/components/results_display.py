@@ -2,7 +2,7 @@
 
 import streamlit as st
 
-from architecture_scorer.schema import ScoringResult, ArchitectureRecommendation
+from architecture_scorer.schema import ScoringResult, ArchitectureRecommendation, ClarificationQuestion
 
 
 # Quality badge colors
@@ -21,17 +21,57 @@ CONFIDENCE_STYLES = {
 }
 
 
-def render_results(result: ScoringResult) -> None:
-    """Render the scoring results."""
+def render_user_answers(
+    questions: list[ClarificationQuestion],
+    answers: dict[str, str]
+) -> None:
+    """Render the user's answers to clarification questions.
+
+    Args:
+        questions: List of clarification questions
+        answers: Dictionary mapping question_id to selected value
+    """
+    if not answers:
+        return
+
+    with st.expander("Your Answers", expanded=False):
+        for q in questions:
+            if q.question_id in answers:
+                answer_value = answers[q.question_id]
+                # Find the label for this answer
+                answer_label = answer_value
+                for opt in q.options:
+                    if opt.value == answer_value:
+                        answer_label = opt.label
+                        break
+
+                st.markdown(
+                    f"**{q.question_text}**  \n"
+                    f"<span style='color:#0078D4;'>{answer_label}</span>",
+                    unsafe_allow_html=True
+                )
+
+
+def render_results(result: ScoringResult, has_unanswered_questions: bool = False) -> None:
+    """Render the scoring results.
+
+    Args:
+        result: The scoring result to display
+        has_unanswered_questions: Whether there are unanswered clarification questions
+    """
     # Summary section
     _render_summary(result)
 
     st.markdown("---")
 
+    # Check if we have recommendations
+    if not result.recommendations:
+        _render_no_matches(result, has_unanswered_questions)
+        return
+
     # Primary recommendation (highlighted)
-    if result.recommendations:
-        st.subheader("Primary Recommendation")
-        _render_recommendation_card(result.recommendations[0], is_primary=True)
+    st.subheader("Primary Recommendation")
+    _render_recommendation_card(result.recommendations[0], is_primary=True)
 
     # Additional recommendations
     if len(result.recommendations) > 1:
@@ -42,6 +82,90 @@ def render_results(result: ScoringResult) -> None:
         for i, rec in enumerate(result.recommendations[1:5]):  # Max 4 alternatives
             with cols[i % 2]:
                 _render_recommendation_card(rec, is_primary=False)
+
+
+def _render_no_matches(result: ScoringResult, has_unanswered_questions: bool) -> None:
+    """Render a helpful message when no strong matches are found.
+
+    Args:
+        result: The scoring result (with empty recommendations)
+        has_unanswered_questions: Whether clarification questions remain unanswered
+    """
+    summary = result.summary
+
+    # Warning banner
+    st.markdown(
+        """
+        <div style="background:#FFF4CE; border-left:4px solid #FFB900; padding:1rem;
+                    border-radius:0 8px 8px 0; margin-bottom:1rem;">
+            <div style="display:flex; align-items:center; gap:0.5rem;">
+                <span style="font-size:1.5rem;">⚠️</span>
+                <span style="font-weight:600; font-size:1.1rem;">No Strong Matches Found</span>
+            </div>
+            <p style="margin:0.5rem 0 0 2rem; color:#5C4813;">
+                We couldn't find architectures that strongly match your application's requirements.
+            </p>
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
+
+    # Two-column layout for details
+    col1, col2 = st.columns(2)
+
+    with col1:
+        # What we understood
+        st.markdown("**What we understood:**")
+        if summary.key_drivers:
+            for driver in summary.key_drivers[:5]:
+                st.markdown(f"- {driver}")
+        else:
+            st.caption("_Limited information extracted from context file_")
+
+    with col2:
+        # Possible reasons
+        st.markdown("**Possible reasons:**")
+        reasons = [
+            "Unique combination of requirements",
+            "Missing details about scale or availability needs",
+            "Specialized technology stack not in catalog",
+            "Context file may need more detail",
+        ]
+        for reason in reasons[:4]:
+            st.markdown(f"- {reason}")
+
+    st.markdown("")
+
+    # Suggestions section
+    with st.container(border=True):
+        st.markdown("**💡 Suggestions to improve results:**")
+
+        suggestions = []
+
+        if has_unanswered_questions:
+            suggestions.append(
+                "**Answer the clarification questions** - "
+                "Providing more details can significantly improve matching"
+            )
+
+        suggestions.extend([
+            "**Review your context file** - Ensure it includes technology stack, "
+            "scalability needs, and compliance requirements",
+            "**Browse Azure Architecture Center** - Explore patterns manually at "
+            "[learn.microsoft.com/azure/architecture](https://learn.microsoft.com/azure/architecture/browse)",
+            "**Contact your Azure specialist** - For complex or unique scenarios, "
+            "consult with an Azure solutions architect",
+        ])
+
+        for suggestion in suggestions:
+            st.markdown(f"- {suggestion}")
+
+    # Show key considerations if any
+    if summary.key_risks:
+        st.markdown("")
+        with st.expander("Key Considerations", expanded=False):
+            for risk in summary.key_risks[:5]:
+                st.markdown(f"- {risk}")
 
 
 def _render_summary(result: ScoringResult) -> None:
@@ -145,10 +269,10 @@ def _render_recommendation_card(rec: ArchitectureRecommendation, is_primary: boo
             if rec.diagram_url:
                 st.markdown("")  # Spacer
                 try:
-                    # Use expander with centered image
+                    # Use expander with centered image - smaller ratio for more compact display
                     with st.expander("View Architecture Diagram", expanded=True):
-                        # Center the image using columns
-                        col1, col2, col3 = st.columns([1, 4, 1])
+                        # Center the image using columns - narrower center for smaller diagram
+                        col1, col2, col3 = st.columns([1, 2, 1])
                         with col2:
                             st.image(rec.diagram_url, use_container_width=True)
                 except Exception:

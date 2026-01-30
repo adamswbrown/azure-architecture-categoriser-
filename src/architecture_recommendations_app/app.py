@@ -18,7 +18,7 @@ if str(src_path) not in sys.path:
 from architecture_recommendations_app.state import initialize_state, get_state, set_state, clear_state
 from architecture_recommendations_app.utils.validation import validate_uploaded_file
 from architecture_recommendations_app.components.upload_section import render_upload_section
-from architecture_recommendations_app.components.results_display import render_results
+from architecture_recommendations_app.components.results_display import render_results, render_user_answers
 from architecture_recommendations_app.components.pdf_generator import generate_pdf_report
 from architecture_recommendations_app.components.config_editor import render_config_editor
 
@@ -290,7 +290,7 @@ def _render_sidebar() -> None:
             # Show current catalog info
             st.success(f"**{info['architecture_count']}** architectures loaded")
 
-            with st.expander("Catalog Details", expanded=True):
+            with st.expander("Catalog Details", expanded=False):
                 st.markdown(f"**File:** `{info['filename']}`")
 
                 # Show source
@@ -808,8 +808,19 @@ def _render_step3_results() -> None:
             _reset_and_restart()
         return
 
+    # Get questions and answers for display
+    questions = get_state('questions', [])
+    user_answers = get_state('user_answers', {})
+
+    # Check if there are unanswered questions
+    answered_ids = set(user_answers.keys()) if user_answers else set()
+    unanswered_count = sum(1 for q in questions if q.question_id not in answered_ids)
+    has_unanswered = unanswered_count > 0
+
     # Render the results
-    render_results(result)
+    render_results(result, has_unanswered_questions=has_unanswered)
+    if questions and user_answers:
+        render_user_answers(questions, user_answers)
 
     # Export section
     st.markdown("---")
@@ -820,7 +831,7 @@ def _render_step3_results() -> None:
     with col1:
         # PDF Download
         try:
-            pdf_bytes = generate_pdf_report(result)
+            pdf_bytes = generate_pdf_report(result, questions, user_answers)
             st.download_button(
                 "📄 Download PDF Report",
                 data=pdf_bytes,

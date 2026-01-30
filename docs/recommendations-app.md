@@ -84,10 +84,36 @@ The application follows a simple 3-step wizard:
    - Core Azure services
    - Link to Microsoft Docs
 3. Review **Alternative Recommendations**
-4. **Export** results:
+4. View **Your Answers** (if questions were answered)
+5. **Export** results:
    - Download PDF Report
    - Download JSON
    - Start New Analysis
+
+### No Strong Matches
+
+When the scoring engine cannot find architectures that strongly match your requirements, the app displays a helpful guidance screen instead of empty results:
+
+**What you'll see:**
+- ⚠️ Warning banner explaining no strong matches were found
+- **What we understood** - Key drivers extracted from your context file
+- **Possible reasons** - Common explanations for low match scores
+- **Suggestions to improve results** - Actionable steps including:
+  - Answer unanswered clarification questions
+  - Review and enrich your context file
+  - Browse Azure Architecture Center manually
+  - Consult with an Azure specialist
+
+**Common causes:**
+- Unique or specialized technology combinations
+- Missing details about scalability or availability requirements
+- Context file lacks sufficient technical detail
+- Application requirements don't map to standard patterns
+
+**Recommended actions:**
+1. Return to Step 2 and answer all clarification questions
+2. Ensure your Dr. Migrate context file includes App Modernization results
+3. Manually explore the [Azure Architecture Center](https://learn.microsoft.com/azure/architecture/browse) for inspiration
 
 ## Context File Format
 
@@ -198,13 +224,16 @@ The generated PDF report includes:
 2. **Executive Summary** - Key metrics in a table
 3. **Key Drivers** - Factors driving the recommendations
 4. **Key Considerations** - Potential risks or challenges
-5. **Recommendations** - Each recommendation with:
-   - Architecture diagram (when available)
+5. **Your Answers** - Clarification questions you answered (if any)
+6. **Recommendations** - Each recommendation with:
+   - Architecture diagram (SVG and PNG supported)
    - Match score and quality level
    - Description
    - Why it fits / Potential challenges
    - Core Azure services
    - Learn URL
+
+The PDF generator uses `reportlab` for PDF creation and `svglib` for SVG diagram conversion.
 
 ## File Structure
 
@@ -259,10 +288,18 @@ Only ~20% of catalog entries have architecture diagrams. The app gracefully hand
 
 ### PDF generation fails
 
-Ensure `reportlab` is installed:
+Ensure `reportlab` and `svglib` are installed:
 ```bash
-pip install reportlab>=4.0.0
+pip install reportlab>=4.0.0 svglib>=1.5.0
 ```
+
+### No recommendations shown
+
+If you see "No Strong Matches Found":
+1. Return to Step 2 and answer all clarification questions
+2. Verify your context file has detailed technology information
+3. Check that App Modernization results are included
+4. Consider manually browsing Azure Architecture Center for your use case
 
 ## Related Documentation
 

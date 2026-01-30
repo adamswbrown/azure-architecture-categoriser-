@@ -10,7 +10,7 @@ from reportlab.lib.colors import HexColor
 from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle, Image
 from reportlab.lib.enums import TA_LEFT
 
-from architecture_scorer.schema import ScoringResult, ArchitectureRecommendation
+from architecture_scorer.schema import ScoringResult, ArchitectureRecommendation, ClarificationQuestion
 
 
 # Azure brand colors
@@ -20,11 +20,17 @@ LIGHT_GRAY = HexColor('#F5F5F5')
 DARK_GRAY = HexColor('#333333')
 
 
-def generate_pdf_report(result: ScoringResult) -> bytes:
+def generate_pdf_report(
+    result: ScoringResult,
+    questions: list[ClarificationQuestion] | None = None,
+    user_answers: dict[str, str] | None = None
+) -> bytes:
     """Generate a PDF report from scoring results.
 
     Args:
         result: The ScoringResult to format as PDF
+        questions: Optional list of clarification questions
+        user_answers: Optional dictionary of user's answers (question_id -> value)
 
     Returns:
         PDF file as bytes
@@ -92,6 +98,27 @@ def generate_pdf_report(result: ScoringResult) -> bytes:
         for risk in summary.key_risks[:5]:
             story.append(Paragraph(f"• {risk}", styles['BulletItem']))
         story.append(Spacer(1, 0.3 * inch))
+
+    # User's answers to clarification questions
+    if questions and user_answers:
+        story.append(Paragraph("Your Answers", styles['ReportHeading1']))
+        story.append(Spacer(1, 0.1 * inch))
+
+        for q in questions:
+            if q.question_id in user_answers:
+                answer_value = user_answers[q.question_id]
+                # Find the label for this answer
+                answer_label = answer_value
+                for opt in q.options:
+                    if opt.value == answer_value:
+                        answer_label = opt.label
+                        break
+
+                story.append(Paragraph(f"<b>{q.question_text}</b>", styles['Normal']))
+                story.append(Paragraph(f"{answer_label}", styles['BulletItem']))
+                story.append(Spacer(1, 0.1 * inch))
+
+        story.append(Spacer(1, 0.2 * inch))
 
     # Recommendations
     story.append(Paragraph("Recommendations", styles['ReportHeading1']))
@@ -190,11 +217,27 @@ def _add_recommendation_to_story(
             response = requests.get(rec.diagram_url, timeout=10)
             if response.ok:
                 img_buffer = BytesIO(response.content)
-                # Smaller image size for cleaner PDF layout
-                img = Image(img_buffer, width=4 * inch, height=2 * inch)
-                img.hAlign = 'CENTER'
-                story.append(img)
-                story.append(Spacer(1, 0.1 * inch))
+
+                # Check if it's an SVG file
+                if rec.diagram_url.lower().endswith('.svg'):
+                    # Use svglib to convert SVG to ReportLab drawing
+                    from svglib.svglib import svg2rlg
+                    drawing = svg2rlg(img_buffer)
+                    if drawing:
+                        # Scale the drawing to fit
+                        target_width = 5 * inch
+                        scale = target_width / drawing.width if drawing.width > 0 else 1
+                        drawing.width = target_width
+                        drawing.height = drawing.height * scale
+                        drawing.scale(scale, scale)
+                        story.append(drawing)
+                        story.append(Spacer(1, 0.1 * inch))
+                else:
+                    # PNG/JPG - use Image directly
+                    img = Image(img_buffer, width=5 * inch, height=2.5 * inch)
+                    img.hAlign = 'CENTER'
+                    story.append(img)
+                    story.append(Spacer(1, 0.1 * inch))
         except Exception:
             # Skip image if it fails to load
             pass
