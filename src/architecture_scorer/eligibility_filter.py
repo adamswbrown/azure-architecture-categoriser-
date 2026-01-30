@@ -222,18 +222,28 @@ class EligibilityFilter:
     def _check_operating_model_compatibility(
         self, arch: ArchitectureEntry, intent: DerivedIntent
     ) -> Optional[ExclusionReasonDetail]:
-        """Check if app's operational maturity can handle architecture requirements."""
+        """Check if app's operational maturity can handle architecture requirements.
+
+        We allow a 1-level gap (transitional can access devops) because:
+        - Transitional teams are actively modernizing
+        - Replatform/refactor projects are part of that journey
+        - Better to show options with guidance than no options
+
+        We still exclude 2+ level gaps (traditional_it can't access devops/sre).
+        """
         app_maturity = intent.operational_maturity_estimate.value
         arch_required = arch.operating_model_required
 
         app_level = self.OPERATING_MODEL_HIERARCHY.get(app_maturity, 0)
         arch_level = self.OPERATING_MODEL_HIERARCHY.get(arch_required, 0)
 
-        # App's maturity must meet architecture requirement
-        if app_level < arch_level:
+        # Allow 1-level gap (transitional->devops, devops->sre)
+        # Exclude only when gap is 2+ levels
+        gap = arch_level - app_level
+        if gap > 1:
             return ExclusionReasonDetail(
                 reason_type="operating_model_gap",
-                description=f"App maturity ({app_maturity.value}) below architecture requirement ({arch_required.value})",
+                description=f"App maturity ({app_maturity.value}) significantly below architecture requirement ({arch_required.value})",
                 blocking_value=app_maturity.value,
                 required_value=arch_required.value,
             )

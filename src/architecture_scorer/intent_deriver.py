@@ -407,6 +407,7 @@ class IntentDeriver:
         """Derive operational maturity estimate."""
         tech = context.detected_technology
         app = context.app_overview
+        app_mod = context.app_mod_results
 
         # Check for DevOps indicators
         if tech.has_ci_cd:
@@ -426,6 +427,28 @@ class IntentDeriver:
                 reasoning="Containerized workload suggests DevOps practices"
             )
 
+        # App Mod container_ready is a strong DevOps indicator
+        # Container-ready apps require CI/CD, image registries, orchestration
+        if app_mod and app_mod.container_ready:
+            return DerivedSignal(
+                value=OperatingModel.DEVOPS,
+                confidence=SignalConfidence.MEDIUM,
+                source="app_mod_results",
+                reasoning="Container-ready application indicates DevOps maturity"
+            )
+
+        # Full AKS support in App Mod suggests DevOps capability
+        if app_mod:
+            for pc in app_mod.platform_compatibility:
+                if "kubernetes" in pc.platform.lower() or "aks" in pc.platform.lower():
+                    if pc.status == CompatibilityStatus.FULLY_SUPPORTED:
+                        return DerivedSignal(
+                            value=OperatingModel.DEVOPS,
+                            confidence=SignalConfidence.MEDIUM,
+                            source="app_mod_results",
+                            reasoning="Full Kubernetes support indicates DevOps readiness"
+                        )
+
         # Modern frameworks often correlate with DevOps
         if tech.primary_runtime in ["Go", "Node.js"] or tech.messaging_present:
             return DerivedSignal(
@@ -433,6 +456,17 @@ class IntentDeriver:
                 confidence=SignalConfidence.LOW,
                 source="technology_detection",
                 reasoning="Modern stack suggests at least transitional maturity"
+            )
+
+        # Replatform/refactor treatments imply modernization intent
+        # Teams choosing these paths are moving toward more modern operations
+        treatment = app.declared_treatment
+        if treatment and treatment in [Treatment.REPLATFORM, Treatment.REFACTOR, Treatment.REBUILD]:
+            return DerivedSignal(
+                value=OperatingModel.TRANSITIONAL,
+                confidence=SignalConfidence.LOW,
+                source="treatment_inference",
+                reasoning=f"{treatment.value.title()} treatment implies modernization and operational maturity growth"
             )
 
         # Business criticality might indicate maturity

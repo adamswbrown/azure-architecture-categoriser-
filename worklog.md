@@ -2,6 +2,87 @@
 
 ## 2026-01-30
 
+### Session: Scoring Bug Fixes & UI Improvements
+
+**Goal:** Fix 0 recommendations bug for cloud-native apps, improve catalog details UI.
+
+**Issues Identified & Fixed:**
+
+| Issue | Root Cause | Fix |
+|-------|-----------|-----|
+| Greenfield cloud-native returns 0 results | `container_ready: true` not used for maturity | Check App Mod container_ready for DevOps inference |
+| Replatform apps get 0 results | Transitional maturity can't access DevOps archs | Allow 1-level gap in eligibility filter |
+| 38/43 architectures excluded | Strict maturity matching | Treatment inference + relaxed filter |
+| Catalog details modal too long | Bullet lists, excessive scrolling | Compact badge design |
+
+**Changes Made:**
+
+#### 1. Intent Deriver - Maturity Inference (`intent_deriver.py`)
+
+Added three new maturity signals:
+
+```python
+# App Mod container_ready → DevOps maturity
+if app_mod and app_mod.container_ready:
+    return DerivedSignal(value=OperatingModel.DEVOPS, ...)
+
+# Full Kubernetes/AKS support → DevOps maturity
+if pc.platform contains "kubernetes" and status == FULLY_SUPPORTED:
+    return DerivedSignal(value=OperatingModel.DEVOPS, ...)
+
+# Replatform/Refactor/Rebuild treatment → Transitional maturity
+if treatment in [REPLATFORM, REFACTOR, REBUILD]:
+    return DerivedSignal(value=OperatingModel.TRANSITIONAL, ...)
+```
+
+#### 2. Eligibility Filter - Relaxed Gap (`eligibility_filter.py`)
+
+Changed from exact maturity match to 1-level gap allowance:
+
+```python
+# OLD: Exclude if app < required
+if app_level < arch_level: exclude
+
+# NEW: Allow 1-level gap, exclude only when gap > 1
+gap = arch_level - app_level
+if gap > 1: exclude
+```
+
+This allows:
+- traditional_it → traditional_it ✓
+- transitional → transitional, devops ✓
+- devops → devops, sre ✓
+
+#### 3. Recommendations App UI (`app.py`)
+
+Redesigned catalog details to use compact badges instead of bullet lists:
+
+- Topics shown as styled badges (e.g., `ref-arch`)
+- Generation settings inline with badges
+- "Load Different Catalog" moved to "Custom Catalog" section
+- Reduced scrolling significantly
+
+**Test Results:**
+
+Before fixes: 16/25 context files return recommendations
+After fixes: 20/25 context files return recommendations
+
+Remaining 5 failures are expected edge cases:
+- `tolerate` treatment (0 matching architectures in catalog)
+- `retire` treatment (only 2 matching architectures)
+- `replace` treatment (only 2 matching architectures)
+- `appmod-blockers` (explicit blockers prevent recommendation)
+- `eliminate-time-category` (retire treatment)
+
+**Files Modified:**
+- `src/architecture_scorer/intent_deriver.py` - Container-ready + treatment maturity
+- `src/architecture_scorer/eligibility_filter.py` - 1-level gap allowance
+- `src/architecture_recommendations_app/app.py` - Compact catalog details UI
+
+**All 152 tests passing.**
+
+---
+
 ### Session: Docker Containerization & v1.0 Release
 
 **Goal:** Containerize the application for easy distribution via GitHub Container Registry.

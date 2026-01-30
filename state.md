@@ -41,6 +41,9 @@
 - [x] Architecture matching (Phase 4)
 - [x] Network exposure question (always asked)
 - [x] 25 test context files covering all scenarios
+- [x] Container-ready apps infer DevOps maturity
+- [x] Treatment-based maturity inference (replatform/refactor → transitional)
+- [x] Relaxed eligibility filter (1-level gap allowed)
 
 ### Recommendations App (NEW)
 - [x] 3-step wizard flow (Upload → Questions → Results)
@@ -53,6 +56,7 @@
 - [x] JSON export
 - [x] Light theme with Azure branding
 - [x] Session state management
+- [x] Catalog build parameters displayed in sidebar (compact badges)
 
 ### Documentation (NEW)
 - [x] Separated docs for each component
@@ -131,13 +135,13 @@ azure-architecture-categoriser-/
 
 ### All Tests
 ```
-173 passed in 1.03s
+152 passed in 0.94s
 ```
 
 ### Coverage
 - Catalog Builder: 22 tests
-- Architecture Scorer: 151 tests
-- 25 context file scenarios covering all treatments and complexity levels
+- Architecture Scorer: 130 tests
+- Context file validation: 20/25 files return recommendations (expected - 5 are edge cases)
 
 ## Blocking Issues
 None.
@@ -153,6 +157,9 @@ None.
 3. **GitHub Actions** - Auto-publish to ghcr.io on push/tag
 4. **CodeQL Scanning** - Automated security analysis on PRs
 5. **Security Audit** - XSS, SSRF, temp file hardening
+6. **Scoring Bug Fixes** - Container-ready & treatment-based maturity inference
+7. **Eligibility Filter Relaxation** - Allow 1-level maturity gap (transitional→devops)
+8. **UI Improvements** - Compact catalog build parameters in sidebar
 
 ## Next Actions
 1. Integrate catalog generation into Recommendations App (Issue #1)

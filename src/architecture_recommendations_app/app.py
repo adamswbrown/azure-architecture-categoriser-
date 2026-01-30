@@ -65,7 +65,10 @@ def get_catalog_info(catalog_path: str) -> dict:
         'last_modified': None,
         'age_days': None,
         'architecture_count': 0,
-        'source': get_state('catalog_source') or 'unknown'
+        'source': get_state('catalog_source') or 'unknown',
+        'generation_settings': None,
+        'generated_at': None,
+        'version': None
     }
 
     try:
@@ -80,11 +83,15 @@ def get_catalog_info(catalog_path: str) -> dict:
         age = datetime.now() - modified_dt
         info['age_days'] = age.days
 
-        # Count architectures
+        # Count architectures and get generation settings
         with open(catalog_path, 'r', encoding='utf-8') as f:
             catalog_data = json.load(f)
             if isinstance(catalog_data, dict) and 'architectures' in catalog_data:
                 info['architecture_count'] = len(catalog_data['architectures'])
+                # Extract build parameters
+                info['generation_settings'] = catalog_data.get('generation_settings')
+                info['generated_at'] = catalog_data.get('generated_at')
+                info['version'] = catalog_data.get('version')
             elif isinstance(catalog_data, list):
                 info['architecture_count'] = len(catalog_data)
 
@@ -287,126 +294,74 @@ def _render_sidebar() -> None:
 
         if catalog_path:
             info = get_catalog_info(catalog_path)
+            age_days = info.get('age_days')
 
-            # Show current catalog info
-            st.success(f"**{info['architecture_count']}** architectures loaded")
+            # Show current catalog info with stale warning if needed
+            if age_days is not None and age_days > 30:
+                st.warning(f"**{info['architecture_count']}** architectures ({age_days} days old)")
+            else:
+                st.success(f"**{info['architecture_count']}** architectures loaded")
 
+            # Compact catalog details expander
             with st.expander("Catalog Details", expanded=False):
-                st.markdown(f"**File:** `{info['filename']}`")
-
-                # Show source
-                source_labels = {
-                    'environment': '`ARCHITECTURE_CATALOG_PATH` env var',
-                    'current_directory': 'Current directory',
-                    'project_root': 'Project root',
-                    'user_selected': 'User selected',
-                    'unknown': 'Auto-detected'
-                }
-                source = info.get('source', 'unknown')
-                st.markdown(f"**Source:** {source_labels.get(source, source)}")
-
-                # Show date with age
-                age_days = info.get('age_days')
-                if info['last_modified']:
-                    if age_days is not None:
-                        if age_days == 0:
-                            age_str = "(today)"
-                        elif age_days == 1:
-                            age_str = "(1 day ago)"
-                        else:
-                            age_str = f"({age_days} days ago)"
-                        st.markdown(f"**Last Updated:** {info['last_modified']} {age_str}")
-                    else:
-                        st.markdown(f"**Last Updated:** {info['last_modified']}")
+                # File and date on same visual block
+                if age_days == 0:
+                    age_str = "today"
+                elif age_days == 1:
+                    age_str = "1 day ago"
+                elif age_days is not None:
+                    age_str = f"{age_days} days ago"
                 else:
-                    st.markdown("**Last Updated:** Unknown")
+                    age_str = "unknown"
 
-                st.markdown(f"**Size:** {info['size_kb']} KB")
+                st.caption(f"`{info['filename']}` · Updated {age_str} · {info['size_kb']} KB")
 
-                # Show full path in a copyable format
+                # Build parameters as compact badges
+                gen_settings = info.get('generation_settings')
+                if gen_settings:
+                    badges = []
+
+                    # Topics badge
+                    topics = gen_settings.get('allowed_topics', [])
+                    if topics:
+                        for topic in topics:
+                            # Shorten common topic names
+                            short_topic = topic.replace('reference-architecture', 'ref-arch') \
+                                               .replace('example-scenario', 'examples') \
+                                               .replace('solution-idea', 'solutions')
+                            badges.append(f'<span style="background:#e8f4fd;color:#0078D4;padding:2px 6px;border-radius:3px;font-size:0.75rem;margin:2px;">{short_topic}</span>')
+
+                    # Exclude examples badge
+                    if gen_settings.get('exclude_examples', False):
+                        badges.append('<span style="background:#DFF6DD;color:#107C10;padding:2px 6px;border-radius:3px;font-size:0.75rem;margin:2px;">excl. examples</span>')
+
+                    # Require YML badge
+                    if gen_settings.get('require_architecture_yml', False):
+                        badges.append('<span style="background:#FFF4CE;color:#797673;padding:2px 6px;border-radius:3px;font-size:0.75rem;margin:2px;">req. yml</span>')
+
+                    # Products filter badge
+                    products = gen_settings.get('allowed_products', [])
+                    if products:
+                        badges.append(f'<span style="background:#E6E6E6;color:#333;padding:2px 6px;border-radius:3px;font-size:0.75rem;margin:2px;">{len(products)} products</span>')
+
+                    # Categories filter badge
+                    categories = gen_settings.get('allowed_categories', [])
+                    if categories:
+                        badges.append(f'<span style="background:#E6E6E6;color:#333;padding:2px 6px;border-radius:3px;font-size:0.75rem;margin:2px;">{len(categories)} categories</span>')
+
+                    if badges:
+                        st.markdown(f'<div style="line-height:1.8;">{"".join(badges)}</div>', unsafe_allow_html=True)
+                    else:
+                        st.caption("All topics, no filters")
+
+                # Copyable path (collapsed by default via small font)
                 st.code(info['path'], language=None)
 
-                # Stale warning if applicable
-                if age_days is not None and age_days > 30:
-                    st.warning(f"Catalog is {age_days} days old. Azure architectures may have been updated.")
-
-                # Always show refresh button
-                if st.button("Refresh Catalog", type="primary", use_container_width=True,
-                           help="Update from Azure Architecture Center", key="refresh_catalog_btn"):
-                    set_state('refresh_catalog_requested', True)
-                    st.rerun()
-
-                # Load different catalog options (inside expander)
-                st.markdown("**Load Different Catalog**")
-
-                uploaded_catalog_inner = st.file_uploader(
-                    "Upload catalog JSON",
-                    type=['json'],
-                    key="catalog_upload_inner",
-                    help="Upload a custom architecture-catalog.json file"
-                )
-
-                if uploaded_catalog_inner is not None:
-                    try:
-                        catalog_data = json.load(uploaded_catalog_inner)
-                        if isinstance(catalog_data, dict) and 'architectures' in catalog_data:
-                            arch_count = len(catalog_data['architectures'])
-                        elif isinstance(catalog_data, list):
-                            arch_count = len(catalog_data)
-                        else:
-                            st.error("Invalid catalog format")
-                            return
-
-                        # Use secure temp file with random name (security fix for predictable paths)
-                        import os as _os
-                        fd, temp_catalog_path = tempfile.mkstemp(suffix='.json', prefix='catalog_')
-                        try:
-                            _os.chmod(temp_catalog_path, 0o600)  # Restrictive permissions
-                            uploaded_catalog_inner.seek(0)
-                            with _os.fdopen(fd, 'w', encoding='utf-8') as f:
-                                json.dump(catalog_data, f, indent=2)
-                        except Exception:
-                            _os.close(fd)
-                            raise
-                        temp_catalog = Path(temp_catalog_path)
-
-                        set_state('catalog_path', str(temp_catalog))
-                        set_state('catalog_source', 'user_selected')
-                        st.success(f"Loaded catalog with {arch_count} architectures")
-                        set_state('scoring_result', None)
-                        set_state('questions', None)
-                        st.rerun()
-
-                    except json.JSONDecodeError:
-                        st.error("Invalid JSON file")
-                    except Exception as e:
-                        st.error(f"Error loading catalog: {e}")
-
-                catalog_input_inner = st.text_input(
-                    "Or enter catalog path",
-                    placeholder="/path/to/architecture-catalog.json",
-                    key="catalog_path_input_inner",
-                    help="Full path to an architecture catalog JSON file"
-                )
-
-                if catalog_input_inner and st.button("Load Catalog", use_container_width=True, key="load_catalog_inner"):
-                    if Path(catalog_input_inner).exists():
-                        set_state('catalog_path', catalog_input_inner)
-                        set_state('catalog_source', 'user_selected')
-                        set_state('scoring_result', None)
-                        set_state('questions', None)
-                        st.success("Catalog loaded!")
-                        st.rerun()
-                    else:
-                        st.error("File not found")
-
-                if get_state('catalog_source') == 'user_selected':
-                    if st.button("Reset to Auto-detect", use_container_width=True, key="reset_catalog_inner"):
-                        set_state('catalog_path', None)
-                        set_state('catalog_source', None)
-                        set_state('scoring_result', None)
-                        set_state('questions', None)
-                        st.rerun()
+            # Refresh button outside expander (more visible)
+            if st.button("Refresh Catalog", use_container_width=True,
+                       help="Update from Azure Architecture Center", key="refresh_catalog_btn"):
+                set_state('refresh_catalog_requested', True)
+                st.rerun()
 
         else:
             st.warning("No catalog found")
@@ -420,15 +375,88 @@ def _render_sidebar() -> None:
 
         st.markdown("---")
 
-        # Custom Catalog Builder section
-        st.subheader("Build Custom Catalog")
-        st.caption("Create a filtered catalog with specific products, categories, or topics.")
+        # Custom Catalog section (build or load)
+        st.subheader("Custom Catalog")
 
+        # Open Catalog Builder
         if st.button("Open Catalog Builder", use_container_width=True,
                     help="Launch the Catalog Builder GUI for advanced filtering",
                     key="launch_catalog_builder_btn"):
             set_state('launch_catalog_builder_requested', True)
             st.rerun()
+
+        # Load existing catalog
+        with st.expander("Load Existing Catalog", expanded=False):
+            uploaded_catalog = st.file_uploader(
+                "Upload catalog JSON",
+                type=['json'],
+                key="catalog_upload",
+                help="Upload a custom architecture-catalog.json file"
+            )
+
+            if uploaded_catalog is not None:
+                try:
+                    catalog_data = json.load(uploaded_catalog)
+                    if isinstance(catalog_data, dict) and 'architectures' in catalog_data:
+                        arch_count = len(catalog_data['architectures'])
+                    elif isinstance(catalog_data, list):
+                        arch_count = len(catalog_data)
+                    else:
+                        st.error("Invalid catalog format")
+                        arch_count = None
+
+                    if arch_count:
+                        # Use secure temp file with random name
+                        import os as _os
+                        fd, temp_catalog_path = tempfile.mkstemp(suffix='.json', prefix='catalog_')
+                        try:
+                            _os.chmod(temp_catalog_path, 0o600)
+                            uploaded_catalog.seek(0)
+                            with _os.fdopen(fd, 'w', encoding='utf-8') as f:
+                                json.dump(catalog_data, f, indent=2)
+                        except Exception:
+                            _os.close(fd)
+                            raise
+                        temp_catalog = Path(temp_catalog_path)
+
+                        set_state('catalog_path', str(temp_catalog))
+                        set_state('catalog_source', 'user_selected')
+                        st.success(f"Loaded {arch_count} architectures")
+                        set_state('scoring_result', None)
+                        set_state('questions', None)
+                        st.rerun()
+
+                except json.JSONDecodeError:
+                    st.error("Invalid JSON file")
+                except Exception as e:
+                    st.error(f"Error: {e}")
+
+            catalog_input = st.text_input(
+                "Or enter path",
+                placeholder="/path/to/catalog.json",
+                key="catalog_path_input",
+                label_visibility="collapsed"
+            )
+
+            if catalog_input:
+                if st.button("Load", use_container_width=True, key="load_catalog_btn"):
+                    if Path(catalog_input).exists():
+                        set_state('catalog_path', catalog_input)
+                        set_state('catalog_source', 'user_selected')
+                        set_state('scoring_result', None)
+                        set_state('questions', None)
+                        st.success("Loaded!")
+                        st.rerun()
+                    else:
+                        st.error("File not found")
+
+            if get_state('catalog_source') == 'user_selected':
+                if st.button("Reset to Default", use_container_width=True, key="reset_catalog_btn"):
+                    set_state('catalog_path', None)
+                    set_state('catalog_source', None)
+                    set_state('scoring_result', None)
+                    set_state('questions', None)
+                    st.rerun()
 
         st.markdown("---")
 
