@@ -1,8 +1,17 @@
 {
   "version": "1.0.0",
-  "generated_at": "2026-01-30T10:02:11.061461",
+  "generated_at": "2026-01-30T11:33:21.357269",
   "source_repo": "/Users/adambrown/architecture-center",
   "source_commit": "06e0d0868e6f59645fdfac6a64048cb0dc57ce5e",
+  "generation_settings": {
+    "allowed_topics": [
+      "reference-architecture"
+    ],
+    "allowed_products": [],
+    "allowed_categories": [],
+    "require_architecture_yml": false,
+    "exclude_examples": false
+  },
   "total_architectures": 51,
   "architectures": [
     {
@@ -25,17 +34,17 @@
       "browse_categories": [
         "Architecture",
         "Reference",
-        "Networking",
         "Security",
         "Web",
-        "AI + Machine Learning"
+        "AI + Machine Learning",
+        "Networking"
       ],
       "family": "paas",
       "family_confidence": {
         "confidence": "ai_suggested",
         "source": "content_analysis"
       },
-      "workload_domain": "infrastructure",
+      "workload_domain": "security",
       "workload_domain_confidence": {
         "confidence": "ai_suggested",
         "source": "yml_metadata"
@@ -171,17 +180,17 @@
       "browse_categories": [
         "Architecture",
         "Reference",
-        "Networking",
         "Security",
         "Web",
-        "AI + Machine Learning"
+        "AI + Machine Learning",
+        "Networking"
       ],
       "family": "paas",
       "family_confidence": {
         "confidence": "ai_suggested",
         "source": "content_analysis"
       },
-      "workload_domain": "infrastructure",
+      "workload_domain": "security",
       "workload_domain_confidence": {
         "confidence": "ai_suggested",
         "source": "yml_metadata"
@@ -429,17 +438,17 @@
       "browse_categories": [
         "Architecture",
         "Reference",
-        "Networking",
         "Databases",
+        "Security",
         "Storage",
-        "Security"
+        "Networking"
       ],
       "family": "foundation",
       "family_confidence": {
         "confidence": "ai_suggested",
         "source": "content_analysis"
       },
-      "workload_domain": "infrastructure",
+      "workload_domain": "data",
       "workload_domain_confidence": {
         "confidence": "ai_suggested",
         "source": "yml_metadata"
@@ -777,8 +786,8 @@
         "Architecture",
         "Reference",
         "Databases",
-        "Analytics",
-        "Storage"
+        "Storage",
+        "Analytics"
       ],
       "family": "data",
       "family_confidence": {
@@ -1114,15 +1123,15 @@
       "browse_categories": [
         "Architecture",
         "Reference",
-        "Networking",
-        "Web"
+        "Web",
+        "Networking"
       ],
       "family": "cloud_native",
       "family_confidence": {
         "confidence": "ai_suggested",
         "source": "content_analysis"
       },
-      "workload_domain": "infrastructure",
+      "workload_domain": "web",
       "workload_domain_confidence": {
         "confidence": "ai_suggested",
         "source": "yml_metadata"
@@ -1485,15 +1494,15 @@
       "browse_categories": [
         "Architecture",
         "Reference",
-        "Hybrid",
-        "Storage"
+        "Storage",
+        "Hybrid"
       ],
       "family": "cloud_native",
       "family_confidence": {
         "confidence": "ai_suggested",
         "source": "content_analysis"
       },
-      "workload_domain": "infrastructure",
+      "workload_domain": "data",
       "workload_domain_confidence": {
         "confidence": "ai_suggested",
         "source": "yml_metadata"
@@ -1597,15 +1606,15 @@
       "browse_categories": [
         "Architecture",
         "Reference",
-        "Hybrid",
-        "Storage"
+        "Storage",
+        "Hybrid"
       ],
       "family": "iaas",
       "family_confidence": {
         "confidence": "ai_suggested",
         "source": "content_analysis"
       },
-      "workload_domain": "infrastructure",
+      "workload_domain": "data",
       "workload_domain_confidence": {
         "confidence": "ai_suggested",
         "source": "yml_metadata"
@@ -1982,8 +1991,8 @@
       "browse_categories": [
         "Architecture",
         "Reference",
-        "Networking",
-        "Hybrid"
+        "Hybrid",
+        "Networking"
       ],
       "family": "iaas",
       "family_confidence": {
@@ -2099,15 +2108,15 @@
       "browse_categories": [
         "Architecture",
         "Reference",
-        "Hybrid",
-        "Storage"
+        "Storage",
+        "Hybrid"
       ],
       "family": "cloud_native",
       "family_confidence": {
         "confidence": "ai_suggested",
         "source": "content_analysis"
       },
-      "workload_domain": "infrastructure",
+      "workload_domain": "data",
       "workload_domain_confidence": {
         "confidence": "ai_suggested",
         "source": "yml_metadata"
@@ -2212,9 +2221,9 @@
       "browse_categories": [
         "Architecture",
         "Reference",
+        "Monitoring",
         "Management",
-        "Hybrid",
-        "Monitoring"
+        "Hybrid"
       ],
       "family": "iaas",
       "family_confidence": {
@@ -2337,8 +2346,8 @@
         "Architecture",
         "Reference",
         "Management",
-        "Networking",
-        "Hybrid"
+        "Hybrid",
+        "Networking"
       ],
       "family": "cloud_native",
       "family_confidence": {
@@ -2719,9 +2728,9 @@
       "browse_categories": [
         "Architecture",
         "Reference",
-        "Kubernetes",
+        "Aks",
         "Containers",
-        "Aks"
+        "Kubernetes"
       ],
       "family": "cloud_native",
       "family_confidence": {
@@ -3925,16 +3934,16 @@
       "browse_categories": [
         "Architecture",
         "Reference",
+        "Security",
         "Hybrid",
-        "Networking",
-        "Security"
+        "Networking"
       ],
       "family": "iaas",
       "family_confidence": {
         "confidence": "ai_suggested",
         "source": "content_analysis"
       },
-      "workload_domain": "infrastructure",
+      "workload_domain": "security",
       "workload_domain_confidence": {
         "confidence": "ai_suggested",
         "source": "yml_metadata"
@@ -4049,9 +4058,9 @@
       "browse_categories": [
         "Architecture",
         "Reference",
+        "Developer Tools",
         "Management",
-        "Integration",
-        "Developer Tools"
+        "Integration"
       ],
       "family": "paas",
       "family_confidence": {
@@ -4167,8 +4176,8 @@
       "browse_categories": [
         "Architecture",
         "Reference",
-        "Networking",
-        "Hybrid"
+        "Hybrid",
+        "Networking"
       ],
       "family": "iaas",
       "family_confidence": {
@@ -4284,8 +4293,8 @@
       "browse_categories": [
         "Architecture",
         "Reference",
-        "Networking",
-        "Hybrid"
+        "Hybrid",
+        "Networking"
       ],
       "family": "foundation",
       "family_confidence": {
@@ -4393,15 +4402,15 @@
       "browse_categories": [
         "Architecture",
         "Reference",
-        "Networking",
-        "Integration"
+        "Integration",
+        "Networking"
       ],
       "family": "foundation",
       "family_confidence": {
         "confidence": "ai_suggested",
         "source": "content_analysis"
       },
-      "workload_domain": "infrastructure",
+      "workload_domain": "integration",
       "workload_domain_confidence": {
         "confidence": "ai_suggested",
         "source": "yml_metadata"
@@ -4518,15 +4527,15 @@
       "browse_categories": [
         "Architecture",
         "Reference",
-        "Hybrid",
-        "Identity"
+        "Identity",
+        "Hybrid"
       ],
       "family": "iaas",
       "family_confidence": {
         "confidence": "ai_suggested",
         "source": "content_analysis"
       },
-      "workload_domain": "infrastructure",
+      "workload_domain": "security",
       "workload_domain_confidence": {
         "confidence": "ai_suggested",
         "source": "yml_metadata"
@@ -4631,15 +4640,15 @@
       "browse_categories": [
         "Architecture",
         "Reference",
-        "Hybrid",
-        "Identity"
+        "Identity",
+        "Hybrid"
       ],
       "family": "iaas",
       "family_confidence": {
         "confidence": "ai_suggested",
         "source": "content_analysis"
       },
-      "workload_domain": "infrastructure",
+      "workload_domain": "security",
       "workload_domain_confidence": {
         "confidence": "ai_suggested",
         "source": "yml_metadata"
@@ -4745,15 +4754,15 @@
       "browse_categories": [
         "Architecture",
         "Reference",
-        "Hybrid",
-        "Identity"
+        "Identity",
+        "Hybrid"
       ],
       "family": "iaas",
       "family_confidence": {
         "confidence": "ai_suggested",
         "source": "content_analysis"
       },
-      "workload_domain": "infrastructure",
+      "workload_domain": "security",
       "workload_domain_confidence": {
         "confidence": "ai_suggested",
         "source": "yml_metadata"
