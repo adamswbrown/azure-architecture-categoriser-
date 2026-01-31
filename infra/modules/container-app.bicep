@@ -23,6 +23,7 @@ resource logAnalytics 'Microsoft.OperationalInsights/workspaces@2023-09-01' = {
 }
 
 // Container Apps environment
+// Note: zoneRedundant requires a VNet, disabled for simplicity
 resource containerAppEnv 'Microsoft.App/managedEnvironments@2023-11-02-preview' = {
   name: containerAppEnvName
   location: location
@@ -34,7 +35,6 @@ resource containerAppEnv 'Microsoft.App/managedEnvironments@2023-11-02-preview' 
         sharedKey: logAnalytics.listKeys().primarySharedKey
       }
     }
-    zoneRedundant: environment == 'prod'
   }
   tags: {
     environment: environment
