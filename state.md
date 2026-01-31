@@ -1,11 +1,29 @@
 # Azure Architecture Recommender - Project State
 
 ## Current Phase
-**Phase 6: Multi-Page App Integration - COMPLETE**
+**Phase 7: Security Hardening & E2E Testing - COMPLETE**
 
 ## Status
 
-### Docker & CI/CD (NEW - 2026-01-30)
+### Path Security (NEW - 2026-01-31)
+- [x] Path injection vulnerability fixes (14 HIGH severity CodeQL alerts)
+- [x] `safe_path()` utility for path validation
+- [x] `validate_repo_path()` for repository path validation
+- [x] `validate_output_path()` for output file validation
+- [x] Null byte injection prevention
+- [x] Path traversal attack prevention
+- [x] Base directory containment enforcement
+- [x] CodeQL suppression comments for false positives
+
+### E2E Test Suite (NEW - 2026-01-31)
+- [x] Comprehensive test suite with 36 tests in `test_e2e.py`
+- [x] Security utilities testing (path validation, traversal prevention)
+- [x] Scoring pipeline testing with synthetic data
+- [x] Component integration testing
+- [x] Real-world migration scenario validation
+- [x] Test documentation in `tests/README.md`
+
+### Docker & CI/CD (2026-01-30)
 - [x] Multi-stage Dockerfile (Python 3.11-slim)
 - [x] Multi-platform builds (amd64 + arm64)
 - [x] GitHub Container Registry (ghcr.io)
@@ -148,12 +166,14 @@ azure-architecture-categoriser-/
 
 ### All Tests
 ```
-217 passed in 1.43s
+253 passed in 1.87s
 ```
 
 ### Coverage
-- Catalog Builder: 22 tests
-- Architecture Scorer: 130 tests
+- Catalog Builder: 24 tests
+- Architecture Scorer: 173 tests
+- E2E Tests: 36 tests
+- Security Tests: 44 tests
 - Context file validation: 20/25 files return recommendations (expected - 5 are edge cases)
 
 ## Blocking Issues
@@ -166,11 +186,14 @@ None.
 4. [#8 - Integrate Catalog Builder into Recommendations App as multi-page Streamlit app](https://github.com/adamswbrown/azure-architecture-categoriser/issues/8) - **COMPLETE**
 
 ## Recent Changes (2026-01-31)
-1. **Multi-Page App Integration** - Unified Streamlit app with 3 pages (Recommendations, Catalog Stats, Catalog Builder)
-2. **Catalog Stats Page** - New analytics dashboard with family, operating model, services, and quality breakdowns
-3. **Simplified Docker** - Single port deployment (8501 only)
-4. **Shared Session State** - State management unified across all pages
-5. **Updated Documentation** - README and docs updated for multi-page structure
+1. **Path Injection Fixes** - Fixed 14 HIGH severity CodeQL path injection vulnerabilities
+2. **Path Validation Utilities** - Added `safe_path()`, `validate_repo_path()`, `validate_output_path()`
+3. **E2E Test Suite** - Comprehensive end-to-end testing with 36 tests
+4. **Test Documentation** - Created `tests/README.md` with full test suite documentation
+5. **Design Prompts v2.0** - Updated all three design prompts to reflect current state
+6. **Multi-Page App Integration** - Unified Streamlit app with 3 pages (Recommendations, Catalog Stats, Catalog Builder)
+7. **Catalog Stats Page** - New analytics dashboard with family, operating model, services, and quality breakdowns
+8. **Simplified Docker** - Single port deployment (8501 only)
 
 ## Previous Changes (2026-01-30)
 1. **v1.0 Release** - First public Docker container release

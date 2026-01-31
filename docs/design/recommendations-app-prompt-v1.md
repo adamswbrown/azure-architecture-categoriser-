@@ -1,4 +1,4 @@
-# Recommendations App Prompt v1.0
+# Recommendations App Prompt v2.0
 
 **Purpose**: Document the design intent and rules for the Azure Architecture Recommendations App.
 
@@ -21,7 +21,7 @@ Build a Streamlit web application that allows customers to upload their applicat
 ## Core Principles
 
 ### 1. Simple User Flow
-- Upload JSON → See recommendations → (Optionally answer questions → Re-score) → Download PDF/JSON
+- Upload JSON: See recommendations: (Optionally answer questions: Re-score): Download PDF/JSON
 - No unnecessary steps or configuration required
 - Auto-process on file upload (no separate "analyze" button)
 
@@ -44,7 +44,9 @@ Build a Streamlit web application that allows customers to upload their applicat
 ```
 src/architecture_recommendations_app/
 ├── __init__.py
-├── app.py                      # Main Streamlit application
+├── app.py                      # Main Streamlit application (renamed from Recommendations.py)
+├── pages/
+│   └── 1_Catalog_Builder.py    # Catalog builder page
 ├── components/
 │   ├── __init__.py
 │   ├── upload_section.py       # File upload component
@@ -57,7 +59,8 @@ src/architecture_recommendations_app/
 │   └── session_state.py        # Session state management
 └── utils/
     ├── __init__.py
-    └── validation.py           # Context file validation
+    ├── validation.py           # Context file validation
+    └── sanitize.py             # Security utilities (XSS, SSRF, path injection)
 ```
 
 ---
@@ -71,7 +74,7 @@ src/architecture_recommendations_app/
 - **White** - Page background
 
 ### Score Badges
-- **High (≥60%)**: Green background (#DFF6DD)
+- **High (>=60%)**: Green background (#DFF6DD)
 - **Medium (40-59%)**: Orange background (#FFF4CE)
 - **Low (<40%)**: Red background (#FDE7E9)
 
@@ -88,61 +91,58 @@ src/architecture_recommendations_app/
 
 ### Layout
 ```
-┌─────────────────────────────────────────────────────┐
-│  Azure Architecture Recommendations                  │
-│  Upload your application context...                  │
-├─────────────────────────────────────────────────────┤
-│  [ Drop your context file here or click to browse ] │
-│  ✓ Loaded: myapp-context.json                       │
-├─────────────────────────────────────────────────────┤
-│  ### Analysis Summary                               │
-│  ┌────────┬────────┬────────┬────────┐             │
-│  │ App    │Confid. │ Recs   │Evaluated│             │
-│  │MyApp   │ High   │   5    │  170    │             │
-│  └────────┴────────┴────────┴────────┘             │
-│                                                      │
-│  **Key Drivers:**           **Considerations:**      │
-│  - Java Spring Boot         - Legacy dependencies    │
-│  - Container-ready          - Team maturity needed   │
-├─────────────────────────────────────────────────────┤
-│  ### Primary Recommendation                         │
-│  ┌─────────────────────────────────────────────────┐│
-│  │ AKS Baseline for Microservices    [78% Match]  ││
-│  │ Pattern: Cloud-Native Container    [Curated]   ││
-│  │                                                 ││
-│  │ ┌─────────────────────────────────────────────┐││
-│  │ │  [Architecture Diagram Image]              │││
-│  │ │  (SVG/PNG from GitHub raw URL)             │││
-│  │ └─────────────────────────────────────────────┘││
-│  │                                                 ││
-│  │ Description...                                  ││
-│  │                                                 ││
-│  │ **Why it fits:**        **Challenges:**         ││
-│  │ - Spring Boot ready     - Requires AKS skills   ││
-│  │ - Kubernetes native     - Networking complexity ││
-│  │                                                 ││
-│  │ [Learn more on Microsoft Docs]                  ││
-│  └─────────────────────────────────────────────────┘│
-├─────────────────────────────────────────────────────┤
-│  ### Alternative Recommendations                    │
-│  [Card] [Card] [Card] [Card]                        │
-├─────────────────────────────────────────────────────┤
-│  ### Improve Recommendations (if questions exist)   │
-│  ┌─────────────────────────────────────────────────┐│
-│  │ Answer these to improve accuracy:               ││
-│  │                                                 ││
-│  │ Network exposure? [▼ External (internet)]      ││
-│  │ Current: Internal (Low confidence)             ││
-│  │                                                 ││
-│  │ Availability needs? [▼ Zone redundant]         ││
-│  │ Current: Unknown                               ││
-│  │                                                 ││
-│  │ [Re-analyze with Answers]                       ││
-│  └─────────────────────────────────────────────────┘│
-├─────────────────────────────────────────────────────┤
-│  ### Export Results                                 │
-│  [Download PDF Report] [Download JSON] [New Analysis]│
-└─────────────────────────────────────────────────────┘
++-----------------------------------------------------+
+|  Azure Architecture Recommendations                  |
+|  Upload your application context...                  |
++-----------------------------------------------------+
+|  [ Drop your context file here or click to browse ] |
+|  Loaded: myapp-context.json                         |
++-----------------------------------------------------+
+|  ### Analysis Summary                               |
+|  +--------+--------+--------+--------+              |
+|  | App    |Confid. | Recs   |Evaluated|             |
+|  |MyApp   | High   |   5    |  170    |             |
+|  +--------+--------+--------+--------+              |
+|                                                      |
+|  **Key Drivers:**           **Considerations:**      |
+|  - Java Spring Boot         - Legacy dependencies    |
+|  - Container-ready          - Team maturity needed   |
++-----------------------------------------------------+
+|  ### Primary Recommendation                         |
+|  +--------------------------------------------------+
+|  | AKS Baseline for Microservices    [78% Match]   |
+|  | Pattern: Cloud-Native Container    [Curated]    |
+|  |                                                  |
+|  | [Architecture Diagram Image]                     |
+|  |                                                  |
+|  | Description...                                   |
+|  |                                                  |
+|  | **Why it fits:**        **Challenges:**          |
+|  | - Spring Boot ready     - Requires AKS skills    |
+|  | - Kubernetes native     - Networking complexity  |
+|  |                                                  |
+|  | [Learn more on Microsoft Docs]                   |
+|  +--------------------------------------------------+
++-----------------------------------------------------+
+|  ### Alternative Recommendations                    |
+|  [Card] [Card] [Card] [Card]                        |
++-----------------------------------------------------+
+|  ### Improve Recommendations (if questions exist)   |
+|  +--------------------------------------------------+
+|  | Answer these to improve accuracy:                |
+|  |                                                  |
+|  | Network exposure? [v External (internet)]        |
+|  | Current: Internal (Low confidence)               |
+|  |                                                  |
+|  | Availability needs? [v Zone redundant]           |
+|  | Current: Unknown                                 |
+|  |                                                  |
+|  | [Re-analyze with Answers]                        |
+|  +--------------------------------------------------+
++-----------------------------------------------------+
+|  ### Export Results                                 |
+|  [Download PDF Report] [Download JSON] [New Analysis]
++-----------------------------------------------------+
 ```
 
 ---
@@ -156,6 +156,7 @@ src/architecture_recommendations_app/
 - Immediate validation on upload
 - Clear error messages with suggestions for common issues
 - Success indicator when valid file loaded
+- Sample context file download dialog
 
 **Validation checks:**
 1. File size (max 10MB)
@@ -167,7 +168,7 @@ src/architecture_recommendations_app/
 **Error handling:**
 - User-friendly error messages
 - Suggestions for how to fix common issues
-- No stack traces shown to customers
+- No stack traces shown to customers (debug mode only)
 
 ### Results Display (`results_display.py`)
 
@@ -203,7 +204,9 @@ src/architecture_recommendations_app/
 
 ### PDF Generator (`pdf_generator.py`)
 
-**Library:** `reportlab` (pure Python, container-friendly, no external deps)
+**Libraries:**
+- `reportlab>=4.0.0` - Pure Python PDF generation
+- `svglib>=1.5.0` - SVG to ReportLab conversion
 
 **Report Structure:**
 1. Title: "Azure Architecture Recommendations"
@@ -211,7 +214,7 @@ src/architecture_recommendations_app/
 3. Executive Summary table
 4. Key Drivers section
 5. Recommendations (numbered, with scores and explanations)
-6. Architecture diagrams (embedded from GitHub URLs)
+6. Architecture diagrams (embedded from GitHub URLs, SVG supported)
 7. Learn URLs for each recommendation
 
 **Styling:**
@@ -230,6 +233,57 @@ src/architecture_recommendations_app/
 
 ---
 
+## Security Utilities (`utils/sanitize.py`)
+
+### XSS Protection
+```python
+from architecture_recommendations_app.utils.sanitize import safe_html
+
+# Escape user-controlled content before display
+safe_output = safe_html(user_input)
+```
+
+### SSRF Protection
+```python
+from architecture_recommendations_app.utils.sanitize import validate_url, ALLOWED_URL_DOMAINS
+
+# Validate URLs before fetching
+is_valid, error = validate_url(user_url)
+# Only allows: microsoft.com, azure.com, github.com, githubusercontent.com
+```
+
+### Path Injection Prevention
+```python
+from architecture_recommendations_app.utils.sanitize import (
+    safe_path, validate_repo_path, validate_output_path, PathValidationError
+)
+
+# Validate paths before file operations
+try:
+    validated_path = safe_path(user_path, must_exist=True)
+except PathValidationError as e:
+    st.error(f"Invalid path: {e}")
+
+# Validate repository path
+is_valid, message, path = validate_repo_path(repo_path)
+
+# Validate output path
+is_valid, message, path = validate_output_path(output_path)
+```
+
+### Secure Temporary Files
+```python
+from architecture_recommendations_app.utils.sanitize import (
+    secure_temp_file, secure_temp_directory
+)
+
+# Create secure temp file (random name, 0o600 permissions, auto-cleanup)
+with secure_temp_file(suffix=".json") as tmp:
+    tmp.write(data)
+```
+
+---
+
 ## Architecture Diagram Images
 
 **Source:** Catalog entries have `diagram_assets: list[str]` containing relative paths like:
@@ -242,32 +296,21 @@ Convert relative path to GitHub raw URL:
 https://raw.githubusercontent.com/MicrosoftDocs/architecture-center/main/{path}
 ```
 
-**Schema Changes:**
-Add to `ArchitectureRecommendation` in `architecture_scorer/schema.py`:
-```python
-diagram_url: Optional[str] = Field(
-    None,
-    description="URL to the primary architecture diagram image"
-)
-```
-
 **Display in UI:**
 ```python
 if rec.diagram_url:
     st.image(rec.diagram_url, use_container_width=True)
 ```
 
-**PDF Generation:**
+**PDF Generation with SVG Support:**
 ```python
-from reportlab.platypus import Image
-from io import BytesIO
-import requests
+from svglib.svglib import svg2rlg
+from reportlab.graphics import renderPDF
 
-if rec.diagram_url:
+if rec.diagram_url and rec.diagram_url.endswith('.svg'):
     response = requests.get(rec.diagram_url, timeout=5)
-    if response.ok:
-        img = Image(BytesIO(response.content), width=6*inch, height=3*inch)
-        story.append(img)
+    drawing = svg2rlg(BytesIO(response.content))
+    # Add to PDF story
 ```
 
 ---
@@ -278,10 +321,12 @@ Track:
 - `scoring_result` - Cached ScoringResult
 - `last_file_hash` - Hash of processed file (avoid re-processing)
 - `error_state` - Any error messages
+- `user_answers` - Accumulated question answers
 
 **Key Features:**
 - Cache results by file hash to avoid re-processing on Streamlit reruns
 - Clear state on "New Analysis" action
+- Persist user answers across re-analyses
 
 ---
 
@@ -299,8 +344,9 @@ Track:
 - Quick regenerate using catalog builder
 
 **Catalog Builder Integration:**
-- Launch button in sidebar to open Catalog Builder GUI
-- Runs on separate port (8502) to avoid conflicts
+- Separate page in sidebar (1_Catalog_Builder.py)
+- Runs on same port as main app
+- Full catalog builder GUI functionality
 
 ---
 
@@ -318,14 +364,15 @@ Track:
 
 ## Dependencies
 
-**New:**
+### Core
 - `streamlit>=1.30.0` - Web UI framework
 - `reportlab>=4.0.0` - PDF generation
+- `svglib>=1.5.0` - SVG support for PDFs
+- `requests` - Fetch diagram images
 
-**Reused:**
+### Reused
 - `architecture_scorer` - Scoring engine
 - `pydantic>=2.0.0` - Data models
-- `requests` - Fetch diagram images (transitive dep)
 
 ---
 
@@ -338,20 +385,63 @@ pip install -e ".[recommendations-app]"
 
 ### Run
 ```bash
+# Using launcher script (recommended)
+./bin/start-recommendations-app.sh
+
+# Or directly
+streamlit run src/architecture_recommendations_app/app.py --server.port 8501
+
+# Or via entry point
 architecture-recommendations
-# Or directly:
-streamlit run src/architecture_recommendations_app/app.py
+```
+
+### Docker
+```bash
+# Build
+docker build -t azure-architecture-categoriser .
+
+# Run
+docker run -p 8501:8501 -p 8502:8502 azure-architecture-categoriser
+
+# Access
+open http://localhost:8501
 ```
 
 ### Test Flow
-1. Upload a test context file from `tests/context_files/`
+1. Upload a test context file from `examples/context_files/`
 2. Verify recommendations display correctly
 3. Verify architecture diagram images load (from GitHub raw URL)
 4. Download PDF and verify formatting (including embedded diagrams)
 5. Download JSON and verify structure
 6. Click "New Analysis" and verify state clears
 7. Upload invalid JSON and verify error handling
-8. Test clarification questions → re-analyze flow
+8. Test clarification questions: re-analyze flow
+
+---
+
+## Testing
+
+### Test Suite
+
+```bash
+# Run all tests
+pytest tests/ -v
+
+# Run E2E tests (includes app component tests)
+pytest tests/test_e2e.py -v
+
+# Run security tests
+pytest tests/test_sanitize.py -v
+
+# With coverage
+pytest tests/ --cov=src/ --cov-report=html
+```
+
+### Test Coverage
+- 36 tests in `test_e2e.py` (end-to-end pipeline)
+- 44 tests in `test_sanitize.py` (security utilities)
+- XSS protection, SSRF prevention, path injection prevention
+- Secure temp file handling
 
 ---
 
@@ -364,6 +454,7 @@ streamlit run src/architecture_recommendations_app/app.py
 5. **Branding** - Azure-branded with professional styling (blue/green palette)
 6. **Architecture diagrams** - Display in results cards and embed in PDF reports
 7. **Config editor** - Allow tuning scorer settings from the UI
+8. **Security hardening** - XSS, SSRF, and path injection protection
 
 ---
 
@@ -373,6 +464,7 @@ streamlit run src/architecture_recommendations_app/app.py
 |---------|------|---------|
 | 1.0 | 2026-01-29 | Initial release with upload, results display, PDF export |
 | 1.1 | 2026-01-29 | Add catalog freshness warning, refresh functionality, config editor |
+| 2.0 | 2026-01-31 | Add security utilities (XSS, SSRF, path injection), SVG support, E2E tests, Docker support |
 
 ---
 
@@ -382,3 +474,13 @@ streamlit run src/architecture_recommendations_app/app.py
 2. **Comparison View**: Side-by-side comparison of recommendations for different applications
 3. **History**: Track previous analyses for the same application over time
 4. **Team Collaboration**: Share and discuss recommendations with team members
+5. **Authentication**: Enterprise SSO integration
+
+---
+
+## Related Documents
+
+- [Catalog Builder Prompt](catalog-builder-prompt-v1.md) - Catalog compilation design
+- [Architecture Scorer Prompt](architecture-scorer-prompt-v1.md) - Scoring engine design
+- [Security Audit](../securityaudit.md) - Security measures documentation
+- [Configuration Guide](../configuration.md) - Full configuration reference

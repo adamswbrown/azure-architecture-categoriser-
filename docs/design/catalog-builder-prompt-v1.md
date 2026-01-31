@@ -1,4 +1,4 @@
-# Catalog Builder Prompt v1.0
+# Catalog Builder Prompt v2.0
 
 **Purpose**: Document the design intent and rules for the Azure Architecture Catalog Builder.
 
@@ -13,8 +13,8 @@ Build a CLI tool that compiles Azure Architecture Center documentation into a st
 | Component | Role | Characteristics |
 |-----------|------|-----------------|
 | **Prompt 1** (this catalog builder) | Neutral catalog compiler | Explainable, deterministic, no scoring |
-| **Prompt 2** (future) | Scorer and recommender | Uses catalog as input |
-| **Browser App** | Explainer and confirmer | User-facing interface |
+| **Prompt 2** (Architecture Scorer) | Scorer and recommender | Uses catalog as input |
+| **Prompt 3** (Recommendations App) | Explainer and confirmer | User-facing interface |
 
 ---
 
@@ -59,9 +59,9 @@ Reject any extracted text containing sentence indicators:
 
 ### Consistent Casing
 All service names use canonical casing from the whitelist:
-- ✅ "Azure Kubernetes Service"
-- ❌ "azure kubernetes service"
-- ❌ "AKS" (unless in whitelist)
+- "Azure Kubernetes Service"
+- "azure kubernetes service"
+- "AKS" (unless in whitelist)
 
 ### Service Classification
 - **core_services**: Compute, data, networking services essential to the pattern
@@ -118,10 +118,10 @@ curated > ai_enriched > ai_suggested > example_only
 | `example_only` | Example scenarios (not reference architectures), junk names |
 
 ### Quality Downgrade Triggers
-- Missing required fields → `ai_suggested`
-- Junk pattern name detected → `example_only`
-- Located in example-scenario paths → `example_only`
-- No authoritative metadata source → `ai_suggested`
+- Missing required fields: `ai_suggested`
+- Junk pattern name detected: `example_only`
+- Located in example-scenario paths: `example_only`
+- No authoritative metadata source: `ai_suggested`
 
 ---
 
@@ -158,9 +158,9 @@ supported_time_categories: list[TimeCategory]
 ```
 
 **Cross-reference from treatments:**
-- refactor → invest, migrate
-- rehost → migrate, tolerate
-- HIGH complexity → invest
+- refactor: invest, migrate
+- rehost: migrate, tolerate
+- HIGH complexity: invest
 
 ### Operating Model
 ```python
@@ -274,8 +274,8 @@ Regex patterns searching for:
     "workload_domain": WorkloadDomain,  # web, data, integration, security, ai, infrastructure, general
 
     # Architectural Expectations
-    "expected_runtime_models": list[RuntimeModel],  # monolith, n_tier, api, microservices, event_driven, batch, mixed
-    "expected_characteristics": ExpectedCharacteristics,  # containers, stateless, devops_required, ci_cd_required
+    "expected_runtime_models": list[RuntimeModel],  # monolith, n_tier, api, microservices, event_driven, batch, mixed, unknown
+    "expected_characteristics": ExpectedCharacteristics,  # containers, stateless, devops_required, ci_cd_required, private_networking_required
 
     # Change Models
     "supported_treatments": list[Treatment],  # Gartner 8R
@@ -312,14 +312,26 @@ Regex patterns searching for:
     "generated_at": datetime,
     "source_repo": str,
     "source_commit": Optional[str],
+    "generation_settings": GenerationSettings,  # Filter settings used
     "total_architectures": int,
     "architectures": list[ArchitectureEntry]
 }
 ```
 
+### GenerationSettings
+```python
+{
+    "allowed_topics": list[str],  # e.g., ["reference-architecture", "example-scenario"]
+    "allowed_products": Optional[list[str]],  # Product filters
+    "allowed_categories": Optional[list[str]],  # Category filters
+    "require_architecture_yml": bool,  # YamlMime:Architecture required
+    "exclude_examples": bool  # Exclude example scenarios
+}
+```
+
 ---
 
-## Expected Output Metrics (v1.0)
+## Expected Output Metrics (v2.0)
 
 | Metric | Expected Value |
 |--------|----------------|
@@ -335,17 +347,130 @@ Regex patterns searching for:
 
 ## CLI Usage
 
+### Entry Points
+
 ```bash
+# Install
+pip install -e ".[dev]"
+
 # Build catalog
-python3 -m catalog_builder.cli build-catalog \
+catalog-builder build-catalog \
     --repo-path /path/to/architecture-center \
     --out /path/to/catalog.json \
     --verbose
 
+# Show catalog stats
+catalog-builder stats --catalog /path/to/catalog.json
+
+# Inspect specific family
+catalog-builder inspect --catalog /path/to/catalog.json --family cloud_native
+
 # Validate catalog
-python3 -m catalog_builder.cli validate \
-    --catalog /path/to/catalog.json
+catalog-builder validate --catalog /path/to/catalog.json
 ```
+
+### Configuration
+
+```yaml
+# catalog-config.yaml
+detection:
+  require_architecture_yml: false
+  exclude_examples: false
+
+filtering:
+  allowed_topics:
+    - reference-architecture
+    - example-scenario
+    - solution-idea
+  allowed_products: null  # All products
+  allowed_categories: null  # All categories
+
+classification:
+  domain_keywords:
+    web: ["web app", "api", "frontend"]
+    data: ["analytics", "data lake", "warehouse"]
+```
+
+---
+
+## GUI Application
+
+A Streamlit GUI is available for visual catalog configuration:
+
+```bash
+# Start Catalog Builder GUI (port 8502)
+./bin/start-catalog-builder-gui.sh
+
+# Or directly
+streamlit run src/catalog_builder_gui/app.py --server.port 8502
+```
+
+### Features
+- Repository cloning with git
+- Filter presets (Quick Build, Full Build)
+- Keyword dictionary editor
+- Preview before generation
+- YAML config export
+
+---
+
+## Security Considerations
+
+The catalog builder includes security hardening:
+
+### Path Validation
+```python
+from architecture_recommendations_app.utils.sanitize import (
+    safe_path, validate_repo_path, validate_output_path, PathValidationError
+)
+
+# Validate repository path
+is_valid, message, path = validate_repo_path(user_repo_path)
+
+# Validate output path
+is_valid, message, path = validate_output_path(user_output_path)
+```
+
+### Protections
+- **Null byte rejection**: Paths with `\x00` are rejected
+- **Path traversal prevention**: `../` sequences are blocked
+- **Base directory containment**: Paths must stay within allowed directories
+- **Existence validation**: Required paths must exist
+
+---
+
+## Docker Support
+
+```bash
+# Build image
+docker build -t azure-architecture-categoriser .
+
+# Run with docker-compose
+docker compose up -d
+
+# Access Catalog Builder GUI
+open http://localhost:8502
+```
+
+---
+
+## Testing
+
+```bash
+# Run all tests
+pytest tests/ -v
+
+# Run catalog builder tests
+pytest tests/test_catalog_builder.py -v
+
+# With coverage
+pytest tests/ --cov=src/ --cov-report=html
+```
+
+### Test Coverage
+- 24 tests in `test_catalog_builder.py`
+- Markdown parsing, architecture detection, metadata extraction
+- Enhanced classification (treatment, security, operating model, cost)
 
 ---
 
@@ -354,16 +479,27 @@ python3 -m catalog_builder.cli validate \
 | Version | Date | Changes |
 |---------|------|---------|
 | 1.0 | 2026-01-29 | Initial release with clean services, junk name detection, enhanced classifications |
+| 2.0 | 2026-01-31 | Added GUI application, path security, Docker support, GenerationSettings schema |
 
 ---
 
-## Future Considerations (Prompt 2)
+## Dependencies
 
-The catalog is designed to support a future scoring/recommendation system:
+### Core
+- `click>=8.1.0` - CLI framework
+- `pydantic>=2.0.0` - Data validation
+- `pyyaml>=6.0` - YAML parsing
+- `rich>=13.0.0` - Terminal UI
+- `gitpython>=3.1.0` - Git operations
 
-1. **Workload Assessment Input**: User provides workload characteristics
-2. **Scoring Engine**: Matches characteristics against catalog entries
-3. **Recommendation Output**: Ranked architectures with explainability
-4. **Browser Interface**: User reviews and confirms recommendations
+### GUI
+- `streamlit>=1.30.0` - Web UI framework
 
-The catalog's neutrality ensures scoring logic can evolve independently.
+---
+
+## Related Documents
+
+- [Architecture Scorer Prompt](architecture-scorer-prompt-v1.md) - Scoring engine design
+- [Recommendations App Prompt](recommendations-app-prompt-v1.md) - Web app design
+- [Catalog Comparison](../catalog-comparison.md) - Quick vs Full build options
+- [Scoring Weights ADR](decisions/0001-scoring-weights.md) - Weight decisions

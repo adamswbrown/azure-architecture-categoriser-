@@ -302,6 +302,7 @@ See [examples/context_files/README.md](examples/context_files/README.md) for the
 | [Configuration](docs/configuration.md) | Full configuration reference |
 | [**Design Decisions**](docs/design/README.md) | **Why does it work this way?** |
 | [Catalog Comparison](docs/catalog-comparison.md) | Quick Build vs Full Build |
+| [Azure Deployment](docs/azure-deployment.md) | Deploy to Azure Container Apps |
 
 ## Repository Structure
 
@@ -323,6 +324,9 @@ azure-architecture-recommender/
 │   │   └── README.md              # "Why does it work this way?"
 │   ├── images/                    # Screenshots
 │   └── *.md                       # Component docs
+├── infra/                         # Infrastructure as Code
+│   ├── main.bicep                 # Azure deployment template
+│   └── modules/                   # Bicep modules
 ├── tests/                         # Tests
 │   └── generate_sample_data.py    # Sample data generator
 ├── examples/                      # Example files

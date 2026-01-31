@@ -1,5 +1,190 @@
 # Azure Architecture Recommender - Work Log
 
+## 2026-01-31
+
+### Session: Path Injection Security Fixes & E2E Test Suite
+
+**Goal:** Address 14 HIGH severity CodeQL path injection vulnerabilities and create comprehensive E2E test suite.
+
+**Issues Identified & Fixed:**
+
+| Issue | Severity | Files Affected | Status |
+|-------|----------|----------------|--------|
+| Path injection in clone_repository() | HIGH | 1_Catalog_Builder.py, app.py | Fixed |
+| Path injection in _generate_catalog() | HIGH | preview_panel.py | Fixed |
+| Path injection in save functionality | HIGH | config_editor.py | Fixed |
+| URL sanitization false positives | Medium | normalizer.py, test_sanitize.py | Suppressed |
+
+**Changes Made:**
+
+#### 1. Path Validation Utilities (`sanitize.py`)
+
+Added three new security functions:
+
+```python
+class PathValidationError(Exception):
+    """Raised when path validation fails."""
+    pass
+
+def safe_path(user_path, allowed_base=None, must_exist=False, allow_creation=True) -> Path:
+    """Validate and resolve a user-provided path safely."""
+    # - Rejects null bytes
+    # - Blocks path traversal (../)
+    # - Optionally enforces base directory containment
+    # - Optionally validates existence
+
+def validate_repo_path(repo_path) -> tuple[bool, str, Optional[Path]]:
+    """Validate a repository path for the catalog builder."""
+    # - Checks path is valid and exists
+    # - Validates it's a directory
+    # - Checks for expected structure (docs folder)
+
+def validate_output_path(output_path, base_dir=None) -> tuple[bool, str, Optional[Path]]:
+    """Validate an output file path for writing."""
+    # - Checks path is valid
+    # - Creates parent directory if needed
+    # - Optionally enforces base directory containment
+```
+
+#### 2. Fixed Source Files
+
+**1_Catalog_Builder.py & catalog_builder_gui/app.py:**
+```python
+from architecture_recommendations_app.utils.sanitize import (
+    safe_path, PathValidationError
+)
+
+def clone_repository(repo_url: str, clone_dir: str) -> tuple[bool, str]:
+    try:
+        clone_path = safe_path(clone_dir, allow_creation=True)
+    except PathValidationError as e:
+        return False, f"Invalid clone directory: {e}"
+```
+
+**preview_panel.py:**
+```python
+from architecture_recommendations_app.utils.sanitize import (
+    safe_path, validate_repo_path, validate_output_path, PathValidationError
+)
+
+def _generate_catalog(repo_path: str, output_path: str) -> None:
+    is_valid, message, validated_repo = validate_repo_path(repo_path)
+    is_valid, message, validated_output = validate_output_path(output_path)
+```
+
+**config_editor.py:**
+```python
+from architecture_recommendations_app.utils.sanitize import validate_output_path
+
+if st.button("Save to File"):
+    is_valid, message, validated_path = validate_output_path(save_path)
+```
+
+#### 3. CodeQL Suppression Comments
+
+For false positive URL sanitization alerts (technology pattern matching, not URL handling):
+
+```python
+# normalizer.py
+# codeql[py/incomplete-url-substring-sanitization]
+is_windows = any(
+    tech.lower() in ["microsoft iis", "iis", "asp.net", ".net framework"]
+    ...
+)
+
+# test_sanitize.py - domain allowlist tests
+assert "microsoft.com" in ALLOWED_URL_DOMAINS  # codeql[py/incomplete-url-substring-sanitization]
+```
+
+#### 4. E2E Test Suite (`test_e2e.py`)
+
+Created comprehensive end-to-end test suite with 36 tests:
+
+**Test Classes:**
+- `TestSafePathUtility` - 10 tests for path validation
+- `TestValidateRepoPath` - 5 tests for repository path validation
+- `TestValidateOutputPath` - 4 tests for output path validation
+- `TestEndToEndScoringPipeline` - 9 tests for full scoring pipeline
+- `TestIntegrationWithModifiedFiles` - 2 tests for component integration
+- `TestSyntheticScenarios` - 6 tests for real-world migration scenarios
+
+**Synthetic Test Data:**
+```python
+CLOUD_NATIVE_JAVA_CONTEXT = {
+    "app_overview": [{"application": "E2ETestApp", "treatment": "Refactor"}],
+    "detected_technology_running": ["Java 17", "Spring Boot", "PostgreSQL", "Redis"],
+    # ... container_ready: true
+}
+
+LEGACY_DOTNET_CONTEXT = {
+    "app_overview": [{"application": "LegacyERPApp", "treatment": "Replatform"}],
+    "detected_technology_running": [".NET Framework 4.8", "SQL Server", "IIS"],
+    # ... container_ready: false
+}
+```
+
+#### 5. Test Documentation (`tests/README.md`)
+
+Created comprehensive test documentation with:
+- Overview table of all test files and counts
+- Running instructions (pytest commands)
+- Test suite descriptions for each file
+- Synthetic test data examples
+- Prerequisites and CI/CD integration
+- Guidelines for adding new tests
+
+**Test Results:**
+```
+253 passed in 1.87s
+```
+
+**Files Modified:**
+- `src/architecture_recommendations_app/utils/sanitize.py` - Path validation utilities
+- `src/architecture_recommendations_app/pages/1_Catalog_Builder.py` - Path injection fix
+- `src/catalog_builder_gui/app.py` - Path injection fix
+- `src/catalog_builder_gui/components/preview_panel.py` - Path injection fix
+- `src/catalog_builder_gui/components/config_editor.py` - Path injection fix
+- `src/architecture_scorer/normalizer.py` - CodeQL suppression
+- `tests/test_sanitize.py` - CodeQL suppression
+- `tests/test_e2e.py` - New E2E test suite (36 tests)
+- `tests/README.md` - Test documentation
+
+**Commit:** `00e7e67` - security: Fix path injection vulnerabilities and add E2E test suite
+
+---
+
+### Session: Design Prompts Update to v2.0
+
+**Goal:** Update all three design prompts to reflect current project state.
+
+**Changes Made:**
+
+Updated design prompts in `docs/design/`:
+
+1. **catalog-builder-prompt-v1.md** → v2.0
+   - Added GenerationSettings schema
+   - Added GUI application section
+   - Added security considerations (path validation)
+   - Added Docker support section
+   - Added testing section with counts
+   - Updated version history
+
+2. **architecture-scorer-prompt-v1.md** → v2.0
+   - Updated output schema with all fields
+   - Added security considerations
+   - Added E2E test suite documentation
+   - Added 25 example context files table
+   - Updated version history
+
+3. **recommendations-app-prompt-v1.md** → v2.0
+   - Added security utilities section (XSS, SSRF, path injection)
+   - Added pages/ directory structure
+   - Added testing section with counts
+   - Updated dependencies (svglib)
+   - Updated version history
+
+---
+
 ## 2026-01-30
 
 ### Session: Scoring Bug Fixes & UI Improvements

@@ -1,4 +1,4 @@
-# Architecture Scorer Prompt v1.0
+# Architecture Scorer Prompt v2.0
 
 **Purpose**: Document the design intent and rules for the Architecture Scoring and Recommendation Engine.
 
@@ -14,7 +14,7 @@ Build a deterministic, explainable Architecture Scoring and Recommendation Engin
 |-----------|------|-----------------|
 | **Catalog Builder** (Prompt 1) | Neutral catalog compiler | Build-time, deterministic |
 | **Scorer** (this engine) | Scoring and recommendation | Runtime, explainable |
-| **Browser App** | User interface | Explainability and confirmation |
+| **Recommendations App** (Prompt 3) | User interface | Explainability and confirmation |
 
 ---
 
@@ -42,6 +42,10 @@ Build a deterministic, explainable Architecture Scoring and Recommendation Engin
 ```json
 {
   "version": "1.0.0",
+  "generation_settings": {
+    "allowed_topics": ["reference-architecture", "example-scenario"],
+    "exclude_examples": false
+  },
   "architectures": [...]
 }
 ```
@@ -76,7 +80,7 @@ Extract and normalize from context:
 
 **From app_overview:**
 - application_name
-- business_criticality
+- business_criticality (Low, Medium, High, MissionCritical)
 - declared_treatment (Gartner 8R)
 - app_type
 
@@ -84,32 +88,36 @@ Extract and normalize from context:
 - server_count
 - environments_present
 - OS mix (Windows/Linux)
-- VM readiness distribution
-- utilization profile
+- VM readiness distribution (Ready, ReadyWithConditions, NotReady)
+- utilization_profile (low, medium, high)
 
 **From detected_technology_running:**
 - primary_runtime (.NET, Java, etc.)
 - database_present
 - middleware_present
+- messaging_present
 
 **From App Mod results (AUTHORITATIVE):**
 - container_ready
-- compatibility per target platform
+- compatibility per target platform (FullySupported, Supported, SupportedWithChanges, SupportedWithRefactor, NotSupported)
 - explicit blockers
 - recommended_targets
 
 ### Phase 2: Derive Architectural Intent
-Infer with confidence levels:
+Infer 10 signal dimensions with confidence levels:
 
 | Signal | Values | Source Priority |
 |--------|--------|-----------------|
-| likely_runtime_model | monolith, n_tier, microservices, mixed | App type, server count |
-| modernization_depth_feasible | tolerate → rebuild | App Mod > tech detection |
+| likely_runtime_model | monolith, n_tier, microservices, mixed, unknown | App type, server count |
+| modernization_depth_feasible | tolerate, rehost, replatform, refactor, rebuild | App Mod > tech detection |
 | cloud_native_feasibility | low, medium, high | App Mod container_ready |
-| operational_maturity_estimate | traditional_it → sre | CI/CD indicators |
-| availability_requirement | single_region → active-active | Business criticality |
-| security_requirement | basic → highly_regulated | Compliance keywords |
-| cost_posture | cost_minimized → innovation_first | Criticality, utilization |
+| operational_maturity_estimate | traditional_it, transitional, devops, sre | CI/CD indicators |
+| availability_requirement | single_region, zone_redundant, multi_region_* | Business criticality |
+| security_requirement | basic, enterprise, regulated, highly_regulated | Compliance keywords |
+| cost_posture | cost_minimized, balanced, scale_optimized, innovation_first | Criticality, utilization |
+| treatment | retire, tolerate, rehost, replatform, refactor, replace, rebuild, retain | Declared or inferred |
+| time_category | tolerate, migrate, invest, eliminate | Treatment mapping |
+| network_exposure | external, internal, mixed | App type inference |
 
 **Key Rule**: App Mod results override inference when they conflict.
 
@@ -132,12 +140,12 @@ def should_ask(confidence: SignalConfidence) -> bool:
 | Question ID | Dimension | Generation Condition |
 |-------------|-----------|---------------------|
 | `network_exposure` | Network exposure | **ALWAYS ASKED** - Critical for architecture selection |
-| `treatment` | Migration strategy | No declared treatment AND confidence ≤ LOW |
+| `treatment` | Migration strategy | No declared treatment AND confidence <= LOW |
 | `time_category` | Strategic investment posture | UNKNOWN confidence only |
-| `availability` | Availability requirements | Confidence ≤ LOW |
-| `security_level` | Security/compliance level | No compliance requirements AND confidence ≤ LOW |
-| `operating_model` | Operational maturity | Confidence ≤ LOW |
-| `cost_posture` | Cost optimization priority | Confidence ≤ LOW |
+| `availability` | Availability requirements | Confidence <= LOW |
+| `security_level` | Security/compliance level | No compliance requirements AND confidence <= LOW |
+| `operating_model` | Operational maturity | Confidence <= LOW |
+| `cost_posture` | Cost optimization priority | Confidence <= LOW |
 
 **Network Exposure Question (Always Asked):**
 
@@ -229,28 +237,60 @@ For each recommendation:
 
 ## Output Schema
 
+### ScoringResult
 ```json
 {
-  "recommendations": [{
-    "architecture_id": "...",
-    "name": "...",
-    "likelihood_score": 87,
-    "catalog_quality": "curated",
-    "matched_dimensions": [...],
-    "mismatched_dimensions": [...],
-    "assumptions": [...],
-    "learn_url": "..."
-  }],
-  "excluded": [{
-    "architecture_id": "...",
-    "reasons": [...]
-  }],
-  "summary": {
-    "primary_recommendation": "...",
-    "confidence_level": "High",
-    "key_drivers": [...],
-    "key_risks": [...]
-  }
+  "scoring_version": "1.0.0",
+  "scored_at": "2026-01-31T12:00:00Z",
+  "application_name": "MyApp",
+  "catalog_version": "1.0.0",
+  "catalog_architecture_count": 170,
+  "derived_intent": {...},
+  "clarification_questions": [...],
+  "questions_pending": false,
+  "recommendations": [...],
+  "excluded": [...],
+  "summary": {...},
+  "eligible_count": 45,
+  "excluded_count": 125,
+  "processing_warnings": []
+}
+```
+
+### ArchitectureRecommendation
+```json
+{
+  "architecture_id": "aks-baseline",
+  "name": "AKS Baseline for Microservices",
+  "pattern_name": "AKS Baseline",
+  "description": "...",
+  "likelihood_score": 87,
+  "catalog_quality": "curated",
+  "scoring_dimensions": [...],
+  "matched_dimensions": [...],
+  "mismatched_dimensions": [...],
+  "assumptions": [...],
+  "fit_summary": ["Spring Boot ready", "Container-native"],
+  "struggle_summary": ["Requires AKS skills"],
+  "core_services": ["Azure Kubernetes Service"],
+  "supporting_services": ["Azure Monitor"],
+  "learn_url": "https://learn.microsoft.com/...",
+  "diagram_url": "https://raw.githubusercontent.com/...",
+  "browse_tags": ["containers", "kubernetes"],
+  "confidence_penalty": 0.05
+}
+```
+
+### RecommendationSummary
+```json
+{
+  "primary_recommendation": "AKS Baseline for Microservices",
+  "primary_recommendation_id": "aks-baseline",
+  "confidence_level": "High",
+  "key_drivers": ["Container-ready", "Microservices architecture"],
+  "key_risks": ["Team needs Kubernetes training"],
+  "assumptions_count": 2,
+  "clarifications_needed": 1
 }
 ```
 
@@ -277,25 +317,16 @@ Each signal dimension has a confidence level that contributes to an overall pena
 
 | Signal | Has Question? | Source When No Answer |
 |--------|---------------|----------------------|
-| network_exposure | ✅ **ALWAYS** | App type inference |
-| treatment | ✅ Yes | App Mod or inference |
-| time_category | ✅ Yes | Treatment inference |
-| availability_requirement | ✅ Yes | Business criticality |
-| security_requirement | ✅ Yes | Compliance detection |
-| operational_maturity_estimate | ✅ Yes | Technology detection |
-| cost_posture | ✅ Yes | Criticality heuristics |
-| likely_runtime_model | ❌ No | App Mod or app type |
-| modernization_depth_feasible | ❌ No | App Mod results only |
-| cloud_native_feasibility | ❌ No | App Mod container_ready |
-
-**Important**: 7 of 10 signals can be addressed via clarification questions. The `network_exposure` question is ALWAYS asked. The remaining 3 (`likely_runtime_model`, `modernization_depth_feasible`, `cloud_native_feasibility`) are derived from App Mod results or technology detection. Without App Mod data, these signals may remain at LOW/UNKNOWN confidence.
-
-**Example Calculation:**
-```
-Signals: treatment=HIGH, availability=MEDIUM, security=MEDIUM, operating_model=LOW
-Penalties: 0% + 5% + 5% + 15% = 25% total penalty
-Final score: base_score × (1 - 0.25)
-```
+| network_exposure | **ALWAYS** | App type inference |
+| treatment | Yes | App Mod or inference |
+| time_category | Yes | Treatment inference |
+| availability_requirement | Yes | Business criticality |
+| security_requirement | Yes | Compliance detection |
+| operational_maturity_estimate | Yes | Technology detection |
+| cost_posture | Yes | Criticality heuristics |
+| likely_runtime_model | No | App Mod or app type |
+| modernization_depth_feasible | No | App Mod results only |
+| cloud_native_feasibility | No | App Mod container_ready |
 
 ### Overall Confidence Level
 
@@ -303,59 +334,9 @@ The recommendation's overall confidence level is determined by **all four condit
 
 | Level | Score | Penalty | Low Signals | Assumptions |
 |-------|-------|---------|-------------|-------------|
-| **HIGH** | ≥75% | <10% | ≤1 | ≤2 |
-| **MEDIUM** | ≥50% | <20% | ≤3 | Any |
+| **HIGH** | >=75% | <10% | <=1 | <=2 |
+| **MEDIUM** | >=50% | <20% | <=3 | Any |
 | **LOW** | Does not meet MEDIUM requirements | | |
-
-**Algorithm:**
-```python
-def calculate_confidence_level(score, penalty, low_signals, assumptions):
-    if score >= 75 and penalty < 0.10 and low_signals <= 1 and assumptions <= 2:
-        return "HIGH"
-    elif score >= 50 and penalty < 0.20 and low_signals <= 3:
-        return "MEDIUM"
-    else:
-        return "LOW"
-```
-
-**Why Confidence Can Remain "Low" Even With All Questions Answered:**
-
-Since only 6 of 9 signals have clarification questions, applications without App Mod results will have at least 3 signals at LOW/UNKNOWN confidence. This means:
-
-1. **Low Signal Count**: Even with all 6 questions answered at HIGH confidence, the 3 remaining signals (`likely_runtime_model`, `modernization_depth_feasible`, `cloud_native_feasibility`) may push `low_signals` count to 3 (borderline for MEDIUM)
-
-2. **Score Threshold**: The score must also meet the threshold (≥50% for MEDIUM). If the best-matching architectures are `example_only` quality (70% weight), effective scores are reduced
-
-3. **Penalty Accumulation**: LOW confidence signals contribute 15% penalty each, UNKNOWN contributes 25%
-
-**Example:**
-```
-Application: GlobalTradingPlatform (no App Mod data)
-
-User answers (all 6): HIGH confidence
-  • treatment, time_category, availability, security, operating_model, cost_posture
-
-Derived signals (no App Mod): LOW/UNKNOWN confidence
-  • likely_runtime_model: LOW (inferred from app type)
-  • modernization_depth_feasible: UNKNOWN
-  • cloud_native_feasibility: UNKNOWN
-
-Calculation:
-  • low_signals = 3 (exactly at MEDIUM threshold)
-  • penalty = 0.15 + 0.25 + 0.25 = 0.65 (capped at 0.25)
-  • score = 50% (top recommendation)
-  • catalog_quality = example_only (0.70 weight)
-
-Result: "Low" confidence
-  - Score is borderline at 50%
-  - 3 low-confidence signals at threshold
-  - Penalty exceeds 20% threshold
-```
-
-**To Improve Confidence:**
-- Provide App Mod results (derives 3 signals at HIGH confidence)
-- Use contexts with better-matching curated architectures
-- Ensure declared treatment in app_overview (avoids treatment inference)
 
 ### Catalog Quality Weights
 | Quality | Weight |
@@ -369,45 +350,47 @@ Result: "Low" confidence
 
 ## CLI Usage
 
-### Basic Commands
+### Entry Points
 
 ```bash
+# Install
+pip install -e ".[dev]"
+
 # Score an application (interactive mode - default)
 architecture-scorer score \
-  -c architecture-catalog.json \
-  -x app-context.json \
-  -n 5 \
+  --catalog architecture-catalog.json \
+  --context app-context.json \
+  --top 5 \
   --verbose
 
-# Non-interactive mode (skip question prompts)
+# Non-interactive mode
 architecture-scorer score \
-  -c catalog.json \
-  -x context.json \
+  --catalog catalog.json \
+  --context context.json \
   --no-interactive
 
 # With user answers (bypass prompts)
 architecture-scorer score \
-  -c catalog.json \
-  -x context.json \
-  -a treatment=replatform \
-  -a security_level=enterprise \
-  -a operating_model=devops \
-  -a cost_posture=balanced
+  --catalog catalog.json \
+  --context context.json \
+  --answer treatment=replatform \
+  --answer security_level=enterprise \
+  --answer operating_model=devops
 
 # Show clarification questions only
 architecture-scorer questions \
-  -c catalog.json \
-  -x context.json
+  --catalog catalog.json \
+  --context context.json
 
 # Validate inputs
 architecture-scorer validate \
-  -c catalog.json \
-  -x context.json
+  --catalog catalog.json \
+  --context context.json
 ```
 
 ### Interactive Question Mode
 
-By default, the CLI runs in interactive mode (`--interactive`/`-i`). When clarification questions are generated, the user is prompted with numbered options:
+By default, the CLI runs in interactive mode. When clarification questions are generated:
 
 ```
 Question 1 of 3:
@@ -416,27 +399,11 @@ Current inference: basic (confidence: LOW)
 
     1. Basic - Standard security practices, no specific compliance
     2. Enterprise - Enterprise security (Zero Trust, private endpoints)
-  → 3. Regulated - Industry compliance (SOC 2, ISO 27001, GDPR)
+  > 3. Regulated - Industry compliance (SOC 2, ISO 27001, GDPR)
     4. Highly Regulated - Strict compliance (HIPAA, PCI-DSS, FedRAMP)
 
 Enter choice (1-4) or value [press Enter to keep current]: 2
-✓ Selected: enterprise
-```
-
-**Input Options:**
-- Enter a number (1-4) to select an option
-- Type the value directly (e.g., `enterprise`)
-- Press Enter to keep the current inference
-
-### Answer Display
-
-User answers are displayed in the scoring summary:
-
-```
-Your Answers Applied:
-  • security_level: enterprise
-  • operating_model: devops
-  • cost_posture: balanced
+Selected: enterprise
 ```
 
 ---
@@ -453,9 +420,77 @@ Your Answers Applied:
 
 ---
 
+## Testing
+
+### Test Suite
+
+```bash
+# Run all scorer tests
+pytest tests/test_architecture_scorer.py -v
+
+# Run E2E tests
+pytest tests/test_e2e.py -v
+
+# With coverage
+pytest tests/ --cov=src/ --cov-report=html
+```
+
+### Test Coverage
+- 173 tests in `test_architecture_scorer.py`
+- 36 tests in `test_e2e.py` (end-to-end)
+- Context file validation, treatment scenarios, complexity scenarios
+- App Mod blocker handling, clarification questions
+
+### Example Context Files
+
+25 pre-built context files in `examples/context_files/`:
+
+| File | Scenario |
+|------|----------|
+| `01-java-refactor-aks.json` | Java app refactoring to AKS |
+| `02-dotnet-replatform-appservice.json` | .NET replatform to App Service |
+| `07-greenfield-cloud-native-perfect.json` | New cloud-native application |
+| `09-rehost-vm-lift-shift.json` | VM lift-and-shift |
+| `10-retire-end-of-life.json` | Application retirement |
+| `13-highly-regulated-healthcare.json` | Regulated industry scenario |
+
+---
+
+## Security Considerations
+
+The scorer validates all file paths before processing:
+
+```python
+from architecture_recommendations_app.utils.sanitize import (
+    safe_path, PathValidationError
+)
+
+# Paths are validated before use
+catalog_path = safe_path(user_catalog_path, must_exist=True)
+context_path = safe_path(user_context_path, must_exist=True)
+```
+
+### Protections
+- Null byte injection prevention
+- Path traversal attack prevention
+- File existence validation
+
+---
+
 ## Version History
 
 | Version | Date | Changes |
 |---------|------|---------|
 | 1.0 | 2026-01-29 | Initial release with full scoring pipeline |
-| 1.1 | 2026-01-29 | Added interactive CLI mode with numbered options, dynamic question generation, confidence level calculations, cost_posture question |
+| 1.1 | 2026-01-29 | Added interactive CLI, dynamic questions, cost_posture |
+| 2.0 | 2026-01-31 | Added path security, E2E test suite, 25 example context files |
+
+---
+
+## Related Documents
+
+- [Catalog Builder Prompt](catalog-builder-prompt-v1.md) - Catalog compilation design
+- [Recommendations App Prompt](recommendations-app-prompt-v1.md) - Web app design
+- [Scoring Weights ADR](decisions/0001-scoring-weights.md) - Weight decisions
+- [Confidence Penalties ADR](decisions/0002-confidence-penalties.md) - Penalty calculations
+- [Eligibility Filter Rules ADR](decisions/0005-eligibility-filter-rules.md) - Exclusion rules

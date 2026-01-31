@@ -5,6 +5,34 @@ All notable changes to the Azure Architecture Recommender are documented in this
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.2.0] - 2026-01-31
+
+### Added
+- **Path Security Utilities**: New `safe_path()`, `validate_repo_path()`, `validate_output_path()` functions in `utils/sanitize.py`
+- **E2E Test Suite**: Comprehensive end-to-end tests with 36 tests covering security, pipeline, and integration (`test_e2e.py`)
+- **Test Documentation**: `tests/README.md` with full test suite documentation and running instructions
+- **Design Prompts v2.0**: Updated all three design prompts to reflect current project state
+
+### Fixed
+- **Path Injection Vulnerabilities**: Fixed 14 HIGH severity CodeQL path injection alerts across 4 files:
+  - `pages/1_Catalog_Builder.py` - clone_repository() function
+  - `catalog_builder_gui/app.py` - clone_repository() function
+  - `catalog_builder_gui/components/preview_panel.py` - _generate_catalog() function
+  - `catalog_builder_gui/components/config_editor.py` - save functionality
+- **False Positive Suppression**: Added CodeQL suppression comments for 5 false positive URL sanitization alerts
+
+### Security
+- Null byte injection prevention in path validation
+- Path traversal attack prevention (`../` sequences blocked)
+- Base directory containment enforcement
+- Existence validation for required paths
+
+### Changed
+- Test count increased to 253 tests (up from 217)
+- All path operations now use validated paths
+
+---
+
 ## [1.1.0] - 2026-01-30
 
 ### Added
