@@ -300,8 +300,8 @@ See [examples/context_files/README.md](examples/context_files/README.md) for the
 | [Architecture Scorer](docs/architecture-scorer.md) | Scoring engine details |
 | [Recommendations App](docs/recommendations-app.md) | Customer-facing web app |
 | [Configuration](docs/configuration.md) | Full configuration reference |
-| [Catalog Builder Spec](docs/design/catalog-builder-prompt-v1.md) | Design specification |
-| [Scorer Spec](docs/design/architecture-scorer-prompt-v1.md) | Scoring specification |
+| [**Design Decisions**](docs/design/README.md) | **Why does it work this way?** |
+| [Catalog Comparison](docs/catalog-comparison.md) | Quick Build vs Full Build |
 
 ## Repository Structure
 
@@ -317,7 +317,10 @@ azure-architecture-recommender/
 │   ├── architecture_scorer/       # Scoring engine
 │   └── architecture_recommendations_app/  # Customer web app
 ├── docs/                          # Documentation
-│   ├── design/                    # Design specifications
+│   ├── design/                    # Design decisions & specifications
+│   │   ├── decisions/             # Architecture Decision Records (ADRs)
+│   │   ├── glossary.md            # Key terms
+│   │   └── README.md              # "Why does it work this way?"
 │   ├── images/                    # Screenshots
 │   └── *.md                       # Component docs
 ├── tests/                         # Tests
