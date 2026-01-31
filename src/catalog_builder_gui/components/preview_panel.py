@@ -538,9 +538,6 @@ def _generate_catalog(repo_path: str, output_path: str) -> None:
         st.error("Repository path not set")
         return
 
-    # Debug: Show what config we're using
-    st.info(f"Building with: topics={config.filters.allowed_topics}, exclude_examples={config.filters.exclude_examples}")
-
     # Apply config to global state
     import catalog_builder.config as config_module
     config_module._config = config

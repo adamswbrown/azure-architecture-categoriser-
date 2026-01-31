@@ -289,19 +289,6 @@ def _render_sidebar() -> None:
         # Catalog section
         st.subheader("Architecture Catalog")
 
-        # Debug: Show raw session state values
-        with st.expander("Debug: Session State", expanded=False):
-            st.caption(f"catalog_path: `{get_state('catalog_path', 'NOT SET')}`")
-            st.caption(f"catalog_source: `{get_state('catalog_source', 'NOT SET')}`")
-            # Check what get_catalog_path will return
-            raw_session = get_state('catalog_path')
-            if raw_session and Path(raw_session).exists():
-                st.caption(f"Session path exists: YES")
-            elif raw_session:
-                st.caption(f"Session path exists: NO - file not found!")
-            else:
-                st.caption(f"Session path: None, will use fallback")
-
         catalog_path = get_catalog_path()
 
         if catalog_path:
