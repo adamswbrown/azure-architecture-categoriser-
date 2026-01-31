@@ -541,6 +541,11 @@ def _generate_catalog(repo_path: str, output_path: str) -> None:
             status_text.empty()
             progress_bar.empty()
 
+            # Update session state so other pages automatically pick up the new catalog
+            resolved_path = str(Path(output_path).resolve())
+            st.session_state.catalog_path = resolved_path
+            st.session_state.catalog_source = 'catalog_builder'
+
             # Success message with stats
             st.success(f"Catalog generated successfully!")
 

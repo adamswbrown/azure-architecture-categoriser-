@@ -364,87 +364,6 @@ def _render_sidebar() -> None:
 
         st.markdown("---")
 
-        # Custom Catalog section (build or load)
-        st.subheader("Custom Catalog")
-
-        # Point to integrated Catalog Builder page
-        st.info("Use the **Catalog Builder** page in the sidebar to create custom catalogs with advanced filtering.")
-
-        # Load existing catalog
-        with st.expander("Load Existing Catalog", expanded=False):
-            uploaded_catalog = st.file_uploader(
-                "Upload catalog JSON",
-                type=['json'],
-                key="catalog_upload",
-                help="Upload a custom architecture-catalog.json file"
-            )
-
-            if uploaded_catalog is not None:
-                try:
-                    catalog_data = json.load(uploaded_catalog)
-                    if isinstance(catalog_data, dict) and 'architectures' in catalog_data:
-                        arch_count = len(catalog_data['architectures'])
-                    elif isinstance(catalog_data, list):
-                        arch_count = len(catalog_data)
-                    else:
-                        st.error("Invalid catalog format")
-                        arch_count = None
-
-                    if arch_count:
-                        # Use secure temp file with random name
-                        import os as _os
-                        fd, temp_catalog_path = tempfile.mkstemp(suffix='.json', prefix='catalog_')
-                        try:
-                            _os.chmod(temp_catalog_path, 0o600)
-                            uploaded_catalog.seek(0)
-                            with _os.fdopen(fd, 'w', encoding='utf-8') as f:
-                                json.dump(catalog_data, f, indent=2)
-                        except Exception:
-                            _os.close(fd)
-                            raise
-                        temp_catalog = Path(temp_catalog_path)
-
-                        set_state('catalog_path', str(temp_catalog))
-                        set_state('catalog_source', 'user_selected')
-                        st.success(f"Loaded {arch_count} architectures")
-                        set_state('scoring_result', None)
-                        set_state('questions', None)
-                        st.rerun()
-
-                except json.JSONDecodeError:
-                    st.error("Invalid JSON file")
-                except Exception as e:
-                    st.error(f"Error: {e}")
-
-            catalog_input = st.text_input(
-                "Or enter path",
-                placeholder="/path/to/catalog.json",
-                key="catalog_path_input",
-                label_visibility="collapsed"
-            )
-
-            if catalog_input:
-                if st.button("Load", use_container_width=True, key="load_catalog_btn"):
-                    if Path(catalog_input).exists():
-                        set_state('catalog_path', catalog_input)
-                        set_state('catalog_source', 'user_selected')
-                        set_state('scoring_result', None)
-                        set_state('questions', None)
-                        st.success("Loaded!")
-                        st.rerun()
-                    else:
-                        st.error("File not found")
-
-            if get_state('catalog_source') == 'user_selected':
-                if st.button("Reset to Default", use_container_width=True, key="reset_catalog_btn"):
-                    set_state('catalog_path', None)
-                    set_state('catalog_source', None)
-                    set_state('scoring_result', None)
-                    set_state('questions', None)
-                    st.rerun()
-
-        st.markdown("---")
-
         # Scoring configuration section
         render_config_editor()
 
@@ -453,24 +372,24 @@ def _render_sidebar() -> None:
         # Help section
         with st.expander("Help"):
             st.markdown("""
-            **Where does the catalog come from?**
-
-            The app looks for a catalog in this order:
-            1. User-selected (upload or path)
-            2. `ARCHITECTURE_CATALOG_PATH` env var
-            3. `./architecture-catalog.json`
-            4. Project root `architecture-catalog.json`
-
             **Available Pages:**
 
             - **Recommendations** (this page) - Upload context files and get architecture recommendations
-            - **Catalog Stats** - View analytics and browse the catalog
             - **Catalog Builder** - Create custom catalogs with advanced filtering
+            - **Catalog Stats** - View analytics and browse the catalog
 
-            **Quick Refresh vs Custom Catalog:**
+            **Catalog Sources:**
 
-            - **Refresh Catalog** - Downloads latest Azure Architecture Center and rebuilds with default settings
-            - **Catalog Builder** - Advanced filtering by product, category, or topic
+            - **Generate Catalog** (above) - Fetches latest Azure Architecture Center and builds with default settings
+            - **Catalog Builder** page - Advanced filtering by product, category, or topic
+            - Catalogs generated in Catalog Builder are automatically used by Recommendations
+
+            **Where does the catalog come from?**
+
+            1. Session state (Catalog Builder or generated)
+            2. `ARCHITECTURE_CATALOG_PATH` env var
+            3. `./architecture-catalog.json`
+            4. Bundled catalog in project root
             """)
 
         # Footer with credits and GitHub link
