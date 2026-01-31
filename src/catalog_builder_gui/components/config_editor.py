@@ -6,6 +6,7 @@ import streamlit as st
 
 from catalog_builder.config import CatalogConfig
 from catalog_builder_gui.state import get_state, set_state
+from architecture_recommendations_app.utils.sanitize import validate_output_path
 
 
 def render_config_editor() -> None:
@@ -311,12 +312,17 @@ def _render_yaml_editor(config: CatalogConfig) -> None:
     )
 
     if st.button("Save to File"):
-        try:
-            with open(save_path, 'w', encoding='utf-8') as f:
-                f.write(yaml_content)
-            st.success(f"Saved to {save_path}")
-        except Exception as e:
-            st.error(f"Error saving file: {e}")
+        # Validate the save path before writing
+        is_valid, message, validated_path = validate_output_path(save_path)
+        if not is_valid:
+            st.error(f"Invalid save path: {message}")
+        else:
+            try:
+                with open(validated_path, 'w', encoding='utf-8') as f:
+                    f.write(yaml_content)
+                st.success(f"Saved to {validated_path}")
+            except Exception as e:
+                st.error(f"Error saving file: {e}")
 
 
 def _get_diff_yaml(config: CatalogConfig) -> str:

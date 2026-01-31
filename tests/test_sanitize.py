@@ -288,17 +288,21 @@ class TestSanitizeFilename:
 
 
 class TestAllowedDomains:
-    """Tests for domain allowlist configuration."""
+    """Tests for domain allowlist configuration.
+
+    Note: CodeQL flags domain string checks as incomplete URL sanitization,
+    but these are set membership tests, not URL handling.
+    """
 
     def test_microsoft_domains_included(self):
         """Test that Microsoft domains are in allowlist."""
-        assert "microsoft.com" in ALLOWED_URL_DOMAINS
-        assert "azure.com" in ALLOWED_URL_DOMAINS
+        assert "microsoft.com" in ALLOWED_URL_DOMAINS  # codeql[py/incomplete-url-substring-sanitization]
+        assert "azure.com" in ALLOWED_URL_DOMAINS  # codeql[py/incomplete-url-substring-sanitization]
 
     def test_github_domains_included(self):
         """Test that GitHub domains are in allowlist."""
-        assert "github.com" in ALLOWED_URL_DOMAINS
-        assert "githubusercontent.com" in ALLOWED_URL_DOMAINS
+        assert "github.com" in ALLOWED_URL_DOMAINS  # codeql[py/incomplete-url-substring-sanitization]
+        assert "githubusercontent.com" in ALLOWED_URL_DOMAINS  # codeql[py/incomplete-url-substring-sanitization]
 
 
 class TestBlockedEndpoints:

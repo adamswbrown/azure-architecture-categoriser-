@@ -289,10 +289,12 @@ class ContextNormalizer:
                     break
 
         # Infer OS from technology
+        # Note: CodeQL flags "asp.net" as incomplete URL sanitization, but this is
+        # technology pattern matching, not URL handling (lgtm [py/incomplete-url-substring-sanitization])
         is_windows = any(
             tech.lower() in ["microsoft iis", "iis", "asp.net", ".net framework"]
             for tech in technologies
-        ) or "asp.net" in all_tech_text or "iis" in all_tech_text
+        ) or "asp.net" in all_tech_text or "iis" in all_tech_text  # codeql[py/incomplete-url-substring-sanitization]
         is_linux = "ubuntu" in all_tech_text or "centos" in all_tech_text or (
             primary_runtime in ["Java", "Node.js", "Python"] and not is_windows
         )

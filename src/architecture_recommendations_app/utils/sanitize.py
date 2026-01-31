@@ -315,3 +315,168 @@ def sanitize_filename(filename: str, max_length: int = 255) -> str:
         sanitized = sanitized[:max_length]
     # Ensure we have something
     return sanitized or 'unnamed'
+
+
+class PathValidationError(Exception):
+    """Raised when path validation fails."""
+    pass
+
+
+def safe_path(
+    user_path: str,
+    allowed_base: Optional[Path] = None,
+    must_exist: bool = False,
+    allow_creation: bool = True,
+) -> Path:
+    """Validate and resolve a user-provided path safely.
+
+    Protects against path traversal attacks by:
+    - Rejecting paths with null bytes
+    - Resolving to absolute path
+    - Optionally ensuring path stays within allowed_base directory
+    - Optionally checking existence
+
+    Args:
+        user_path: The user-provided path string to validate.
+        allowed_base: If provided, the resolved path must be within this directory.
+                     Use this to prevent path traversal outside allowed directories.
+        must_exist: If True, raises error if path doesn't exist.
+        allow_creation: If True, allows paths that don't exist yet (for file creation).
+
+    Returns:
+        Resolved, validated Path object.
+
+    Raises:
+        PathValidationError: If the path is invalid or violates security constraints.
+
+    Example:
+        >>> safe_path("/tmp/data.json")
+        PosixPath('/tmp/data.json')
+        >>> safe_path("../../../etc/passwd", allowed_base=Path("/app"))
+        PathValidationError: Path escapes allowed directory
+    """
+    if not user_path or not isinstance(user_path, str):
+        raise PathValidationError("Path must be a non-empty string")
+
+    # Check for null bytes (can bypass security checks in some systems)
+    if '\x00' in user_path:
+        raise PathValidationError("Path contains null bytes")
+
+    # Check for obviously malicious patterns before resolution
+    # These checks are redundant with the allowed_base check but provide defense in depth
+    normalized = user_path.replace('\\', '/')
+    if '/..' in normalized or '../' in normalized or normalized.startswith('..'):
+        # Only raise if no allowed_base is set (if allowed_base is set, we'll check containment)
+        if allowed_base is None:
+            raise PathValidationError("Path contains traversal sequences")
+
+    try:
+        # Convert to Path and resolve to absolute
+        path = Path(user_path).expanduser()
+
+        # For existence checks, resolve symlinks
+        if must_exist:
+            path = path.resolve(strict=True)
+        else:
+            path = path.resolve(strict=False)
+
+    except OSError as e:
+        raise PathValidationError(f"Invalid path: {e}")
+
+    # Check if path is within allowed base directory
+    if allowed_base is not None:
+        try:
+            allowed_base_resolved = allowed_base.resolve(strict=False)
+            # Use is_relative_to for Python 3.9+, or check manually
+            try:
+                path.relative_to(allowed_base_resolved)
+            except ValueError:
+                raise PathValidationError(
+                    f"Path must be within {allowed_base_resolved}"
+                )
+        except OSError as e:
+            raise PathValidationError(f"Invalid base path: {e}")
+
+    # Check existence if required
+    if must_exist and not path.exists():
+        raise PathValidationError(f"Path does not exist: {path}")
+
+    # If not allowing creation, path or parent must exist
+    if not allow_creation and not path.exists() and not path.parent.exists():
+        raise PathValidationError(f"Parent directory does not exist: {path.parent}")
+
+    return path
+
+
+def validate_repo_path(repo_path: str) -> tuple[bool, str, Optional[Path]]:
+    """Validate a repository path for the catalog builder.
+
+    Checks that the path:
+    - Is a valid, safe path
+    - Exists and is a directory
+    - Contains expected repository structure (docs folder)
+
+    Args:
+        repo_path: User-provided path to validate.
+
+    Returns:
+        Tuple of (is_valid, message, resolved_path or None).
+
+    Example:
+        >>> validate_repo_path("/path/to/architecture-center")
+        (True, "Valid repository", PosixPath('/path/to/architecture-center'))
+    """
+    if not repo_path:
+        return False, "Repository path is required", None
+
+    try:
+        path = safe_path(repo_path, must_exist=True)
+    except PathValidationError as e:
+        return False, str(e), None
+
+    if not path.is_dir():
+        return False, "Path is not a directory", None
+
+    # Check for expected structure
+    docs_path = path / 'docs'
+    if not docs_path.exists():
+        return False, "Repository missing 'docs' folder - is this the Azure Architecture Center?", None
+
+    return True, "Valid repository", path
+
+
+def validate_output_path(output_path: str, base_dir: Optional[Path] = None) -> tuple[bool, str, Optional[Path]]:
+    """Validate an output file path for writing.
+
+    Checks that the path:
+    - Is a valid, safe path
+    - Parent directory exists or can be created
+    - Optionally stays within base_dir
+
+    Args:
+        output_path: User-provided output path to validate.
+        base_dir: Optional base directory to restrict output to.
+
+    Returns:
+        Tuple of (is_valid, message, resolved_path or None).
+
+    Example:
+        >>> validate_output_path("./output/catalog.json")
+        (True, "Valid output path", PosixPath('/current/dir/output/catalog.json'))
+    """
+    if not output_path:
+        return False, "Output path is required", None
+
+    try:
+        path = safe_path(output_path, allowed_base=base_dir, allow_creation=True)
+    except PathValidationError as e:
+        return False, str(e), None
+
+    # Ensure parent directory exists
+    if not path.parent.exists():
+        try:
+            path.parent.mkdir(parents=True, exist_ok=True)
+        except OSError as e:
+            return False, f"Cannot create parent directory: {e}", None
+
+    return True, "Valid output path", path

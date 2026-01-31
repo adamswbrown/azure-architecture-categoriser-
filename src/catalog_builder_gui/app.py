@@ -18,6 +18,11 @@ from catalog_builder_gui.components.filter_presets import render_filter_presets
 from catalog_builder_gui.components.preview_panel import render_preview_panel
 from catalog_builder_gui.components.config_editor import render_config_editor
 
+# Import path validation utilities
+from architecture_recommendations_app.utils.sanitize import (
+    safe_path, PathValidationError
+)
+
 # Default repository URL
 DEFAULT_REPO_URL = "https://github.com/MicrosoftDocs/architecture-center.git"
 DEFAULT_CLONE_DIR = str(Path.home() / "architecture-center")
@@ -26,9 +31,18 @@ DEFAULT_CLONE_DIR = str(Path.home() / "architecture-center")
 def clone_repository(repo_url: str, clone_dir: str) -> tuple[bool, str]:
     """Clone the repository to the specified directory.
 
-    Returns (success, message) tuple.
+    Args:
+        repo_url: Git URL to clone from.
+        clone_dir: User-provided directory path to clone into.
+
+    Returns:
+        Tuple of (success, message).
     """
-    clone_path = Path(clone_dir)
+    # Validate the clone directory path to prevent path injection
+    try:
+        clone_path = safe_path(clone_dir, allow_creation=True)
+    except PathValidationError as e:
+        return False, f"Invalid clone directory: {e}"
 
     # Check if directory already exists with a valid repo
     if clone_path.exists():
@@ -37,13 +51,13 @@ def clone_repository(repo_url: str, clone_dir: str) -> tuple[bool, str]:
             try:
                 result = subprocess.run(
                     ['git', 'pull'],
-                    cwd=clone_path,
+                    cwd=str(clone_path),
                     capture_output=True,
                     text=True,
                     timeout=120
                 )
                 if result.returncode == 0:
-                    return True, f"Repository updated (git pull)"
+                    return True, "Repository updated (git pull)"
                 else:
                     return False, f"Git pull failed: {result.stderr}"
             except subprocess.TimeoutExpired:
@@ -116,8 +130,12 @@ def render_sidebar() -> None:
                 success, message = clone_repository(repo_url, clone_dir)
                 if success:
                     st.sidebar.success(message)
-                    # Resolve symlinks for consistent paths
-                    set_state('repo_path', str(Path(clone_dir).resolve()))
+                    # Resolve symlinks for consistent paths using validated path
+                    try:
+                        validated_path = safe_path(clone_dir, must_exist=True)
+                        set_state('repo_path', str(validated_path))
+                    except PathValidationError:
+                        set_state('repo_path', '')
                     st.rerun()
                 else:
                     st.sidebar.error(message)
@@ -151,8 +169,12 @@ def render_sidebar() -> None:
                     success, message = clone_repository(repo_url, clone_dir)
                     if success:
                         st.success(message)
-                        # Resolve symlinks for consistent paths
-                        set_state('repo_path', str(Path(clone_dir).resolve()))
+                        # Resolve symlinks for consistent paths using validated path
+                        try:
+                            validated_path = safe_path(clone_dir, must_exist=True)
+                            set_state('repo_path', str(validated_path))
+                        except PathValidationError:
+                            set_state('repo_path', '')
                         st.rerun()
                     else:
                         st.error(message)

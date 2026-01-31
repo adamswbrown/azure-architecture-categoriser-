@@ -16,6 +16,9 @@ from architecture_recommendations_app.state import (
     initialize_state, get_state, set_state, get_config,
     DEFAULT_REPO_URL, DEFAULT_CLONE_DIR
 )
+from architecture_recommendations_app.utils.sanitize import (
+    safe_path, PathValidationError
+)
 
 # Import catalog builder components
 from catalog_builder_gui.components.keywords_editor import render_keywords_editor
@@ -25,21 +28,33 @@ from catalog_builder_gui.components.config_editor import render_config_editor
 
 
 def clone_repository(repo_url: str, clone_dir: str) -> tuple[bool, str]:
-    """Clone the repository to the specified directory."""
-    clone_path = Path(clone_dir)
+    """Clone the repository to the specified directory.
+
+    Args:
+        repo_url: Git URL to clone from.
+        clone_dir: User-provided directory path to clone into.
+
+    Returns:
+        Tuple of (success, message).
+    """
+    # Validate the clone directory path to prevent path injection
+    try:
+        clone_path = safe_path(clone_dir, allow_creation=True)
+    except PathValidationError as e:
+        return False, f"Invalid clone directory: {e}"
 
     if clone_path.exists():
         if (clone_path / '.git').exists() and (clone_path / 'docs').exists():
             try:
                 result = subprocess.run(
                     ['git', 'pull'],
-                    cwd=clone_path,
+                    cwd=str(clone_path),
                     capture_output=True,
                     text=True,
                     timeout=120
                 )
                 if result.returncode == 0:
-                    return True, f"Repository updated (git pull)"
+                    return True, "Repository updated (git pull)"
                 else:
                     return False, f"Git pull failed: {result.stderr}"
             except subprocess.TimeoutExpired:
@@ -47,7 +62,7 @@ def clone_repository(repo_url: str, clone_dir: str) -> tuple[bool, str]:
             except Exception as e:
                 return False, f"Error updating repo: {e}"
         else:
-            return False, f"Directory exists but is not the Azure Architecture Center repo"
+            return False, "Directory exists but is not the Azure Architecture Center repo"
 
     clone_path.parent.mkdir(parents=True, exist_ok=True)
 
@@ -145,7 +160,11 @@ def render_sidebar() -> None:
                 success, message = clone_repository(repo_url, clone_dir)
                 if success:
                     st.sidebar.success(message)
-                    set_state('repo_path', str(Path(clone_dir).resolve()))
+                    try:
+                        validated_path = safe_path(clone_dir, must_exist=True)
+                        set_state('repo_path', str(validated_path))
+                    except PathValidationError:
+                        set_state('repo_path', '')
                     st.rerun()
                 else:
                     st.sidebar.error(message)
@@ -177,7 +196,11 @@ def render_sidebar() -> None:
                     success, message = clone_repository(repo_url, clone_dir)
                     if success:
                         st.success(message)
-                        set_state('repo_path', str(Path(clone_dir).resolve()))
+                        try:
+                            validated_path = safe_path(clone_dir, must_exist=True)
+                            set_state('repo_path', str(validated_path))
+                        except PathValidationError:
+                            set_state('repo_path', '')
                         st.rerun()
                     else:
                         st.error(message)

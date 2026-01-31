@@ -7,6 +7,9 @@ from collections import Counter
 import streamlit as st
 
 from catalog_builder_gui.state import get_state, set_state
+from architecture_recommendations_app.utils.sanitize import (
+    safe_path, validate_repo_path, validate_output_path, PathValidationError
+)
 
 
 def _get_default_output_path() -> str:
@@ -534,8 +537,16 @@ def _generate_catalog(repo_path: str, output_path: str) -> None:
 
     config = get_state('config')
 
-    if not repo_path:
-        st.error("Repository path not set")
+    # Validate repository path
+    is_valid, message, validated_repo = validate_repo_path(repo_path)
+    if not is_valid:
+        st.error(f"Invalid repository path: {message}")
+        return
+
+    # Validate output path
+    is_valid, message, validated_output = validate_output_path(output_path)
+    if not is_valid:
+        st.error(f"Invalid output path: {message}")
         return
 
     # Apply config to global state
@@ -559,7 +570,7 @@ def _generate_catalog(repo_path: str, output_path: str) -> None:
             status_text.text("Initializing catalog builder...")
             progress_bar.progress(10)
 
-            builder = CatalogBuilder(Path(repo_path))
+            builder = CatalogBuilder(validated_repo)
 
             status_text.text("Scanning repository...")
             progress_bar.progress(30)
@@ -569,9 +580,9 @@ def _generate_catalog(repo_path: str, output_path: str) -> None:
             status_text.text("Writing catalog file...")
             progress_bar.progress(80)
 
-            # Write to file
+            # Write to file using validated path
             catalog_dict = catalog.model_dump(mode='json')
-            with open(output_path, 'w', encoding='utf-8') as f:
+            with open(validated_output, 'w', encoding='utf-8') as f:
                 json.dump(catalog_dict, f, indent=2, default=str)
 
             progress_bar.progress(100)
@@ -579,8 +590,7 @@ def _generate_catalog(repo_path: str, output_path: str) -> None:
             progress_bar.empty()
 
             # Update session state so other pages automatically pick up the new catalog
-            resolved_path = str(Path(output_path).resolve())
-            set_state('catalog_path', resolved_path)
+            set_state('catalog_path', str(validated_output))
             set_state('catalog_source', 'catalog_builder')
 
             # Log what was generated for debugging
@@ -606,9 +616,9 @@ def _generate_catalog(repo_path: str, output_path: str) -> None:
             col1.metric("Architectures", len(catalog.architectures))
             col2.metric("Services", len(all_services))
             col3.metric("Categories", len(all_categories))
-            col4.metric("File Size", f"{Path(output_path).stat().st_size / 1024:.1f} KB")
+            col4.metric("File Size", f"{validated_output.stat().st_size / 1024:.1f} KB")
 
-            st.caption(f"📁 Saved to: `{output_path}`")
+            st.caption(f"📁 Saved to: `{validated_output}`")
 
             # Download button
             st.download_button(
