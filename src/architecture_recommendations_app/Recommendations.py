@@ -27,6 +27,57 @@ from architecture_scorer.engine import ScoringEngine
 from architecture_scorer.schema import ScoringResult
 
 
+@st.dialog("Recommendations Help")
+def _show_help_dialog():
+    """Display help information in a modal dialog."""
+    st.markdown("""
+    ### How to Use This App
+
+    **1. Upload Context File**
+    Upload your Dr. Migrate application context file (JSON) to get started.
+
+    **2. Answer Questions (Optional)**
+    Answer clarification questions to improve recommendation accuracy.
+
+    **3. View Results**
+    See matched architectures with scores, diagrams, and export options.
+
+    ---
+
+    ### Understanding the Catalog
+
+    **Sources:**
+    - **Refresh with Defaults** - Fetches latest Azure Architecture Center (~51 reference architectures)
+    - **Catalog Builder** page - Custom filtering (can include examples, solution ideas)
+
+    **Catalog Priority:**
+    1. Session state (from Catalog Builder)
+    2. `ARCHITECTURE_CATALOG_PATH` env var
+    3. `./architecture-catalog.json`
+    4. Bundled catalog
+
+    ---
+
+    **Other Pages:**
+    - **Catalog Builder** - Create custom catalogs with filters
+    - **Catalog Stats** - Browse and explore the catalog
+    """)
+
+    if st.button("Got it!", type="primary", use_container_width=True):
+        st.rerun()
+
+
+def _render_title_with_help(key_suffix: str = ""):
+    """Render the page title with a help button."""
+    title_col, help_col = st.columns([10, 1])
+    with title_col:
+        st.title("Azure Architecture Recommendations")
+    with help_col:
+        st.markdown("<br>", unsafe_allow_html=True)  # Align with title
+        if st.button("?", help="Show help", key=f"help_button{key_suffix}"):
+            _show_help_dialog()
+
+
 def get_catalog_path() -> str:
     """Get the catalog path from session state, environment, or default locations."""
     # 0. Session state (user-selected catalog) - takes precedence
@@ -407,31 +458,6 @@ def _render_sidebar() -> None:
         # Scoring configuration section
         render_config_editor()
 
-        st.markdown("---")
-
-        # Help section
-        with st.expander("Help"):
-            st.markdown("""
-            **Available Pages:**
-
-            - **Recommendations** (this page) - Upload context files and get architecture recommendations
-            - **Catalog Builder** - Create custom catalogs with advanced filtering
-            - **Catalog Stats** - View analytics and browse the catalog
-
-            **Catalog Sources:**
-
-            - **Refresh with Defaults** (above) - Fetches latest Azure Architecture Center, builds with reference architectures only (~51)
-            - **Catalog Builder** page - Custom filtering by product, category, or topic (can include example scenarios, solution ideas)
-            - Catalogs generated in Catalog Builder are automatically used by Recommendations
-
-            **Where does the catalog come from?**
-
-            1. Session state (Catalog Builder or generated)
-            2. `ARCHITECTURE_CATALOG_PATH` env var
-            3. `./architecture-catalog.json`
-            4. Bundled catalog in project root
-            """)
-
         # Footer with credits and GitHub link
         st.markdown("---")
         st.markdown(
@@ -573,7 +599,7 @@ def _render_step_indicator(current: int) -> None:
 
 def _render_step1_upload(catalog_path: str) -> None:
     """Step 1: Upload file and review application summary."""
-    st.title("Azure Architecture Recommendations")
+    _render_title_with_help("_step1")
     st.caption("Upload your application context to receive tailored architecture recommendations.")
 
     _render_step_indicator(1)
@@ -634,7 +660,7 @@ def _render_step1_upload(catalog_path: str) -> None:
 
 def _render_step2_questions(catalog_path: str) -> None:
     """Step 2: Answer clarification questions."""
-    st.title("Azure Architecture Recommendations")
+    _render_title_with_help("_step2")
 
     _render_step_indicator(2)
 
@@ -714,7 +740,7 @@ def _render_step2_questions(catalog_path: str) -> None:
 
 def _render_step3_results() -> None:
     """Step 3: Show results with export options."""
-    st.title("Azure Architecture Recommendations")
+    _render_title_with_help("_step3")
 
     _render_step_indicator(3)
 

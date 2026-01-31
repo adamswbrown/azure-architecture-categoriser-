@@ -28,4 +28,4 @@ if (-not (Test-Path "architecture-catalog.json")) {
 }
 
 # Start the app
-streamlit run src/architecture_recommendations_app/app.py $args
+streamlit run src/architecture_recommendations_app/Recommendations.py $args

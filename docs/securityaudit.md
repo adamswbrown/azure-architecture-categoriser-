@@ -25,7 +25,7 @@ A comprehensive security audit was performed on the Azure Architecture Categoris
 ### 1. Cross-Site Scripting (XSS) - HIGH
 
 **Affected Files:**
-- `src/architecture_recommendations_app/app.py`
+- `src/architecture_recommendations_app/Recommendations.py`
 - `src/architecture_recommendations_app/components/results_display.py`
 
 **Issue:**
@@ -64,7 +64,7 @@ st.markdown(f"<span>{safe_html(app_name)}</span>", unsafe_allow_html=True)
 **Files Modified:**
 - `src/architecture_recommendations_app/utils/sanitize.py` (NEW)
 - `src/architecture_recommendations_app/utils/__init__.py`
-- `src/architecture_recommendations_app/app.py` (lines 883-987)
+- `src/architecture_recommendations_app/Recommendations.py` (lines 883-987)
 - `src/architecture_recommendations_app/components/results_display.py` (multiple)
 
 ---
@@ -117,7 +117,7 @@ if url_valid:
 ### 3. Insecure Temporary File Handling - MEDIUM
 
 **Affected Files:**
-- `src/architecture_recommendations_app/app.py`
+- `src/architecture_recommendations_app/Recommendations.py`
 
 **Issue:**
 Temporary files were created with predictable names in world-readable locations:
@@ -147,7 +147,7 @@ with secure_temp_file(suffix='.json') as (f, temp_path):
 
 **Files Modified:**
 - `src/architecture_recommendations_app/utils/sanitize.py` (secure_temp_file, secure_temp_directory)
-- `src/architecture_recommendations_app/app.py` (lines 360-365, 1007-1025, 1028-1045)
+- `src/architecture_recommendations_app/Recommendations.py` (lines 360-365, 1007-1025, 1028-1045)
 
 ---
 
@@ -299,7 +299,7 @@ ls /tmp/uploaded-architecture-catalog.json  # Should not exist
 |------|---------|
 | `utils/sanitize.py` | NEW - Security utilities |
 | `utils/__init__.py` | Export sanitization functions |
-| `app.py` | XSS fixes, secure temp files |
+| `Recommendations.py` | XSS fixes, secure temp files |
 | `results_display.py` | XSS fixes, URL validation |
 | `pdf_generator.py` | SSRF protection |
 | `preview_panel.py` | Conditional stack traces |

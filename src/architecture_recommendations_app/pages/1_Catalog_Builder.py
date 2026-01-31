@@ -76,6 +76,38 @@ def ensure_config_initialized() -> None:
         set_state('config', CatalogConfig())
 
 
+@st.dialog("Catalog Builder Help")
+def show_help_dialog():
+    """Display help information in a modal dialog."""
+    st.markdown("""
+    ### How to Use the Catalog Builder
+
+    **1. Clone the Repository**
+    Use the sidebar to clone the Azure Architecture Center repository,
+    or specify an existing local path.
+
+    **2. Build Your Catalog**
+    - **Quick Build**: ~51 production-ready reference architectures
+    - **Full Build**: ~171 architectures including examples and solution ideas
+    - **Custom Build**: Fine-tune filters and content types
+
+    **3. Use Your Catalog**
+    After generating a catalog, navigate to:
+    - **Recommendations** - Analyze your applications and get architecture matches
+    - **Catalog Stats** - Explore and browse the catalog contents
+
+    ---
+
+    **Tips:**
+    - The catalog is automatically shared across all pages
+    - Use "Update Repository" periodically to get the latest patterns
+    - Custom configs can be saved and loaded via YAML files
+    """)
+
+    if st.button("Got it!", type="primary", use_container_width=True):
+        st.rerun()
+
+
 def render_sidebar() -> None:
     """Render the sidebar with repository controls."""
     st.sidebar.title("Catalog Builder")
@@ -187,13 +219,6 @@ def render_sidebar() -> None:
         st.sidebar.success("Reset complete!")
         st.rerun()
 
-    # Link to other pages
-    st.sidebar.markdown("---")
-    st.sidebar.info("""
-    **Tip:** After generating a catalog, go to **Recommendations** to analyze
-    your applications, or **Catalog Stats** to explore the catalog.
-    """)
-
     # Footer with credits and GitHub link
     st.sidebar.markdown("---")
     st.sidebar.markdown(
@@ -229,8 +254,14 @@ def main():
     # Render sidebar
     render_sidebar()
 
-    # Main content
-    st.title("Azure Architecture Catalog Builder")
+    # Main content - title with help button
+    title_col, help_col = st.columns([10, 1])
+    with title_col:
+        st.title("Azure Architecture Catalog Builder")
+    with help_col:
+        st.markdown("<br>", unsafe_allow_html=True)  # Align with title
+        if st.button("?", help="Show help", key="help_button"):
+            show_help_dialog()
 
     # Getting Started - visible section (not collapsed)
     if not get_state('repo_path'):

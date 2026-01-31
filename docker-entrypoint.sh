@@ -10,7 +10,7 @@ echo "  - Catalog Stats page"
 echo "  - Catalog Builder page"
 
 # Start the unified app (multi-page Streamlit with pages/ directory)
-exec streamlit run src/architecture_recommendations_app/app.py \
+exec streamlit run src/architecture_recommendations_app/Recommendations.py \
     --server.port 8501 \
     --server.address 0.0.0.0 \
     --server.headless true

@@ -25,4 +25,4 @@ if [ ! -f "architecture-catalog.json" ]; then
 fi
 
 # Start the app
-streamlit run src/architecture_recommendations_app/app.py "$@"
+streamlit run src/architecture_recommendations_app/Recommendations.py "$@"

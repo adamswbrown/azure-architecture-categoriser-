@@ -239,7 +239,7 @@ The PDF generator uses `reportlab` for PDF creation and `svglib` for SVG diagram
 
 ```
 src/architecture_recommendations_app/
-├── app.py                      # Main Streamlit application
+├── Recommendations.py          # Main Streamlit application
 ├── components/
 │   ├── upload_section.py       # File upload component
 │   ├── results_display.py      # Recommendation cards
@@ -260,7 +260,7 @@ src/architecture_recommendations_app/
 pip install -e ".[dev,recommendations-app]"
 
 # Run with auto-reload
-streamlit run src/architecture_recommendations_app/app.py --server.runOnSave true
+streamlit run src/architecture_recommendations_app/Recommendations.py --server.runOnSave true
 
 # Run tests
 pytest tests/
