@@ -29,8 +29,13 @@ from architecture_scorer.schema import ScoringResult
 
 def get_catalog_path() -> str:
     """Get the catalog path from session state, environment, or default locations."""
-    # 0. Session state (user-selected catalog)
+    # 0. Session state (user-selected catalog) - takes precedence
     session_catalog = get_state('catalog_path')
+    session_source = get_state('catalog_source')
+
+    # Debug: Log what we found in session state
+    # print(f"DEBUG: session_catalog={session_catalog}, session_source={session_source}")
+
     if session_catalog and Path(session_catalog).exists():
         return session_catalog
 
@@ -38,20 +43,25 @@ def get_catalog_path() -> str:
     env_path = os.environ.get("ARCHITECTURE_CATALOG_PATH")
     if env_path and Path(env_path).exists():
         set_state('catalog_source', 'environment')
+        set_state('catalog_path', env_path)
         return env_path
 
-    # 2. Local file in current directory
-    local_path = Path("architecture-catalog.json")
-    if local_path.exists():
-        set_state('catalog_source', 'current_directory')
-        return str(local_path.resolve())
-
-    # 3. Local file in project root
+    # 2. Project root first (more likely to be correct than CWD)
     project_root = Path(__file__).parent.parent.parent
     root_path = project_root / "architecture-catalog.json"
     if root_path.exists():
+        resolved = str(root_path.resolve())
         set_state('catalog_source', 'project_root')
-        return str(root_path.resolve())
+        set_state('catalog_path', resolved)
+        return resolved
+
+    # 3. Local file in current directory (fallback)
+    local_path = Path("architecture-catalog.json")
+    if local_path.exists():
+        resolved = str(local_path.resolve())
+        set_state('catalog_source', 'current_directory')
+        set_state('catalog_path', resolved)
+        return resolved
 
     return None
 
@@ -286,10 +296,13 @@ def _render_sidebar() -> None:
             age_days = info.get('age_days')
 
             # Show current catalog info with stale warning if needed
+            source = get_state('catalog_source', 'unknown')
+            source_label = {'catalog_builder': '(from Catalog Builder)', 'project_root': '', 'current_directory': '', 'environment': '(env)'}.get(source, '')
+
             if age_days is not None and age_days > 30:
-                st.warning(f"**{info['architecture_count']}** architectures ({age_days} days old)")
+                st.warning(f"**{info['architecture_count']}** architectures ({age_days} days old) {source_label}")
             else:
-                st.success(f"**{info['architecture_count']}** architectures loaded")
+                st.success(f"**{info['architecture_count']}** architectures loaded {source_label}")
 
             # Compact catalog details expander
             with st.expander("Catalog Details", expanded=False):

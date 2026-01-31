@@ -580,11 +580,16 @@ def _generate_catalog(repo_path: str, output_path: str) -> None:
 
             # Update session state so other pages automatically pick up the new catalog
             resolved_path = str(Path(output_path).resolve())
-            st.session_state.catalog_path = resolved_path
-            st.session_state.catalog_source = 'catalog_builder'
+            set_state('catalog_path', resolved_path)
+            set_state('catalog_source', 'catalog_builder')
+
+            # Log what was generated for debugging
+            topics_used = config.filters.allowed_topics or ['reference-architecture']
+            exclude_examples = config.filters.exclude_examples
 
             # Success message with stats
-            st.success(f"Catalog generated successfully! Go to **Recommendations** to use it.")
+            st.success(f"Catalog generated successfully with **{len(catalog.architectures)}** architectures!")
+            st.info(f"Topics: {', '.join(topics_used)} | Exclude Examples: {exclude_examples}")
 
             # Calculate useful stats from the catalog
             all_services = set()
