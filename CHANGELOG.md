@@ -5,6 +5,28 @@ All notable changes to the Azure Architecture Recommender are documented in this
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.3.0] - 2026-01-31
+
+### Added
+- **Azure Container Apps Deployment**: GitHub Actions workflow for automated deployment to Azure
+  - Bicep infrastructure-as-code templates (`infra/main.bicep`, `infra/modules/container-app.bicep`)
+  - OIDC authentication (no secrets stored)
+  - Deploys to UK South region
+  - Automatic image updates on push to main
+- **Architecture Decision Records (ADRs)**: Design documentation explaining "why" decisions were made
+  - `docs/design/README.md` - Entry point for design decisions
+  - `docs/design/glossary.md` - Key terms and concepts
+  - 5 ADRs covering scoring weights, confidence penalties, catalog quality, service whitelist, eligibility filters
+- **Sample Files Dialog**: "Try a Sample" button with modal dialog showing 8 demo scenarios
+- **Help Dialogs**: Moved help content from sidebar expanders to modal dialogs for cleaner UX
+- **Catalog Comparison Doc**: `docs/catalog-comparison.md` comparing Quick Build vs Full Build
+
+### Changed
+- Renamed `app.py` to `Recommendations.py` for clearer sidebar navigation
+- Help content now in modal dialogs (click "?" button)
+
+---
+
 ## [1.2.0] - 2026-01-31
 
 ### Added
@@ -176,7 +198,7 @@ docker run -p 8501:8501 -p 8502:8502 ghcr.io/adamswbrown/azure-architecture-cate
 ### From Source
 ```bash
 pip install -e ".[recommendations-app,gui]"
-streamlit run src/architecture_recommendations_app/app.py  # Port 8501
+streamlit run src/architecture_recommendations_app/Recommendations.py  # Port 8501
 streamlit run src/catalog_builder_gui/app.py --server.port 8502  # Port 8502
 ```
 

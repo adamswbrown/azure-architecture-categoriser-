@@ -35,7 +35,7 @@ Federated credentials allow GitHub Actions to authenticate without storing secre
 
 ```bash
 # Set your variables
-SUBSCRIPTION_ID="your-subscription-id"
+SUBSCRIPTION_ID="305b3db0-4019-485b-95e9-574f7c20ead4"  # azure@askadam.cloud
 GITHUB_ORG="adamswbrown"
 GITHUB_REPO="azure-architecture-categoriser"
 
@@ -192,7 +192,7 @@ az login
 
 # Deploy infrastructure
 az deployment sub create \
-  --location australiaeast \
+  --location uksouth \
   --template-file infra/main.bicep \
   --parameters environment=prod
 

@@ -336,13 +336,13 @@ azure-architecture-recommender/
 
 ## Version
 
-**Current: v1.1.0** (2026-01-30)
+**Current: v1.3.0** (2026-01-31)
 
 Latest features:
-- Docker containerization with multi-platform support
-- Security hardening (XSS, SSRF, secure temp files)
-- Improved scoring for cloud-native and modernization scenarios
-- Compact catalog details UI
+- Azure Container Apps deployment via GitHub Actions
+- Architecture Decision Records (ADRs) for design transparency
+- Sample files dialog for demo scenarios
+- UK South region deployment
 
 See [CHANGELOG.md](CHANGELOG.md) for full release history.
 
