@@ -7,8 +7,7 @@ services:
       context: .
       dockerfile: Dockerfile
     ports:
-      - "8501:8501"  # Recommendations App
-      - "8502:8502"  # Catalog Builder
+      - "8501:8501"  # Unified multi-page app (Recommendations, Stats, Catalog Builder)
     volumes:
       # Mount custom catalog (optional - image includes default catalog)
       # - ./my-custom-catalog.json:/app/architecture-catalog.json:ro

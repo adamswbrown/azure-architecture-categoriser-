@@ -48,13 +48,15 @@ This tool **integrates with** Dr. Migrate's workflow - it is not a feature of Dr
 
 ## Components
 
-| Component | Purpose | For Who |
-|-----------|---------|---------|
-| **Catalog Builder GUI** | Generate architecture catalogs from Azure Architecture Center | All users (first-time setup) |
-| **Recommendations App** | Upload context files and get architecture recommendations | End users / customers |
-| **Architecture Scorer CLI** | Backend engine + command-line interface | Automation / power users |
+The application is a unified multi-page Streamlit app with three pages:
 
-**Note:** The Recommendations App uses the Architecture Scorer as its backend engine. Most users will never need to use the CLI directly.
+| Page | Purpose | For Who |
+|------|---------|---------|
+| **Recommendations** | Upload context files and get architecture recommendations | End users / customers |
+| **Catalog Stats** | Browse and analyze the architecture catalog | All users |
+| **Catalog Builder** | Generate custom catalogs from Azure Architecture Center | Admins / power users |
+
+**Note:** The Recommendations page uses the Architecture Scorer as its backend engine. The CLI is also available for automation and scripting.
 
 ## Prerequisites
 
@@ -75,34 +77,29 @@ cd azure-architecture-categoriser
 pip install -e ".[recommendations-app,gui]"
 ```
 
-### Step 2: Generate a Catalog
+### Step 2: Launch the Application
 
 ```bash
-# Launch Catalog Builder GUI (port 8502)
-./bin/start-catalog-builder-gui.sh
-
-# Or on Windows:
-.\bin\start-catalog-builder-gui.ps1
-```
-
-In the Catalog Builder:
-1. Click **Clone Repository** in the sidebar to get Azure Architecture Center
-2. Click **Generate with Defaults** to create `architecture-catalog.json`
-
-### Step 3: Get Recommendations
-
-```bash
-# Launch Recommendations App (port 8501)
+# Launch the unified app (port 8501)
 ./bin/start-recommendations-app.sh
 
 # Or on Windows:
 .\bin\start-recommendations-app.ps1
 ```
 
-In the Recommendations App:
-1. Upload your Dr. Migrate context file
-2. Answer optional clarification questions
-3. Download your PDF report
+### Step 3: Generate a Catalog (if needed)
+
+If no catalog exists, the app will prompt you to generate one:
+1. Go to the **Catalog Builder** page in the sidebar
+2. Click **Clone Repository** to get Azure Architecture Center
+3. Click **Generate with Defaults** to create `architecture-catalog.json`
+
+### Step 4: Get Recommendations
+
+1. Go to the **Recommendations** page (main page)
+2. Upload your Dr. Migrate context file
+3. Answer optional clarification questions
+4. Download your PDF report
 
 ---
 
@@ -114,12 +111,15 @@ The easiest way to run the application is via Docker - no Python installation re
 
 ```bash
 # Pull and run the container
-docker run -p 8501:8501 -p 8502:8502 ghcr.io/adamswbrown/azure-architecture-categoriser:latest
+docker run -p 8501:8501 ghcr.io/adamswbrown/azure-architecture-categoriser:latest
 ```
 
-Then open:
-- **Recommendations App**: http://localhost:8501
-- **Catalog Builder**: http://localhost:8502
+Then open: http://localhost:8501
+
+Use the sidebar to navigate between pages:
+- **Recommendations** - Upload context files and get architecture recommendations
+- **Catalog Stats** - View analytics and browse the catalog
+- **Catalog Builder** - Generate custom catalogs with advanced filtering
 
 ### Using Docker Compose
 
@@ -145,7 +145,7 @@ docker compose down
 docker build -t azure-architecture-categoriser .
 
 # Run it
-docker run -p 8501:8501 -p 8502:8502 azure-architecture-categoriser
+docker run -p 8501:8501 azure-architecture-categoriser
 ```
 
 ### What's Included in the Container

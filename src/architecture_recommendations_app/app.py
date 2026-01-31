@@ -245,17 +245,11 @@ def main() -> None:
         st.info("""
         **To get started, you need an architecture catalog.**
 
-        **Option 1:** Generate one using the Catalog Builder:
-        ```bash
-        ./bin/start-catalog-builder-gui.sh
-        ```
+        **Option 1:** Go to the **Catalog Builder** page (in the sidebar) to generate one.
 
-        **Option 2:** Use the sidebar to select an existing catalog file.
+        **Option 2:** Use the sidebar to upload an existing catalog file.
 
-        **Option 3:** Set the environment variable:
-        ```bash
-        export ARCHITECTURE_CATALOG_PATH=/path/to/catalog.json
-        ```
+        **Option 3:** Click "Generate Catalog" in the sidebar to build one with default settings.
         """)
         return
 
@@ -281,11 +275,6 @@ def _render_sidebar() -> None:
             set_state('refresh_catalog_requested', False)
             _refresh_catalog()
             return
-
-        # Handle deferred catalog builder launch
-        if get_state('launch_catalog_builder_requested'):
-            set_state('launch_catalog_builder_requested', False)
-            _do_launch_catalog_builder()
 
         # Catalog section
         st.subheader("Architecture Catalog")
@@ -378,12 +367,8 @@ def _render_sidebar() -> None:
         # Custom Catalog section (build or load)
         st.subheader("Custom Catalog")
 
-        # Open Catalog Builder
-        if st.button("Open Catalog Builder", use_container_width=True,
-                    help="Launch the Catalog Builder GUI for advanced filtering",
-                    key="launch_catalog_builder_btn"):
-            set_state('launch_catalog_builder_requested', True)
-            st.rerun()
+        # Point to integrated Catalog Builder page
+        st.info("Use the **Catalog Builder** page in the sidebar to create custom catalogs with advanced filtering.")
 
         # Load existing catalog
         with st.expander("Load Existing Catalog", expanded=False):
@@ -476,22 +461,16 @@ def _render_sidebar() -> None:
             3. `./architecture-catalog.json`
             4. Project root `architecture-catalog.json`
 
+            **Available Pages:**
+
+            - **Recommendations** (this page) - Upload context files and get architecture recommendations
+            - **Catalog Stats** - View analytics and browse the catalog
+            - **Catalog Builder** - Create custom catalogs with advanced filtering
+
             **Quick Refresh vs Custom Catalog:**
 
             - **Refresh Catalog** - Downloads latest Azure Architecture Center and rebuilds with default settings
-            - **Build Custom Catalog** - Opens the Catalog Builder GUI for advanced filtering by product, category, or topic
-
-            **Manual CLI options:**
-            ```bash
-            # GUI with full filtering options
-            ./bin/start-catalog-builder-gui.sh
-
-            # CLI for scripting
-            catalog-builder build-catalog \\
-              --repo-path ./architecture-center \\
-              --product azure-kubernetes-service \\
-              --out my-catalog.json
-            ```
+            - **Catalog Builder** - Advanced filtering by product, category, or topic
             """)
 
         # Footer with credits and GitHub link
@@ -573,58 +552,6 @@ def _refresh_catalog() -> None:
 
         if st.button("Continue", type="primary"):
             st.rerun()
-
-
-def _do_launch_catalog_builder() -> None:
-    """Launch the Catalog Builder GUI in a new process."""
-    project_root = Path(__file__).parent.parent.parent
-
-    # Try to find the launch script
-    launch_script = project_root / "bin" / "start-catalog-builder-gui.sh"
-    launch_script_ps = project_root / "bin" / "start-catalog-builder-gui.ps1"
-
-    try:
-        import platform
-
-        if platform.system() == "Windows":
-            if launch_script_ps.exists():
-                subprocess.Popen(
-                    ["powershell", "-ExecutionPolicy", "Bypass", "-File", str(launch_script_ps)],
-                    cwd=project_root,
-                    creationflags=subprocess.CREATE_NEW_CONSOLE
-                )
-            else:
-                # Fallback to direct streamlit command
-                subprocess.Popen(
-                    ["streamlit", "run", "src/catalog_builder_gui/app.py", "--server.port", "8502"],
-                    cwd=project_root,
-                    creationflags=subprocess.CREATE_NEW_CONSOLE
-                )
-        else:
-            # macOS/Linux
-            if launch_script.exists():
-                subprocess.Popen(
-                    ["bash", str(launch_script)],
-                    cwd=project_root,
-                    start_new_session=True
-                )
-            else:
-                # Fallback to direct streamlit command
-                subprocess.Popen(
-                    ["streamlit", "run", "src/catalog_builder_gui/app.py", "--server.port", "8502"],
-                    cwd=project_root,
-                    start_new_session=True
-                )
-
-        # Show success message in sidebar
-        st.sidebar.success("Catalog Builder launched!")
-        st.sidebar.markdown("[Open Catalog Builder at localhost:8502](http://localhost:8502)")
-
-    except FileNotFoundError:
-        st.sidebar.error("Could not launch Catalog Builder. Streamlit may not be installed.")
-        st.sidebar.code("./bin/start-catalog-builder-gui.sh")
-    except Exception as e:
-        st.sidebar.error(f"Error launching: {e}")
 
 
 def _apply_custom_styles() -> None:

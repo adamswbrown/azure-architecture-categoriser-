@@ -48,8 +48,8 @@ RUN chmod +x /app/docker-entrypoint.sh \
 # Switch to non-root user
 USER appuser
 
-# Expose Streamlit ports
-EXPOSE 8501 8502
+# Expose Streamlit port (unified multi-page app)
+EXPOSE 8501
 
 # Health check
 HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \

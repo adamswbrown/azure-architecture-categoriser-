@@ -2,18 +2,14 @@
 set -e
 
 # Azure Architecture Categoriser - Container Entrypoint
-# Starts both Streamlit applications
+# Starts the unified multi-page Streamlit application
 
-echo "Starting Azure Architecture Categoriser..."
+echo "Starting Azure Architecture Recommender..."
+echo "  - Recommendations page (main)"
+echo "  - Catalog Stats page"
+echo "  - Catalog Builder page"
 
-# Start Catalog Builder GUI in background (port 8502)
-streamlit run src/catalog_builder_gui/app.py \
-    --server.port 8502 \
-    --server.address 0.0.0.0 \
-    --server.headless true \
-    &
-
-# Start Recommendations App in foreground (port 8501)
+# Start the unified app (multi-page Streamlit with pages/ directory)
 exec streamlit run src/architecture_recommendations_app/app.py \
     --server.port 8501 \
     --server.address 0.0.0.0 \

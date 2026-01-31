@@ -1,7 +1,7 @@
 # Azure Architecture Recommender - Project State
 
 ## Current Phase
-**Phase 5: Containerization - COMPLETE**
+**Phase 6: Multi-Page App Integration - COMPLETE**
 
 ## Status
 
@@ -45,7 +45,7 @@
 - [x] Treatment-based maturity inference (replatform/refactor → transitional)
 - [x] Relaxed eligibility filter (1-level gap allowed)
 
-### Recommendations App (NEW)
+### Recommendations App
 - [x] 3-step wizard flow (Upload → Questions → Results)
 - [x] File validation with user-friendly errors
 - [x] Application summary display
@@ -57,6 +57,16 @@
 - [x] Light theme with Azure branding
 - [x] Session state management
 - [x] Catalog build parameters displayed in sidebar (compact badges)
+
+### Multi-Page App Integration (NEW - 2026-01-31)
+- [x] Unified multi-page Streamlit app structure
+- [x] pages/ directory with auto-discovered pages
+- [x] Catalog Stats page with analytics dashboard
+- [x] Catalog Builder integrated as a page
+- [x] Shared session state across pages
+- [x] Single container/port deployment (8501 only)
+- [x] Updated Docker configuration
+- [x] Updated README and documentation
 
 ### Documentation (NEW)
 - [x] Separated docs for each component
@@ -92,14 +102,17 @@ azure-architecture-categoriser-/
 │   ├── catalog_builder_gui/          # Catalog Builder GUI
 │   │   ├── app.py, state/
 │   │   └── components/
-│   └── architecture_recommendations_app/  # Customer App (NEW)
-│       ├── app.py
+│   └── architecture_recommendations_app/  # Unified Multi-Page App
+│       ├── app.py                    # Main page (Recommendations)
+│       ├── pages/                    # Multi-page Streamlit pages
+│       │   ├── 1_Catalog_Stats.py    # Analytics dashboard
+│       │   └── 2_Catalog_Builder.py  # Catalog generation
 │       ├── components/
 │       │   ├── upload_section.py
 │       │   ├── results_display.py
 │       │   ├── questions_section.py
 │       │   └── pdf_generator.py
-│       ├── state/session_state.py
+│       ├── state/session_state.py    # Shared state across pages
 │       ├── utils/validation.py
 │       └── .streamlit/config.toml
 ├── docs/                             # Documentation
@@ -135,7 +148,7 @@ azure-architecture-categoriser-/
 
 ### All Tests
 ```
-152 passed in 0.94s
+217 passed in 1.43s
 ```
 
 ### Coverage
@@ -147,11 +160,19 @@ azure-architecture-categoriser-/
 None.
 
 ## GitHub Issues
-1. [#1 - Integrate Catalog Builder into Recommendations App](https://github.com/adamswbrown/azure-architecture-categoriser/issues/1) - Open
+1. [#1 - Integrate Catalog Builder into Recommendations App](https://github.com/adamswbrown/azure-architecture-categoriser/issues/1) - Open (superseded by #8)
 2. [#2 - Containerize the Application](https://github.com/adamswbrown/azure-architecture-categoriser/issues/2) - **COMPLETE**
 3. [#3 - Add CodeQL Security Scanning](https://github.com/adamswbrown/azure-architecture-categoriser/issues/3) - **COMPLETE**
+4. [#8 - Integrate Catalog Builder into Recommendations App as multi-page Streamlit app](https://github.com/adamswbrown/azure-architecture-categoriser/issues/8) - **COMPLETE**
 
-## Recent Changes (2026-01-30)
+## Recent Changes (2026-01-31)
+1. **Multi-Page App Integration** - Unified Streamlit app with 3 pages (Recommendations, Catalog Stats, Catalog Builder)
+2. **Catalog Stats Page** - New analytics dashboard with family, operating model, services, and quality breakdowns
+3. **Simplified Docker** - Single port deployment (8501 only)
+4. **Shared Session State** - State management unified across all pages
+5. **Updated Documentation** - README and docs updated for multi-page structure
+
+## Previous Changes (2026-01-30)
 1. **v1.0 Release** - First public Docker container release
 2. **Docker Containerization** - Multi-platform images (amd64 + arm64)
 3. **GitHub Actions** - Auto-publish to ghcr.io on push/tag
@@ -162,6 +183,6 @@ None.
 8. **UI Improvements** - Compact catalog build parameters in sidebar
 
 ## Next Actions
-1. Integrate catalog generation into Recommendations App (Issue #1)
+1. Deploy to Azure Container Apps
 2. Improve diagram asset extraction in catalog builder
 3. Add more test context files for edge cases
