@@ -24,10 +24,13 @@ on:
         required: false
         default: 'latest'
       deploy_infra:
-        description: 'Deploy/update infrastructure'
-        required: false
-        default: false
-        type: boolean
+        description: 'Deploy/update infrastructure (REQUIRED for first deploy)'
+        required: true
+        default: 'no'
+        type: choice
+        options:
+          - 'yes'
+          - 'no'
 
 env:
   AZURE_REGION: australiaeast
@@ -58,8 +61,14 @@ jobs:
           else
             echo "environment=prod" >> $GITHUB_OUTPUT
             echo "image_tag=latest" >> $GITHUB_OUTPUT
-            echo "deploy_infra=false" >> $GITHUB_OUTPUT
+            echo "deploy_infra=no" >> $GITHUB_OUTPUT
           fi
+
+      - name: Show configuration
+        run: |
+          echo "Environment: ${{ steps.vars.outputs.environment }}"
+          echo "Image tag: ${{ steps.vars.outputs.image_tag }}"
+          echo "Deploy infrastructure: ${{ steps.vars.outputs.deploy_infra }}"
 
       - name: Azure Login (OIDC)
         uses: azure/login@v2
@@ -68,8 +77,8 @@ jobs:
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
-      - name: Deploy Infrastructure (if requested)
-        if: steps.vars.outputs.deploy_infra == 'true'
+      - name: Deploy Infrastructure
+        if: ${{ steps.vars.outputs.deploy_infra == 'yes' }}
         uses: azure/arm-deploy@v2
         with:
           scope: subscription
@@ -90,8 +99,19 @@ jobs:
           echo "rg_name=${RG_NAME}" >> $GITHUB_OUTPUT
           echo "app_name=${APP_NAME}" >> $GITHUB_OUTPUT
 
+      - name: Check if Container App exists
+        id: check-app
+        run: |
+          if az containerapp show --name ${{ steps.app-info.outputs.app_name }} --resource-group ${{ steps.app-info.outputs.rg_name }} &>/dev/null; then
+            echo "exists=true" >> $GITHUB_OUTPUT
+          else
+            echo "exists=false" >> $GITHUB_OUTPUT
+            echo "::error::Container App does not exist. Run workflow with 'Deploy infrastructure: yes' first."
+            exit 1
+          fi
+
       - name: Update Container App image
-        if: steps.vars.outputs.deploy_infra != 'true'
+        if: ${{ steps.vars.outputs.deploy_infra == 'no' && steps.check-app.outputs.exists == 'true' }}
         run: |
           az containerapp update \
             --name ${{ steps.app-info.outputs.app_name }} \
