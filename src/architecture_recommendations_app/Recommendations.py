@@ -1107,17 +1107,18 @@ def _render_placeholder() -> None:
     5. Download your PDF report
     """)
 
-    with st.expander("What is a context file?"):
+    with st.expander("What is a context file?", expanded=True):
         st.markdown("""
         A context file contains information about your application gathered by
-        Dr. Migrate or similar assessment tools. It includes:
+        [Dr. Migrate](https://www.drmigrate.com/). It includes:
 
         - **Application Overview**: Name, type, business criticality, migration treatment
         - **Detected Technologies**: Runtime, frameworks, databases, middleware
         - **Server Details**: Infrastructure metrics and Azure readiness
         - **App Modernization Results**: Platform compatibility assessments
 
-        The file should be in JSON format.
+        The file should be in JSON format. See the
+        [Dr. Migrate documentation](https://www.drmigrate.com/) for how to generate a context file.
         """)
 
 

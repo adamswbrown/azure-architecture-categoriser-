@@ -127,7 +127,11 @@ def main():
     render_sidebar_footer()
 
     st.title("Catalog Statistics")
-    st.caption("Analytics dashboard for the architecture catalog")
+    st.caption(
+        "Analytics for the catalog built from the "
+        "[Azure Architecture Center](https://learn.microsoft.com/en-us/azure/architecture/) "
+        "— Microsoft's repository of reference architectures, best practices, and design patterns for Azure."
+    )
 
     # Get catalog path
     catalog_path = get_catalog_path()

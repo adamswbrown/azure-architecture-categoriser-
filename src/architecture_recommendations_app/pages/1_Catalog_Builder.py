@@ -286,41 +286,15 @@ def main():
         if st.button("?", help="Show help", key="help_button"):
             show_help_dialog()
 
-    # Getting Started - visible section (not collapsed)
+    # Compact intro
     if not get_state('repo_path'):
         st.info("**Step 1:** Clone the Azure Architecture Center repository using the sidebar to get started.")
 
-    col1, col2 = st.columns([2, 1])
-
-    with col1:
-        st.markdown("""
-        The Catalog Builder scans the [Azure Architecture Center](https://learn.microsoft.com/en-us/azure/architecture/)
-        repository and creates a structured catalog of architecture patterns. This catalog powers the
-        **Recommendations** page to match your applications to suitable architectures.
-        """)
-
-    with col2:
-        st.markdown("""
-        **Quick Start:**
-        1. Clone the repository (sidebar)
-        2. Generate catalog (Build tab)
-        """)
-
-    # Keeping the catalog current
-    with st.container():
-        st.markdown("##### Keeping Your Catalog Current")
-        st.markdown("""
-        The Azure Architecture Center is updated regularly with new patterns and improvements.
-        To get the latest architectures:
-
-        - **Local usage:** Click "Update Repository (git pull)" in the sidebar periodically
-        - **Docker/hosted:** Rebuild the container image to include the latest catalog
-        - **Public deployments:** The bundled catalog is a snapshot from when the image was built;
-          use the Catalog Builder to generate a fresh catalog if you need the latest patterns
-        """)
-
-    st.markdown("---")
-    st.markdown("Configure the catalog builder settings through the tabs below.")
+    st.caption(
+        "Scans the [Azure Architecture Center](https://learn.microsoft.com/en-us/azure/architecture/) "
+        "to create a catalog of architecture patterns for the **Recommendations** page. "
+        "**Quick Start:** Clone repo (sidebar) → Generate catalog (Build tab)"
+    )
 
     # Tabs for different functionality
     tab1, tab2, tab3, tab4 = st.tabs([
