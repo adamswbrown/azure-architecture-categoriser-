@@ -8,7 +8,7 @@ targetScope = 'subscription'
 param environment string = 'prod'
 
 @description('Azure region for resources')
-param location string = 'australiaeast'
+param location string = 'uksouth'
 
 @description('Container image to deploy')
 param containerImage string = 'ghcr.io/adamswbrown/azure-architecture-categoriser:latest'

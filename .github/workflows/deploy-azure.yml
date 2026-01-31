@@ -27,7 +27,7 @@ on:
           - 'no'
 
 env:
-  AZURE_REGION: australiaeast
+  AZURE_REGION: uksouth
   IMAGE_REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}
 
