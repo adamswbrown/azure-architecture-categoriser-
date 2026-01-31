@@ -56,8 +56,9 @@ def render_preview_panel() -> None:
             if st.button("Build Quick Catalog", type="primary", use_container_width=True, key="quick_build"):
                 # Set config for reference architectures only
                 from catalog_builder.config import CatalogConfig
-                import catalog_builder.config as config_module
-                config_module._config = CatalogConfig()  # Uses defaults (reference-architecture + exclude_examples=True)
+                config = CatalogConfig()  # Uses defaults (reference-architecture + exclude_examples=True)
+                # Update session state so _generate_catalog uses the correct config
+                set_state('config', config)
                 _generate_catalog(repo_path, _get_default_output_path())
 
     with col2:
@@ -68,11 +69,11 @@ def render_preview_panel() -> None:
             if st.button("Build Full Catalog", type="secondary", use_container_width=True, key="full_build"):
                 # Set config for all content types
                 from catalog_builder.config import CatalogConfig
-                import catalog_builder.config as config_module
                 config = CatalogConfig()
                 config.filters.allowed_topics = ['reference-architecture', 'example-scenario', 'solution-idea']
                 config.filters.exclude_examples = False
-                config_module._config = config
+                # Update session state so _generate_catalog uses the correct config
+                set_state('config', config)
                 _generate_catalog(repo_path, _get_default_output_path())
 
     st.markdown("---")
