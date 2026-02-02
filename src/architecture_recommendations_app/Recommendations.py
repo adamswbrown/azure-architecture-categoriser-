@@ -248,6 +248,11 @@ def _show_sample_files_dialog():
         """)
         return
 
+    # Show where samples directory was found
+    import os
+    files_in_dir = os.listdir(str(samples_dir)) if os.path.isdir(str(samples_dir)) else []
+    st.info(f"📁 Found samples at: `{samples_dir}` ({len(files_in_dir)} items)")
+
     for sample in SAMPLE_FILES:
         with st.container(border=True):
             col1, col2 = st.columns([3, 1])
