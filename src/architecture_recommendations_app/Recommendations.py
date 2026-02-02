@@ -136,6 +136,46 @@ SAMPLE_FILES = [
 ]
 
 
+def _get_samples_directory() -> Path | None:
+    """Find the samples directory with multiple fallback paths.
+
+    Tries several approaches to find the samples directory:
+    1. Relative to this file's location
+    2. Relative to current working directory
+    3. Absolute path from project root environment variable
+    4. Docker container standard location
+    """
+    # Approach 1: Relative to this file
+    samples_dir = Path(__file__).parent.parent.parent / "examples" / "context_files"
+    if samples_dir.exists():
+        return samples_dir
+
+    # Approach 2: Relative to current working directory
+    samples_dir = Path.cwd() / "examples" / "context_files"
+    if samples_dir.exists():
+        return samples_dir
+
+    # Approach 3: Check /app (Docker standard)
+    samples_dir = Path("/app/examples/context_files")
+    if samples_dir.exists():
+        return samples_dir
+
+    # Approach 4: Check common development locations
+    project_root_candidates = [
+        Path(__file__).parent.parent.parent,
+        Path.cwd(),
+        Path.cwd().parent,
+        Path.home() / "Developer" / "azure-architecture-categoriser-",
+    ]
+
+    for root in project_root_candidates:
+        samples_dir = root / "examples" / "context_files"
+        if samples_dir.exists():
+            return samples_dir
+
+    return None
+
+
 @st.dialog("Sample Context Files", width="large")
 def _show_sample_files_dialog():
     """Display sample files available for download."""
@@ -146,8 +186,20 @@ def _show_sample_files_dialog():
 
     st.info("**Tip:** Select a scenario that matches your interests, then upload it to see recommendations.")
 
-    # Get the samples directory path
-    samples_dir = Path(__file__).parent.parent.parent / "examples" / "context_files"
+    # Get the samples directory path with fallbacks
+    samples_dir = _get_samples_directory()
+
+    if not samples_dir:
+        st.error("""
+        **Sample files directory not found.**
+
+        This can happen if:
+        - The Docker image wasn't built correctly
+        - The examples/ directory is missing from the deployment
+
+        **Workaround:** Generate sample files by going to the Catalog Builder page, or download them from the [GitHub repository](https://github.com/adamswbrown/azure-architecture-categoriser/tree/main/examples/context_files).
+        """)
+        return
 
     for sample in SAMPLE_FILES:
         with st.container(border=True):
@@ -173,7 +225,7 @@ def _show_sample_files_dialog():
                         use_container_width=True,
                     )
                 else:
-                    st.caption("File not found")
+                    st.caption(f"⚠️ Not found")
 
     st.markdown("---")
     st.caption("For production use, generate context files using [Dr. Migrate](https://drmigrate.com).")
@@ -722,27 +774,59 @@ def _render_step1_upload(catalog_path: str) -> None:
     uploaded_file = render_upload_section(on_sample_click=_show_sample_files_dialog)
 
     if uploaded_file is not None:
-        file_hash = hash(uploaded_file.getvalue())
+        try:
+            file_hash = hash(uploaded_file.getvalue())
 
-        # Check if this is a new file
-        if get_state('last_file_hash') != file_hash:
-            # New file - validate it
-            is_valid, error_msg, data, suggestions = validate_uploaded_file(uploaded_file)
+            # Check if this is a new file
+            if get_state('last_file_hash') != file_hash:
+                # New file - validate it
+                try:
+                    is_valid, error_msg, data, suggestions = validate_uploaded_file(uploaded_file)
 
-            if not is_valid:
-                st.error(f"**Validation Error:** {error_msg}")
-                if suggestions:
-                    with st.expander("How to fix this"):
-                        for suggestion in suggestions:
-                            st.markdown(f"- {suggestion}")
-                return
+                    if not is_valid:
+                        st.error(f"**Validation Error:** {error_msg}")
+                        if suggestions:
+                            with st.expander("How to fix this"):
+                                for suggestion in suggestions:
+                                    st.markdown(f"- {suggestion}")
+                        return
+                except Exception as e:
+                    # Catch any unexpected errors during validation
+                    st.error(f"""
+                    **Upload Error:** Could not process your file.
 
-            # Store the validated data
-            set_state('context_data', data)
-            set_state('last_file_hash', file_hash)
-            set_state('scoring_result', None)
-            set_state('user_answers', {})
-            set_state('questions', None)
+                    **Error details:** {str(e)}
+
+                    **Troubleshooting:**
+                    - Ensure the file is valid JSON format
+                    - Check that the file is not corrupted
+                    - Try downloading a sample file first to verify the format
+                    """)
+                    return
+
+                # Store the validated data
+                set_state('context_data', data)
+                set_state('last_file_hash', file_hash)
+                set_state('scoring_result', None)
+                set_state('user_answers', {})
+                set_state('questions', None)
+
+        except Exception as e:
+            # Catch errors reading the file itself
+            st.error(f"""
+            **File Read Error:** Could not read your file.
+
+            **Error details:** {str(e)}
+
+            **This could happen if:**
+            - The file is too large (max 10MB)
+            - The file path contains special characters
+            - There's a permissions issue
+            - The file is being used by another process
+
+            **Try:** Download and upload a sample file first to verify the upload works correctly.
+            """)
+            return
 
         # Get the stored context data
         data = get_state('context_data')
