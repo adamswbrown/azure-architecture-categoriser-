@@ -253,6 +253,20 @@ src/architecture_recommendations_app/
     └── config.toml             # Streamlit configuration
 ```
 
+## Confidence Levels Explained
+
+Each architecture recommendation includes a **match score** (0-100%) and a **confidence level**:
+
+| Confidence Level | Score Range | Meaning |
+|------------------|-------------|---------|
+| **High** | 60%+ | Strong match for your requirements |
+| **Medium** | 50-59% | Good match with some considerations |
+| **Low** | <50% | Moderate match, review carefully |
+
+The confidence thresholds were calibrated based on typical migration patterns. A "Medium" confidence score of 50%+ indicates the architecture reasonably aligns with your application's needs, even if it's not a perfect fit.
+
+**Answering clarification questions** improves the accuracy of both the scoring and confidence assessment, as the scoring engine can better understand your specific requirements and constraints.
+
 ## Development
 
 ```bash
@@ -268,6 +282,43 @@ pytest tests/
 
 ## Troubleshooting
 
+### File Upload Errors (400 Bad Request)
+
+**Problem**: Uploading a context file shows "400 Bad Request" error in browser console.
+
+**Causes & Solutions**:
+
+1. **CORS/XSRF Configuration** (Most common in Azure deployments)
+   - Streamlit's default CORS and XSRF protection settings can conflict
+   - **Solution**: This is automatically configured in the Docker image. If running locally and experiencing this:
+     - The app is designed to work with a reverse proxy (like Azure Container Apps) handling TLS/authentication
+     - Ensure `STREAMLIT_SERVER_ENABLE_CORS=true` in your environment
+
+2. **File Size Exceeds Limit** (>10MB)
+   - Maximum context file size is 10MB
+   - **Solution**: Reduce file size or remove unnecessary data
+
+3. **Network/Proxy Issues** (In corporate environments)
+   - Firewalls or proxies may block file uploads
+   - **Solution**:
+     - Check with your IT department for file upload restrictions
+     - Try uploading from a different network
+     - Contact support if the issue persists
+
+### Sample Files Not Found (Try a Sample)
+
+**Problem**: Clicking "Try a Sample" shows "File not found" in Azure deployments but works locally.
+
+**Cause**: Path resolution differences between local development and Docker containers.
+
+**Solution**: This has been fixed in the latest version with robust path resolution:
+- The app now searches multiple locations automatically
+- Ensures examples are found in Docker deployments
+- If you're still experiencing issues:
+  1. Check that you're running version 1.1.0 or later
+  2. Verify the Docker image was rebuilt after the fix
+  3. Restart the container to ensure the latest version is running
+
 ### "Architecture catalog not found"
 
 Ensure you have a catalog file. Generate one using:
@@ -281,6 +332,9 @@ Check that your context file:
 - Is valid JSON
 - Is an array with at least one object
 - Contains `app_overview` with an `application` name
+- Includes `detected_technology_running` and `server_details` fields
+
+If validation fails, the app provides specific error messages and suggestions for fixing the file.
 
 ### No images in recommendations
 

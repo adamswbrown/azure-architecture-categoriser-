@@ -125,22 +125,42 @@ for rec in result.recommendations:
 
 ## Confidence Levels
 
-Each recommendation includes a confidence assessment:
+Each recommendation includes a confidence assessment based on the match score and associated penalties:
 
-| Level | Requirements |
-|-------|--------------|
-| **High** | Score ≥75% AND Penalty <10% AND Low Signals ≤1 AND Assumptions ≤2 |
-| **Medium** | Score ≥50% AND Penalty <20% AND Low Signals ≤3 |
-| **Low** | Does not meet Medium criteria |
+| Level | Score Range | Requirements |
+|-------|-------------|--------------|
+| **High** | 75%+ | Score ≥75% AND Penalty <10% AND Low Signals ≤1 AND Assumptions ≤2 |
+| **Medium** | 50-74% | Score ≥50% AND Penalty <20% AND Low Signals ≤3 |
+| **Low** | <50% | Does not meet Medium criteria |
+
+**Note**: The 50% threshold for "Medium" confidence was calibrated based on typical migration patterns. A score of 50%+ indicates the architecture reasonably aligns with the application's requirements and should be seriously considered by the customer.
 
 ### Confidence Penalties
 
-| Signal Confidence | Penalty |
-|-------------------|---------|
-| HIGH | 0% |
-| MEDIUM | 5% per signal |
-| LOW | 15% per signal |
-| UNKNOWN | 25% per signal |
+The scoring engine applies penalties based on how confident it is about each derived signal:
+
+| Signal Confidence | Penalty | When Applied |
+|-------------------|---------|--------------|
+| HIGH | 0% | Signal derived with high confidence from the data |
+| MEDIUM | 5% per signal | Signal inferred but with some uncertainty |
+| LOW | 15% per signal | Signal inferred but with significant uncertainty |
+| UNKNOWN | 25% per signal | Cannot reliably infer the signal from context |
+
+### Improving Confidence Scores
+
+To achieve higher confidence recommendations:
+
+1. **Answer all clarification questions** - This converts UNKNOWN and LOW confidence signals into HIGH or MEDIUM confidence, significantly boosting the overall confidence level
+
+2. **Provide detailed context files** - Ensure your Dr. Migrate context file includes:
+   - Complete technology stack information
+   - App Modernization assessment results
+   - Server and environment details
+   - Explicit treatment strategy (rehost, replatform, refactor, etc.)
+
+3. **Include compliance/security requirements** - Explicitly state if your application has regulatory or compliance requirements
+
+4. **Specify operational requirements** - Clarify availability, scalability, and disaster recovery needs
 
 ## Clarification Questions
 

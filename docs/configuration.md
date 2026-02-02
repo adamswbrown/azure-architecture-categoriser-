@@ -62,7 +62,7 @@ quality_weights:
 
 confidence_thresholds:
   high_score_threshold: 60.0     # Min score for "High" confidence
-  medium_score_threshold: 40.0   # Min score for "Medium" confidence
+  medium_score_threshold: 50.0   # Min score for "Medium" confidence (changed from 40.0)
   high_penalty_limit: 0.10       # Max penalty for "High" confidence
   medium_penalty_limit: 0.20     # Max penalty for "Medium" confidence
   high_max_low_signals: 1        # Max low-confidence signals for "High"

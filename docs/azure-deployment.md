@@ -173,6 +173,52 @@ az containerapp logs show \
   --type system
 ```
 
+### File uploads fail with 400 Bad Request
+
+**Problem**: Uploading context files returns a 400 error in the browser, but uploads work locally.
+
+**Cause**: Streamlit's CORS and XSRF protection configuration conflict in reverse proxy environments.
+
+**Solution**: This is already configured correctly in the Dockerfile:
+```dockerfile
+ENV STREAMLIT_SERVER_ENABLE_CORS=true
+ENV STREAMLIT_SERVER_ENABLE_XSRF_PROTECTION=false
+```
+
+These settings are required because:
+- Azure Container Apps acts as a reverse proxy with TLS termination
+- Authentication and security are handled at the platform level (not by Streamlit)
+- The combination of CORS enabled + XSRF disabled allows file uploads through the proxy
+
+**If you're experiencing this after deployment:**
+1. Rebuild the Docker image to ensure latest configuration
+2. Redeploy the container app with the updated image
+3. Check logs for any CORS-related warnings:
+```bash
+az containerapp logs show \
+  --name ca-azarch-recommender-prod \
+  --resource-group rg-azarch-prod \
+  --follow | grep -i cors
+```
+
+### Sample files show "File not found"
+
+**Problem**: Sample files are not accessible when clicking "Try a Sample" in Azure deployment.
+
+**Cause**: Path resolution differences between local development and containerized environments.
+
+**Solution**: This has been fixed with improved path resolution that searches multiple locations:
+1. Relative to the application file
+2. Current working directory
+3. Docker standard path (`/app/examples/context_files`)
+4. Common development locations
+
+**If updating from an older version:**
+1. Rebuild the Docker image
+2. Redeploy to Azure Container Apps
+3. Clear browser cache (Ctrl+Shift+Del or Cmd+Shift+Del on macOS)
+4. Refresh the page
+
 ### OIDC authentication fails
 
 Ensure federated credentials match exactly:
