@@ -206,20 +206,45 @@ def _show_sample_files_dialog():
 
     if not samples_dir:
         import os
+        import subprocess
+
+        # Get detailed directory listing for debugging
+        app_listing = "❌ Could not list /app"
+        try:
+            result = subprocess.run(['ls', '-la', '/app'], capture_output=True, text=True, timeout=5)
+            if result.returncode == 0:
+                app_listing = "```\n" + result.stdout + "\n```"
+            else:
+                app_listing = f"Error listing: {result.stderr}"
+        except Exception as e:
+            app_listing = f"Exception: {str(e)}"
+
+        examples_listing = "❌ /app/examples not accessible"
+        if os.path.exists('/app/examples'):
+            try:
+                result = subprocess.run(['ls', '-la', '/app/examples'], capture_output=True, text=True, timeout=5)
+                if result.returncode == 0:
+                    examples_listing = "```\n" + result.stdout + "\n```"
+            except:
+                pass
+
         st.error(f"""
         **Sample files directory not found.**
 
-        This can happen if:
-        - The Docker image wasn't rebuilt or redeployed
-        - The examples/ directory is missing from the deployment
-        - The container hasn't been restarted yet
+        **Directory Check:**
+        - Current working directory: `{os.getcwd()}`
+        - Python executable: `{__file__}`
+        - /app exists: `{os.path.exists('/app')}`
+        - /app/examples exists: `{os.path.exists('/app/examples')}`
+        - /app/examples/context_files exists: `{os.path.exists('/app/examples/context_files')}`
 
-        **Workaround:** Generate sample files by going to the Catalog Builder page, or download them from the [GitHub repository](https://github.com/adamswbrown/azure-architecture-categoriser/tree/main/examples/context_files).
+        **Contents of /app:**
+        {app_listing}
 
-        **Debug info:**
-        - Current directory: {os.getcwd()}
-        - /app exists: {os.path.exists('/app')}
-        - /app/examples exists: {os.path.exists('/app/examples')}
+        **Contents of /app/examples:**
+        {examples_listing}
+
+        **Workaround:** Generate sample files from the Catalog Builder page or download from [GitHub](https://github.com/adamswbrown/azure-architecture-categoriser/tree/main/examples/context_files).
         """)
         return
 
