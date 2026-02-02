@@ -78,7 +78,7 @@ class ConfidenceThresholdsConfig(BaseModel):
         description="Minimum match score for High confidence (0-100)"
     )
     medium_score_threshold: float = Field(
-        40.0,
+        50.0,
         description="Minimum match score for Medium confidence (0-100)"
     )
     high_penalty_limit: float = Field(
