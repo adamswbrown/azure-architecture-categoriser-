@@ -17,6 +17,17 @@ from rich.tree import Tree
 
 from .engine import ScoringEngine, validate_catalog, validate_context
 from .schema import ScoringResult
+from .drmigrate_generator import DrMigrateContextGenerator
+from .drmigrate_schema import (
+    DrMigrateApplicationData,
+    DrMigrateApplicationOverview,
+    DrMigrateServerOverview,
+    DrMigrateInstalledApplication,
+    DrMigrateKeySoftware,
+    DrMigrateCloudServerCost,
+    DrMigrateAppModCandidate,
+    DrMigrateApplicationCostComparison,
+)
 
 console = Console()
 
@@ -572,6 +583,283 @@ def init_config_cmd(out: str, force: bool):
         console.print("  3. ~/.config/architecture-scorer/config.yaml")
     except Exception as e:
         console.print(f"[red]Error creating config:[/red] {e}")
+        sys.exit(1)
+
+
+@main.command("generate-context")
+@click.option(
+    "--input", "-i",
+    "input_file",
+    required=True,
+    type=click.Path(exists=True),
+    help="Path to Dr. Migrate data JSON file"
+)
+@click.option(
+    "--out", "-o",
+    type=click.Path(),
+    help="Output file for generated context JSON (default: stdout)"
+)
+@click.option(
+    "--include-costs/--no-include-costs",
+    default=False,
+    help="Include cost comparison data in output"
+)
+@click.option(
+    "--include-network/--no-include-network",
+    default=False,
+    help="Include network dependency data in output"
+)
+@click.option(
+    "--pretty/--compact",
+    default=True,
+    help="Pretty-print the JSON output"
+)
+def generate_context_cmd(
+    input_file: str,
+    out: Optional[str],
+    include_costs: bool,
+    include_network: bool,
+    pretty: bool,
+):
+    """Generate context files from Dr. Migrate data.
+
+    This command converts Dr. Migrate LLM-exposed data into the context file
+    format expected by the Architecture Scoring Engine. This enables architecture
+    recommendations for ALL applications, not just those with Java/.NET App Cat scans.
+
+    The input JSON file should contain Dr. Migrate data in one of these formats:
+
+    1. Single application (DrMigrateApplicationData):
+       {
+         "application_overview": {...},
+         "server_overviews": [...],
+         "installed_applications": [...],
+         ...
+       }
+
+    2. Multiple applications (list of DrMigrateApplicationData):
+       [
+         {"application_overview": {...}, ...},
+         {"application_overview": {...}, ...}
+       ]
+
+    Examples:
+        architecture-scorer generate-context -i drmigrate.json -o context.json
+        architecture-scorer generate-context -i drmigrate.json --include-costs
+    """
+    try:
+        # Load input data
+        with open(input_file, "r", encoding="utf-8") as f:
+            raw_data = json.load(f)
+
+        # Initialize generator
+        generator = DrMigrateContextGenerator(
+            include_cost_data=include_costs,
+            include_network_data=include_network,
+        )
+
+        # Determine if single app or multiple apps
+        if isinstance(raw_data, list):
+            # Multiple applications
+            results = {}
+            for item in raw_data:
+                app_data = DrMigrateApplicationData.model_validate(item)
+                app_name = app_data.application_overview.application
+                context = generator.generate_context(app_data)
+                results[app_name] = context
+
+            console.print(f"[green]Generated context files for {len(results)} applications[/green]")
+
+            # Output
+            output_data = results
+        else:
+            # Single application
+            app_data = DrMigrateApplicationData.model_validate(raw_data)
+            context = generator.generate_context(app_data)
+            app_name = app_data.application_overview.application
+
+            console.print(f"[green]Generated context file for: {app_name}[/green]")
+
+            output_data = context
+
+        # Write output
+        indent = 2 if pretty else None
+        json_output = json.dumps(output_data, indent=indent, default=str)
+
+        if out:
+            with open(out, "w", encoding="utf-8") as f:
+                f.write(json_output)
+            console.print(f"[green]✓[/green] Context file saved to: {out}")
+        else:
+            print(json_output)
+
+    except json.JSONDecodeError as e:
+        console.print(f"[red]Error parsing input JSON:[/red] {e}")
+        sys.exit(1)
+    except Exception as e:
+        console.print(f"[red]Error:[/red] {e}")
+        sys.exit(1)
+
+
+@main.command("generate-sample-drmigrate")
+@click.option(
+    "--out", "-o",
+    type=click.Path(),
+    default="sample-drmigrate-input.json",
+    help="Output file for sample Dr. Migrate data"
+)
+@click.option(
+    "--app-name", "-n",
+    default="SampleApplication",
+    help="Application name for the sample"
+)
+def generate_sample_drmigrate_cmd(out: str, app_name: str):
+    """Generate a sample Dr. Migrate input file.
+
+    Creates a sample JSON file showing the expected format for Dr. Migrate data
+    that can be used with the generate-context command.
+
+    Example:
+        architecture-scorer generate-sample-drmigrate -o my-app.json -n MyApp
+    """
+    sample_data = {
+        "application_overview": {
+            "application": app_name,
+            "number_of_machines": 3,
+            "number_of_environments": 2,
+            "environment_names": "Production, Development",
+            "complexity_rating": "Medium",
+            "migration_scope": "Yes",
+            "app_function": "Business Application",
+            "app_type": "In-house",
+            "app_owner": "IT Department",
+            "business_critical": "Yes",
+            "inherent_risk": "Medium",
+            "high_availability": "Yes",
+            "disaster_recovery": "No",
+            "pii_data": "No",
+            "unique_operating_systems": "Windows Server 2019, Ubuntu 20.04",
+            "sql_server_count": "1",
+            "other_tech_stack_components": "Java 11, Spring Boot, PostgreSQL",
+            "assigned_migration_strategy": "Replatform",
+            "suitable_migration_strategy_options": "Replatform, Refactor, Rehost",
+            "detected_app_components": "Web Application, API, Database",
+            "app_component_modernization_options": "Containerize, Migrate to PaaS",
+        },
+        "server_overviews": [
+            {
+                "machine": "APP-WEB-01",
+                "application": app_name,
+                "environment": "Production",
+                "OperatingSystem": "Ubuntu 20.04",
+                "os_support_status": "Supported",
+                "PowerStatus": "On",
+                "CloudVMReadiness": "Ready",
+                "AllocatedMemoryInGB": 8.0,
+                "Cores": 4,
+                "CPUUsageInPct": 45.5,
+                "MemoryUsageInPct": 62.0,
+                "StorageGB": 100.0,
+                "DiskReadOpsPerSec": 150.0,
+                "DiskWriteOpsPerSec": 75.0,
+                "NetworkInMBPS": "50",
+                "NetworkOutMBPS": "30",
+            },
+            {
+                "machine": "APP-DB-01",
+                "application": app_name,
+                "environment": "Production",
+                "OperatingSystem": "Windows Server 2019",
+                "os_support_status": "Supported",
+                "PowerStatus": "On",
+                "CloudVMReadiness": "Ready",
+                "AllocatedMemoryInGB": 16.0,
+                "Cores": 8,
+                "CPUUsageInPct": 30.0,
+                "MemoryUsageInPct": 55.0,
+                "StorageGB": 500.0,
+                "DiskReadOpsPerSec": 500.0,
+                "DiskWriteOpsPerSec": 200.0,
+                "NetworkInMBPS": "100",
+                "NetworkOutMBPS": "80",
+            },
+        ],
+        "installed_applications": [
+            {
+                "machine": "APP-WEB-01",
+                "key_software": "Java 11",
+                "key_software_category": "Runtime",
+                "key_software_type": "Server",
+            },
+            {
+                "machine": "APP-WEB-01",
+                "key_software": "Apache Tomcat",
+                "key_software_category": "Web Server",
+                "key_software_type": "Server",
+            },
+            {
+                "machine": "APP-DB-01",
+                "key_software": "PostgreSQL",
+                "key_software_category": "Database",
+                "key_software_type": "Server",
+            },
+        ],
+        "key_software": [
+            {
+                "application": app_name,
+                "key_software": "Spring Boot",
+                "key_software_category": "Framework",
+            },
+        ],
+        "cloud_server_costs": [
+            {
+                "machine": "APP-WEB-01",
+                "application": app_name,
+                "assigned_treatment": "Replatform",
+                "assigned_target": "Azure App Service",
+                "cloud_compute_cost_annual": 2400.0,
+                "cloud_storage_cost_annual": 120.0,
+                "cloud_total_cost_annual": 2520.0,
+            },
+            {
+                "machine": "APP-DB-01",
+                "application": app_name,
+                "assigned_treatment": "Replatform",
+                "assigned_target": "Azure Database for PostgreSQL",
+                "cloud_compute_cost_annual": 3600.0,
+                "cloud_storage_cost_annual": 600.0,
+                "cloud_total_cost_annual": 4200.0,
+            },
+        ],
+        "app_mod_candidates": [
+            {
+                "application": app_name,
+                "app_mod_candidate_technology": "Java",
+                "number_of_machines_with_tech": 1,
+            },
+        ],
+        "cost_comparison": {
+            "application": app_name,
+            "current_total_cost_annual": 12000.0,
+            "cloud_compute_cost_annual": 6000.0,
+            "cloud_storage_cost_annual": 720.0,
+            "cloud_total_cost_annual": 6720.0,
+            "Currency": "USD",
+            "Symbol": "$",
+        },
+    }
+
+    try:
+        with open(out, "w", encoding="utf-8") as f:
+            json.dump(sample_data, f, indent=2)
+
+        console.print(f"[green]✓[/green] Sample Dr. Migrate data saved to: {out}")
+        console.print("\nThis file demonstrates the expected input format for the generate-context command.")
+        console.print("\nTo generate a context file from this sample:")
+        console.print(f"  [cyan]architecture-scorer generate-context -i {out} -o context.json[/cyan]")
+
+    except Exception as e:
+        console.print(f"[red]Error:[/red] {e}")
         sys.exit(1)
 
 

@@ -50,6 +50,10 @@ catalog-builder inspect --catalog catalog.json --family cloud_native
 architecture-scorer score --catalog catalog.json --context context.json
 architecture-scorer questions --catalog catalog.json --context context.json
 architecture-scorer validate --catalog catalog.json
+
+# Dr. Migrate Integration (generate context files from Dr. Migrate data)
+architecture-scorer generate-context --input drmigrate.json --out context.json
+architecture-scorer generate-sample-drmigrate --out sample-input.json
 ```
 
 ## Repository Structure
@@ -68,7 +72,7 @@ azure-architecture-categoriser/
 │   │   └── config.py                    # Configuration management (YAML)
 │   │
 │   ├── architecture_scorer/             # Scoring engine & CLI
-│   │   ├── cli.py                       # Click commands (score, questions, validate)
+│   │   ├── cli.py                       # Click commands (score, questions, validate, generate-context)
 │   │   ├── engine.py                    # ScoringEngine orchestrator (5-phase pipeline)
 │   │   ├── schema.py                    # Input/output models (Pydantic)
 │   │   ├── normalizer.py                # Phase 1: Normalize raw context
@@ -77,7 +81,9 @@ azure-architecture-categoriser/
 │   │   ├── eligibility_filter.py        # Phase 4: Filter by compatibility
 │   │   ├── scorer.py                    # Phase 5: Score and rank architectures
 │   │   ├── explainer.py                 # Phase 6: Build explanations
-│   │   └── config.py                    # Scorer configuration
+│   │   ├── config.py                    # Scorer configuration
+│   │   ├── drmigrate_schema.py          # Dr. Migrate input data models
+│   │   └── drmigrate_generator.py       # Context file generator from Dr. Migrate data
 │   │
 │   ├── architecture_recommendations_app/ # Streamlit customer-facing web app
 │   │   ├── app.py                       # Main app entry point (3-step wizard)
@@ -116,6 +122,7 @@ azure-architecture-categoriser/
 │   ├── recommendations-app.md           # Web app guide
 │   ├── configuration.md                 # Full config reference
 │   ├── securityaudit.md                 # Security measures
+│   ├── drmigrate-integration.md         # Dr. Migrate context file generation
 │   └── design/                          # Design specifications
 │
 ├── bin/                                 # Launcher scripts
