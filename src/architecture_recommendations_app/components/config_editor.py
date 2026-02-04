@@ -83,7 +83,7 @@ def render_config_editor() -> None:
                 min_value=0.0, max_value=0.3,
                 value=weights.availability_alignment,
                 step=0.02,
-                help="Weight for availability requirements"
+                help="Weight for availability requirements (boosted when user answers)"
             )
 
             weights.service_overlap = st.slider(
@@ -116,7 +116,7 @@ def render_config_editor() -> None:
                 min_value=0.0, max_value=0.2,
                 value=weights.operating_model_fit,
                 step=0.02,
-                help="Weight for operational maturity"
+                help="Weight for operational maturity (boosted when user answers)"
             )
 
             weights.cost_posture_alignment = st.slider(
@@ -124,7 +124,15 @@ def render_config_editor() -> None:
                 min_value=0.0, max_value=0.2,
                 value=weights.cost_posture_alignment,
                 step=0.02,
-                help="Weight for cost strategy match"
+                help="Weight for cost strategy match (boosted when user answers)"
+            )
+
+            weights.security_alignment = st.slider(
+                "Security alignment",
+                min_value=0.0, max_value=0.2,
+                value=weights.security_alignment,
+                step=0.02,
+                help="Weight for security requirements alignment"
             )
 
         # Show weight sum
@@ -138,7 +146,8 @@ def render_config_editor() -> None:
             weights.availability_alignment +
             weights.operating_model_fit +
             weights.complexity_tolerance +
-            weights.cost_posture_alignment
+            weights.cost_posture_alignment +
+            weights.security_alignment
         )
         if abs(total - 1.0) > 0.1:
             st.warning(f"Weights sum to {total:.2f} (should be ~1.0)")
