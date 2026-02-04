@@ -598,6 +598,7 @@ class DrMigrateContextGenerator:
         include_network_data: bool = False,
         azure_service_mappings: Optional[dict[str, str]] = None,
         compatibility_mappings: Optional[dict[str, dict[str, str]]] = None,
+        use_csv_mappings: bool = True,
     ):
         """Initialize the generator.
 
@@ -608,11 +609,39 @@ class DrMigrateContextGenerator:
             compatibility_mappings: Custom platform compatibility mappings (overrides defaults).
                 Format: {"Technology": {"azure_service": "CompatibilityLevel"}}
                 Compatibility levels: FullySupported, Supported, SupportedWithChanges, NotSupported
+            use_csv_mappings: If True (default), load mappings from Modernisation_Options.csv.
+                Falls back to DEFAULT_COMPATIBILITY_MAPPINGS if CSV not found.
         """
         self.include_cost_data = include_cost_data
         self.include_network_data = include_network_data
         self.azure_service_mappings = azure_service_mappings or AZURE_SERVICE_MAPPINGS
-        self.compatibility_mappings = compatibility_mappings or DEFAULT_COMPATIBILITY_MAPPINGS
+
+        # Load compatibility mappings with priority:
+        # 1. Explicit compatibility_mappings parameter
+        # 2. CSV file (if use_csv_mappings=True)
+        # 3. DEFAULT_COMPATIBILITY_MAPPINGS fallback
+        if compatibility_mappings is not None:
+            self.compatibility_mappings = compatibility_mappings
+        elif use_csv_mappings:
+            self.compatibility_mappings = self._load_csv_mappings()
+        else:
+            self.compatibility_mappings = DEFAULT_COMPATIBILITY_MAPPINGS
+
+    def _load_csv_mappings(self) -> dict[str, dict[str, str]]:
+        """Load compatibility mappings from CSV file.
+
+        Returns:
+            Dictionary of technology mappings, or DEFAULT_COMPATIBILITY_MAPPINGS if CSV not found.
+        """
+        try:
+            from .modernization_loader import get_compatibility_mappings
+            return get_compatibility_mappings()
+        except (ImportError, FileNotFoundError):
+            # Fall back to hardcoded defaults if CSV not available
+            return DEFAULT_COMPATIBILITY_MAPPINGS
+        except Exception:
+            # Any other error, use defaults
+            return DEFAULT_COMPATIBILITY_MAPPINGS
 
     def generate_context(self, app_data: DrMigrateApplicationData) -> list[dict[str, Any]]:
         """Generate a context file from Dr. Migrate application data.

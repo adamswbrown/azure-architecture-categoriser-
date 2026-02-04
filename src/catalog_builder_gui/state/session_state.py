@@ -74,6 +74,14 @@ def initialize_state() -> None:
         else:
             st.session_state.repo_path = ""
 
+        # Modernization options state
+        st.session_state.modernization_config = None  # Loaded lazily
+        st.session_state.modernization_changes = False
+        st.session_state.mod_search = ""
+        st.session_state.mod_current_page = 1
+        st.session_state.adding_option_for = None
+        st.session_state.adding_new_technology = False
+
 
 def get_state(key: str, default: Any = None) -> Any:
     """Get a value from session state."""

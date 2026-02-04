@@ -17,6 +17,7 @@ from catalog_builder_gui.components.keywords_editor import render_keywords_edito
 from catalog_builder_gui.components.filter_presets import render_filter_presets
 from catalog_builder_gui.components.preview_panel import render_preview_panel
 from catalog_builder_gui.components.config_editor import render_config_editor
+from catalog_builder_gui.components.modernization_editor import render_modernization_editor
 
 # Import path validation utilities
 from architecture_recommendations_app.utils.sanitize import (
@@ -292,11 +293,12 @@ def main() -> None:
 
     st.markdown("Configure the catalog builder settings through the tabs below.")
 
-    tab1, tab2, tab3, tab4 = st.tabs([
+    tab1, tab2, tab3, tab4, tab5 = st.tabs([
         "🔨 Build Catalog",
         "🎛️ Filter Presets",
         "📚 Keyword Dictionaries",
-        "⚙️ Config Editor"
+        "⚙️ Config Editor",
+        "🔄 Modernization Options"
     ])
 
     with tab1:
@@ -310,6 +312,9 @@ def main() -> None:
 
     with tab4:
         render_config_editor()
+
+    with tab5:
+        render_modernization_editor()
 
 
 if __name__ == "__main__":

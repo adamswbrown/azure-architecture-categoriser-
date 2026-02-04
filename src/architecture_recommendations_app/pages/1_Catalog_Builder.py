@@ -25,6 +25,7 @@ from catalog_builder_gui.components.keywords_editor import render_keywords_edito
 from catalog_builder_gui.components.filter_presets import render_filter_presets
 from catalog_builder_gui.components.preview_panel import render_preview_panel
 from catalog_builder_gui.components.config_editor import render_config_editor
+from catalog_builder_gui.components.modernization_editor import render_modernization_editor
 
 
 def clone_repository(repo_url: str, clone_dir: str) -> tuple[bool, str]:
@@ -297,11 +298,12 @@ def main():
     )
 
     # Tabs for different functionality
-    tab1, tab2, tab3, tab4 = st.tabs([
+    tab1, tab2, tab3, tab4, tab5 = st.tabs([
         "Build Catalog",
         "Filter Presets",
         "Keyword Dictionaries",
-        "Config Editor"
+        "Config Editor",
+        "Modernization Options"
     ])
 
     with tab1:
@@ -315,6 +317,9 @@ def main():
 
     with tab4:
         render_config_editor()
+
+    with tab5:
+        render_modernization_editor()
 
 
 if __name__ == "__main__":
