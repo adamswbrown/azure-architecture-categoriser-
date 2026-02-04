@@ -18,7 +18,10 @@ def render_upload_section(on_sample_click=None):
         uploaded_file = st.file_uploader(
             "Upload your context file (JSON)",
             type=['json'],
-            help="Upload the JSON context file from Dr. Migrate or similar assessment tool"
+            help=(
+                "Supports both App Cat context files (Java/.NET) and Dr. Migrate data exports (all applications). "
+                "Dr. Migrate format is automatically detected and converted."
+            )
         )
 
     with col2:
