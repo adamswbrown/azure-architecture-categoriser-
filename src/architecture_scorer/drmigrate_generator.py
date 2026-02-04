@@ -41,6 +41,9 @@ TECHNOLOGY_PATTERNS = {
         (r"db2", "IBM DB2"),
         (r"sqlite", "SQLite"),
         (r"microsoft\s*access", "Microsoft Access"),
+        (r"cassandra", "Apache Cassandra"),
+        (r"couchdb", "CouchDB"),
+        (r"elasticsearch", "Elasticsearch"),
     ],
     # Web servers
     "web_servers": [
@@ -48,6 +51,9 @@ TECHNOLOGY_PATTERNS = {
         (r"apache\s*http|apache2|httpd", "Apache HTTP Server"),
         (r"nginx", "NGINX"),
         (r"tomcat", "Apache Tomcat"),
+        (r"jetty", "Eclipse Jetty"),
+        (r"lighttpd", "Lighttpd"),
+        (r"caddy", "Caddy"),
     ],
     # Runtimes
     "runtimes": [
@@ -57,9 +63,14 @@ TECHNOLOGY_PATTERNS = {
         (r"java\s*(\d+)", "Java {0}"),
         (r"jdk\s*(\d+)", "Java {0}"),
         (r"jre\s*(\d+)", "Java {0}"),
+        (r"openjdk\s*(\d+)", "Java {0}"),
         (r"python\s*(\d+\.?\d*)", "Python {0}"),
         (r"node\.?js\s*(\d+\.?\d*)", "Node.js {0}"),
         (r"php\s*(\d+\.?\d*)", "PHP {0}"),
+        (r"ruby\s*(\d+\.?\d*)", "Ruby {0}"),
+        (r"go\s*(\d+\.?\d*)|golang", "Go {0}"),
+        (r"rust\s*(\d+\.?\d*)", "Rust {0}"),
+        (r"perl\s*(\d+\.?\d*)", "Perl {0}"),
     ],
     # Frameworks
     "frameworks": [
@@ -70,10 +81,18 @@ TECHNOLOGY_PATTERNS = {
         (r"asp\.?net", "ASP.NET"),
         (r"django", "Django"),
         (r"flask", "Flask"),
+        (r"fastapi", "FastAPI"),
         (r"express", "Express.js"),
+        (r"nextjs|next\.js", "Next.js"),
         (r"react", "React"),
         (r"angular", "Angular"),
         (r"vue\.?js|vuejs", "Vue.js"),
+        (r"rails|ruby\s*on\s*rails", "Ruby on Rails"),
+        (r"laravel", "Laravel"),
+        (r"symfony", "Symfony"),
+        (r"wordpress", "WordPress"),
+        (r"drupal", "Drupal"),
+        (r"magento", "Magento"),
     ],
     # Messaging
     "messaging": [
@@ -82,6 +101,8 @@ TECHNOLOGY_PATTERNS = {
         (r"activemq", "Apache ActiveMQ"),
         (r"msmq", "Microsoft MSMQ"),
         (r"ibm\s*mq|websphere\s*mq", "IBM MQ"),
+        (r"zeromq", "ZeroMQ"),
+        (r"nats", "NATS"),
     ],
     # Middleware
     "middleware": [
@@ -89,6 +110,8 @@ TECHNOLOGY_PATTERNS = {
         (r"weblogic", "Oracle WebLogic"),
         (r"jboss|wildfly", "JBoss/WildFly"),
         (r"biztalk", "Microsoft BizTalk"),
+        (r"mulesoft", "MuleSoft"),
+        (r"tibco", "TIBCO"),
     ],
 }
 
@@ -102,11 +125,17 @@ AZURE_SERVICE_MAPPINGS = {
     "MongoDB": "Azure Cosmos DB",
     "Redis": "Azure Cache for Redis",
     "MariaDB": "Azure Database for MariaDB",
+    "Apache Cassandra": "Azure Cosmos DB for Apache Cassandra",
+    "CouchDB": "Azure Cosmos DB",
+    "Elasticsearch": "Azure Cognitive Search",
     # Web servers
     "Microsoft IIS": "Azure App Service",
     "Apache HTTP Server": "Azure App Service",
     "NGINX": "Azure App Service",
     "Apache Tomcat": "Azure App Service",
+    "Eclipse Jetty": "Azure App Service",
+    "Lighttpd": "Azure App Service",
+    "Caddy": "Azure Container Apps",
     # Runtimes
     ".NET Framework": "Azure Virtual Machines",
     ".NET Core": "Azure App Service",
@@ -115,16 +144,247 @@ AZURE_SERVICE_MAPPINGS = {
     "Python": "Azure App Service",
     "Node.js": "Azure App Service",
     "PHP": "Azure App Service",
+    "Ruby": "Azure App Service",
+    "Go": "Azure Container Apps",
+    "Rust": "Azure Container Apps",
+    "Perl": "Azure Virtual Machines",
+    # Frameworks
+    "Spring Boot": "Azure App Service",
+    "Django": "Azure App Service",
+    "Flask": "Azure App Service",
+    "FastAPI": "Azure Container Apps",
+    "Express.js": "Azure App Service",
+    "Next.js": "Azure Static Web Apps",
+    "Ruby on Rails": "Azure App Service",
+    "Laravel": "Azure App Service",
+    "Symfony": "Azure App Service",
+    "WordPress": "Azure App Service",
+    "Drupal": "Azure App Service",
+    "Magento": "Azure Kubernetes Service",
     # Messaging
     "RabbitMQ": "Azure Service Bus",
     "Apache Kafka": "Azure Event Hubs",
     "Apache ActiveMQ": "Azure Service Bus",
     "Microsoft MSMQ": "Azure Service Bus",
     "IBM MQ": "Azure Service Bus",
+    "ZeroMQ": "Azure Service Bus",
+    "NATS": "Azure Service Bus",
     # Middleware
     "IBM WebSphere": "Azure Kubernetes Service",
     "Oracle WebLogic": "Azure Kubernetes Service",
     "JBoss/WildFly": "Azure App Service",
+    "MuleSoft": "Azure API Management",
+    "TIBCO": "Azure Logic Apps",
+}
+
+# =============================================================================
+# Inferred Platform Compatibility Mappings
+# =============================================================================
+# These mappings are used when App Cat scan data is NOT available.
+# They represent general compatibility assumptions based on technology type,
+# NOT actual code analysis. Results should be treated as estimates.
+#
+# Compatibility levels:
+#   - "FullySupported": Technology runs natively without changes
+#   - "Supported": Technology works with minimal configuration
+#   - "SupportedWithChanges": Requires code/config modifications
+#   - "NotSupported": Technology cannot run on this platform
+
+DEFAULT_COMPATIBILITY_MAPPINGS = {
+    # Java ecosystem
+    "Java": {
+        "azure_app_service": "SupportedWithChanges",
+        "azure_kubernetes_service": "Supported",
+        "azure_container_apps": "Supported",
+        "azure_spring_apps": "FullySupported",
+        "azure_virtual_machines": "FullySupported",
+    },
+    "Spring Boot": {
+        "azure_app_service": "Supported",
+        "azure_kubernetes_service": "FullySupported",
+        "azure_container_apps": "FullySupported",
+        "azure_spring_apps": "FullySupported",
+        "azure_virtual_machines": "FullySupported",
+    },
+    "Apache Tomcat": {
+        "azure_app_service": "Supported",
+        "azure_kubernetes_service": "Supported",
+        "azure_container_apps": "Supported",
+        "azure_virtual_machines": "FullySupported",
+    },
+    # .NET ecosystem
+    ".NET Core": {
+        "azure_app_service": "FullySupported",
+        "azure_kubernetes_service": "FullySupported",
+        "azure_container_apps": "FullySupported",
+        "azure_functions": "FullySupported",
+        "azure_virtual_machines": "FullySupported",
+    },
+    ".NET Framework": {
+        "azure_app_service": "SupportedWithChanges",
+        "azure_kubernetes_service": "NotSupported",
+        "azure_container_apps": "NotSupported",
+        "azure_virtual_machines": "FullySupported",
+    },
+    ".NET": {
+        "azure_app_service": "Supported",
+        "azure_kubernetes_service": "Supported",
+        "azure_container_apps": "Supported",
+        "azure_virtual_machines": "FullySupported",
+    },
+    "ASP.NET Core": {
+        "azure_app_service": "FullySupported",
+        "azure_kubernetes_service": "FullySupported",
+        "azure_container_apps": "FullySupported",
+        "azure_virtual_machines": "FullySupported",
+    },
+    "ASP.NET": {
+        "azure_app_service": "SupportedWithChanges",
+        "azure_virtual_machines": "FullySupported",
+    },
+    # Python ecosystem
+    "Python": {
+        "azure_app_service": "Supported",
+        "azure_kubernetes_service": "Supported",
+        "azure_container_apps": "Supported",
+        "azure_functions": "Supported",
+        "azure_virtual_machines": "FullySupported",
+    },
+    "Django": {
+        "azure_app_service": "Supported",
+        "azure_kubernetes_service": "Supported",
+        "azure_container_apps": "Supported",
+        "azure_virtual_machines": "FullySupported",
+    },
+    "Flask": {
+        "azure_app_service": "Supported",
+        "azure_kubernetes_service": "Supported",
+        "azure_container_apps": "Supported",
+        "azure_functions": "SupportedWithChanges",
+        "azure_virtual_machines": "FullySupported",
+    },
+    "FastAPI": {
+        "azure_app_service": "SupportedWithChanges",
+        "azure_kubernetes_service": "Supported",
+        "azure_container_apps": "FullySupported",
+        "azure_virtual_machines": "FullySupported",
+    },
+    # Node.js ecosystem
+    "Node.js": {
+        "azure_app_service": "FullySupported",
+        "azure_kubernetes_service": "Supported",
+        "azure_container_apps": "Supported",
+        "azure_functions": "FullySupported",
+        "azure_static_web_apps": "SupportedWithChanges",
+        "azure_virtual_machines": "FullySupported",
+    },
+    "Express.js": {
+        "azure_app_service": "Supported",
+        "azure_kubernetes_service": "Supported",
+        "azure_container_apps": "Supported",
+        "azure_virtual_machines": "FullySupported",
+    },
+    "Next.js": {
+        "azure_app_service": "SupportedWithChanges",
+        "azure_static_web_apps": "Supported",
+        "azure_container_apps": "Supported",
+        "azure_virtual_machines": "FullySupported",
+    },
+    # PHP ecosystem
+    "PHP": {
+        "azure_app_service": "Supported",
+        "azure_kubernetes_service": "Supported",
+        "azure_container_apps": "Supported",
+        "azure_virtual_machines": "FullySupported",
+    },
+    "Laravel": {
+        "azure_app_service": "Supported",
+        "azure_kubernetes_service": "Supported",
+        "azure_container_apps": "Supported",
+        "azure_virtual_machines": "FullySupported",
+    },
+    "Symfony": {
+        "azure_app_service": "Supported",
+        "azure_kubernetes_service": "Supported",
+        "azure_container_apps": "Supported",
+        "azure_virtual_machines": "FullySupported",
+    },
+    "WordPress": {
+        "azure_app_service": "Supported",
+        "azure_kubernetes_service": "SupportedWithChanges",
+        "azure_virtual_machines": "FullySupported",
+    },
+    "Drupal": {
+        "azure_app_service": "Supported",
+        "azure_kubernetes_service": "SupportedWithChanges",
+        "azure_virtual_machines": "FullySupported",
+    },
+    "Magento": {
+        "azure_kubernetes_service": "SupportedWithChanges",
+        "azure_virtual_machines": "FullySupported",
+    },
+    # Ruby ecosystem
+    "Ruby": {
+        "azure_app_service": "Supported",
+        "azure_kubernetes_service": "Supported",
+        "azure_container_apps": "Supported",
+        "azure_virtual_machines": "FullySupported",
+    },
+    "Ruby on Rails": {
+        "azure_app_service": "Supported",
+        "azure_kubernetes_service": "Supported",
+        "azure_container_apps": "Supported",
+        "azure_virtual_machines": "FullySupported",
+    },
+    # Go ecosystem
+    "Go": {
+        "azure_app_service": "SupportedWithChanges",
+        "azure_kubernetes_service": "FullySupported",
+        "azure_container_apps": "FullySupported",
+        "azure_functions": "SupportedWithChanges",
+        "azure_virtual_machines": "FullySupported",
+    },
+    # Rust
+    "Rust": {
+        "azure_kubernetes_service": "Supported",
+        "azure_container_apps": "Supported",
+        "azure_virtual_machines": "FullySupported",
+    },
+    # Web servers
+    "NGINX": {
+        "azure_app_service": "NotSupported",
+        "azure_kubernetes_service": "FullySupported",
+        "azure_container_apps": "Supported",
+        "azure_virtual_machines": "FullySupported",
+    },
+    "Apache HTTP Server": {
+        "azure_app_service": "NotSupported",
+        "azure_kubernetes_service": "Supported",
+        "azure_container_apps": "Supported",
+        "azure_virtual_machines": "FullySupported",
+    },
+    "Microsoft IIS": {
+        "azure_app_service": "Supported",
+        "azure_virtual_machines": "FullySupported",
+    },
+    # Middleware - typically requires containers or VMs
+    "IBM WebSphere": {
+        "azure_kubernetes_service": "SupportedWithChanges",
+        "azure_virtual_machines": "FullySupported",
+    },
+    "Oracle WebLogic": {
+        "azure_kubernetes_service": "SupportedWithChanges",
+        "azure_virtual_machines": "FullySupported",
+    },
+    "JBoss/WildFly": {
+        "azure_app_service": "SupportedWithChanges",
+        "azure_kubernetes_service": "Supported",
+        "azure_virtual_machines": "FullySupported",
+    },
+    # Default fallback for unknown technologies
+    "_default": {
+        "azure_virtual_machines": "Supported",
+    },
 }
 
 
@@ -139,6 +399,11 @@ class DrMigrateContextGenerator:
     This class transforms Dr. Migrate data into the format expected by the
     Architecture Scoring Engine, enabling architecture recommendations for
     applications that don't have App Cat/App Mod scan results.
+
+    IMPORTANT: Compatibility assessments generated by this class are INFERRED
+    from technology detection patterns, NOT from actual code analysis like
+    App Cat provides. Results should be treated as estimates and may require
+    manual validation for production migration decisions.
     """
 
     def __init__(
@@ -146,6 +411,7 @@ class DrMigrateContextGenerator:
         include_cost_data: bool = False,
         include_network_data: bool = False,
         azure_service_mappings: Optional[dict[str, str]] = None,
+        compatibility_mappings: Optional[dict[str, dict[str, str]]] = None,
     ):
         """Initialize the generator.
 
@@ -153,10 +419,14 @@ class DrMigrateContextGenerator:
             include_cost_data: Include cost information in extended fields
             include_network_data: Include network dependency information
             azure_service_mappings: Custom Azure service mappings (overrides defaults)
+            compatibility_mappings: Custom platform compatibility mappings (overrides defaults).
+                Format: {"Technology": {"azure_service": "CompatibilityLevel"}}
+                Compatibility levels: FullySupported, Supported, SupportedWithChanges, NotSupported
         """
         self.include_cost_data = include_cost_data
         self.include_network_data = include_network_data
         self.azure_service_mappings = azure_service_mappings or AZURE_SERVICE_MAPPINGS
+        self.compatibility_mappings = compatibility_mappings or DEFAULT_COMPATIBILITY_MAPPINGS
 
     def generate_context(self, app_data: DrMigrateApplicationData) -> list[dict[str, Any]]:
         """Generate a context file from Dr. Migrate application data.
@@ -552,7 +822,11 @@ class DrMigrateContextGenerator:
     def _generate_inferred_app_mod_results(
         self, app_data: DrMigrateApplicationData
     ) -> list[dict[str, Any]]:
-        """Generate inferred App Mod results when no explicit data available."""
+        """Generate inferred App Mod results when no explicit data available.
+
+        WARNING: These results are INFERRED from technology detection patterns,
+        NOT from actual code analysis. They should be treated as estimates only.
+        """
         # Detect primary technology from available data
         technologies = self._detect_technologies(app_data)
         primary_tech = self._detect_primary_technology(technologies)
@@ -573,13 +847,30 @@ class DrMigrateContextGenerator:
                 "modernization_feasible": mod_feasible,
                 "inferred_from_dr_migrate": True,
                 "no_appcat_scan": True,
+                "confidence": "Low",
+                "warning": "Compatibility inferred from technology type, not code analysis",
             },
-            "findings": [{
-                "type": "InferredFromDrMigrate",
-                "severity": "Info",
-                "description": "App Mod results inferred from Dr. Migrate data. "
-                              "No App Cat scan available for this application."
-            }],
+            "findings": [
+                {
+                    "type": "InferredFromDrMigrate",
+                    "severity": "Warning",
+                    "description": (
+                        "Platform compatibility is INFERRED from detected technology patterns. "
+                        "Unlike App Cat scans which analyze actual code, these assessments are "
+                        "based on general technology characteristics. Manual validation is "
+                        "recommended before making migration decisions."
+                    ),
+                },
+                {
+                    "type": "NoCodeAnalysis",
+                    "severity": "Info",
+                    "description": (
+                        f"No App Cat scan available. Compatibility for '{primary_tech}' is based on "
+                        "predefined mappings that may not account for custom code, dependencies, "
+                        "or configuration-specific issues."
+                    ),
+                },
+            ],
             "compatibility": self._infer_compatibility(primary_tech),
             "recommended_targets": self._get_recommended_targets(primary_tech),
             "blockers": [],
@@ -588,7 +879,23 @@ class DrMigrateContextGenerator:
     def _detect_primary_technology(self, technologies: list[str]) -> str:
         """Detect the primary technology from a list of technologies."""
         # Priority order for primary technology detection
+        # Order matters: more specific patterns first
         priority_patterns = [
+            # Frameworks (most specific)
+            (r"spring\s*boot", "Spring Boot"),
+            (r"asp\.?net\s*core", "ASP.NET Core"),
+            (r"asp\.?net", "ASP.NET"),
+            (r"django", "Django"),
+            (r"flask", "Flask"),
+            (r"fastapi", "FastAPI"),
+            (r"laravel", "Laravel"),
+            (r"symfony", "Symfony"),
+            (r"rails|ruby\s*on\s*rails", "Ruby on Rails"),
+            (r"express", "Express.js"),
+            (r"next\.?js", "Next.js"),
+            # Runtimes
+            (r"\.net\s*core", ".NET Core"),
+            (r"\.net\s*framework", ".NET Framework"),
             (r"java", "Java"),
             (r"\.net|dotnet", ".NET"),
             (r"python", "Python"),
@@ -596,6 +903,11 @@ class DrMigrateContextGenerator:
             (r"php", "PHP"),
             (r"ruby", "Ruby"),
             (r"go|golang", "Go"),
+            (r"rust", "Rust"),
+            # Web servers
+            (r"nginx", "NGINX"),
+            (r"tomcat", "Apache Tomcat"),
+            (r"iis", "Microsoft IIS"),
         ]
 
         for tech in technologies:
@@ -614,63 +926,173 @@ class DrMigrateContextGenerator:
         return "Unknown"
 
     def _infer_compatibility(self, technology: str) -> dict[str, str]:
-        """Infer platform compatibility based on technology."""
-        tech_lower = technology.lower()
+        """Infer platform compatibility based on technology.
 
-        # Default compatibility based on technology
+        Uses the configurable compatibility_mappings dictionary. Falls back to
+        pattern matching and then to a conservative default for unknown technologies.
+
+        NOTE: These are INFERRED compatibilities, not based on code analysis.
+        """
+        # First, check for exact match in mappings
+        if technology in self.compatibility_mappings:
+            return self.compatibility_mappings[technology].copy()
+
+        # Check for partial matches (case-insensitive)
+        tech_lower = technology.lower()
+        for mapped_tech, compat in self.compatibility_mappings.items():
+            if mapped_tech == "_default":
+                continue
+            if mapped_tech.lower() in tech_lower or tech_lower in mapped_tech.lower():
+                return compat.copy()
+
+        # Pattern-based fallback for common technology families
         if "java" in tech_lower:
-            return {
+            return self.compatibility_mappings.get("Java", {
                 "azure_app_service": "SupportedWithChanges",
                 "azure_kubernetes_service": "Supported",
                 "azure_container_apps": "Supported",
                 "azure_virtual_machines": "FullySupported",
-            }
+            }).copy()
         elif ".net core" in tech_lower or "dotnet core" in tech_lower:
-            return {
+            return self.compatibility_mappings.get(".NET Core", {
                 "azure_app_service": "FullySupported",
-                "azure_kubernetes_service": "Supported",
-                "azure_container_apps": "Supported",
+                "azure_kubernetes_service": "FullySupported",
+                "azure_container_apps": "FullySupported",
                 "azure_virtual_machines": "FullySupported",
-            }
+            }).copy()
         elif ".net framework" in tech_lower or "dotnet framework" in tech_lower:
-            return {
+            return self.compatibility_mappings.get(".NET Framework", {
                 "azure_app_service": "SupportedWithChanges",
                 "azure_kubernetes_service": "NotSupported",
                 "azure_container_apps": "NotSupported",
                 "azure_virtual_machines": "FullySupported",
-            }
+            }).copy()
         elif ".net" in tech_lower or "dotnet" in tech_lower:
-            return {
+            return self.compatibility_mappings.get(".NET", {
                 "azure_app_service": "Supported",
                 "azure_virtual_machines": "FullySupported",
-            }
-        elif "python" in tech_lower or "node" in tech_lower or "php" in tech_lower:
-            return {
+            }).copy()
+        elif "python" in tech_lower:
+            return self.compatibility_mappings.get("Python", {
                 "azure_app_service": "Supported",
                 "azure_kubernetes_service": "Supported",
                 "azure_container_apps": "Supported",
                 "azure_virtual_machines": "FullySupported",
-            }
-        else:
-            # Conservative default for unknown technologies
-            return {
-                "azure_virtual_machines": "Supported",
-            }
+            }).copy()
+        elif "node" in tech_lower:
+            return self.compatibility_mappings.get("Node.js", {
+                "azure_app_service": "FullySupported",
+                "azure_kubernetes_service": "Supported",
+                "azure_container_apps": "Supported",
+                "azure_virtual_machines": "FullySupported",
+            }).copy()
+        elif "php" in tech_lower:
+            return self.compatibility_mappings.get("PHP", {
+                "azure_app_service": "Supported",
+                "azure_kubernetes_service": "Supported",
+                "azure_container_apps": "Supported",
+                "azure_virtual_machines": "FullySupported",
+            }).copy()
+        elif "ruby" in tech_lower:
+            return self.compatibility_mappings.get("Ruby", {
+                "azure_app_service": "Supported",
+                "azure_kubernetes_service": "Supported",
+                "azure_container_apps": "Supported",
+                "azure_virtual_machines": "FullySupported",
+            }).copy()
+        elif "go" in tech_lower or "golang" in tech_lower:
+            return self.compatibility_mappings.get("Go", {
+                "azure_kubernetes_service": "FullySupported",
+                "azure_container_apps": "FullySupported",
+                "azure_virtual_machines": "FullySupported",
+            }).copy()
+        elif "nginx" in tech_lower:
+            return self.compatibility_mappings.get("NGINX", {
+                "azure_kubernetes_service": "FullySupported",
+                "azure_container_apps": "Supported",
+                "azure_virtual_machines": "FullySupported",
+            }).copy()
+        elif "tomcat" in tech_lower:
+            return self.compatibility_mappings.get("Apache Tomcat", {
+                "azure_app_service": "Supported",
+                "azure_kubernetes_service": "Supported",
+                "azure_container_apps": "Supported",
+                "azure_virtual_machines": "FullySupported",
+            }).copy()
+
+        # Return default for unknown technologies (conservative)
+        return self.compatibility_mappings.get("_default", {
+            "azure_virtual_machines": "Supported",
+        }).copy()
 
     def _get_recommended_targets(self, technology: str) -> list[str]:
-        """Get recommended Azure targets based on technology."""
+        """Get recommended Azure targets based on technology.
+
+        Returns a prioritized list of Azure services suitable for the technology.
+        """
         tech_lower = technology.lower()
 
-        if "java" in tech_lower:
+        # Java ecosystem
+        if "spring boot" in tech_lower:
+            return ["Azure Spring Apps", "Azure Kubernetes Service", "Azure Container Apps", "Azure App Service"]
+        elif "java" in tech_lower or "tomcat" in tech_lower:
             return ["Azure App Service", "Azure Kubernetes Service", "Azure Container Apps"]
-        elif ".net core" in tech_lower or "dotnet core" in tech_lower:
-            return ["Azure App Service", "Azure Container Apps", "Azure Kubernetes Service"]
-        elif ".net framework" in tech_lower or "dotnet framework" in tech_lower:
+
+        # .NET ecosystem
+        elif ".net core" in tech_lower or "dotnet core" in tech_lower or "asp.net core" in tech_lower:
+            return ["Azure App Service", "Azure Container Apps", "Azure Kubernetes Service", "Azure Functions"]
+        elif ".net framework" in tech_lower or "dotnet framework" in tech_lower or "asp.net" in tech_lower:
             return ["Azure Virtual Machines", "Azure App Service"]
         elif ".net" in tech_lower or "dotnet" in tech_lower:
-            return ["Azure App Service", "Azure Virtual Machines"]
-        elif "python" in tech_lower or "node" in tech_lower:
+            return ["Azure App Service", "Azure Container Apps", "Azure Virtual Machines"]
+
+        # Python ecosystem
+        elif "django" in tech_lower or "flask" in tech_lower:
+            return ["Azure App Service", "Azure Container Apps", "Azure Kubernetes Service"]
+        elif "fastapi" in tech_lower:
+            return ["Azure Container Apps", "Azure Kubernetes Service", "Azure App Service"]
+        elif "python" in tech_lower:
             return ["Azure App Service", "Azure Container Apps", "Azure Functions"]
+
+        # Node.js ecosystem
+        elif "next.js" in tech_lower or "nextjs" in tech_lower:
+            return ["Azure Static Web Apps", "Azure Container Apps", "Azure App Service"]
+        elif "express" in tech_lower or "node" in tech_lower:
+            return ["Azure App Service", "Azure Container Apps", "Azure Functions"]
+
+        # PHP ecosystem
+        elif "laravel" in tech_lower or "symfony" in tech_lower:
+            return ["Azure App Service", "Azure Container Apps", "Azure Kubernetes Service"]
+        elif "wordpress" in tech_lower or "drupal" in tech_lower:
+            return ["Azure App Service", "Azure Virtual Machines"]
+        elif "magento" in tech_lower:
+            return ["Azure Kubernetes Service", "Azure Virtual Machines"]
+        elif "php" in tech_lower:
+            return ["Azure App Service", "Azure Container Apps", "Azure Virtual Machines"]
+
+        # Ruby ecosystem
+        elif "rails" in tech_lower or "ruby on rails" in tech_lower:
+            return ["Azure App Service", "Azure Container Apps", "Azure Kubernetes Service"]
+        elif "ruby" in tech_lower:
+            return ["Azure App Service", "Azure Container Apps"]
+
+        # Go/Rust (cloud-native)
+        elif "go" in tech_lower or "golang" in tech_lower or "rust" in tech_lower:
+            return ["Azure Container Apps", "Azure Kubernetes Service", "Azure Functions"]
+
+        # Web servers
+        elif "nginx" in tech_lower or "apache" in tech_lower:
+            return ["Azure Kubernetes Service", "Azure Container Apps", "Azure Virtual Machines"]
+        elif "iis" in tech_lower:
+            return ["Azure App Service", "Azure Virtual Machines"]
+
+        # Middleware
+        elif "websphere" in tech_lower or "weblogic" in tech_lower:
+            return ["Azure Kubernetes Service", "Azure Virtual Machines"]
+        elif "jboss" in tech_lower or "wildfly" in tech_lower:
+            return ["Azure App Service", "Azure Kubernetes Service"]
+
+        # Default for unknown
         else:
             return ["Azure Virtual Machines"]
 

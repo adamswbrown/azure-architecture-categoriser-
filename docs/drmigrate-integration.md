@@ -371,6 +371,140 @@ generator = DrMigrateContextGenerator(
 )
 ```
 
+### Custom Compatibility Mappings
+
+You can override the default inferred compatibility assessments:
+
+```python
+custom_compatibility = {
+    "MyCustomFramework": {
+        "azure_app_service": "Supported",
+        "azure_kubernetes_service": "FullySupported",
+        "azure_virtual_machines": "FullySupported",
+    },
+}
+
+generator = DrMigrateContextGenerator(
+    compatibility_mappings=custom_compatibility
+)
+```
+
+## ⚠️ Important: Inferred vs Scanned Results
+
+**This is critical to understand:**
+
+| Source | Analysis Type | Confidence | Details |
+|--------|---------------|------------|---------|
+| **App Cat Scan** | Actual code analysis | **High** | Scans Java/.NET source code, detects API usage, identifies blockers |
+| **Dr. Migrate Export** | Inferred from technology patterns | **Low** | Based on technology type, not actual code |
+
+When using Dr. Migrate exports (non-Java/.NET apps), the platform compatibility assessments are **educated guesses** based on:
+- The detected technology name (e.g., "PHP", "Python", "NGINX")
+- General characteristics of that technology
+- Common Azure deployment patterns
+
+**What this means:**
+- Compatibility marked as "Supported" doesn't guarantee the app will work without issues
+- Custom code, specific dependencies, or configuration may cause problems not detected
+- Manual validation is recommended before making migration decisions
+
+Generated App Mod results include warnings:
+```json
+{
+  "summary": {
+    "inferred_from_dr_migrate": true,
+    "no_appcat_scan": true,
+    "confidence": "Low",
+    "warning": "Compatibility inferred from technology type, not code analysis"
+  }
+}
+```
+
+## Inferred Compatibility Mappings
+
+The following tables show the default compatibility mappings used when inferring platform support.
+
+**Compatibility Levels:**
+- **FullySupported**: Technology runs natively without changes
+- **Supported**: Technology works with minimal configuration
+- **SupportedWithChanges**: Requires code/config modifications
+- **NotSupported**: Technology cannot run on this platform
+
+### Java Ecosystem
+
+| Technology | App Service | AKS | Container Apps | Spring Apps | VMs |
+|------------|-------------|-----|----------------|-------------|-----|
+| Java | SupportedWithChanges | Supported | Supported | FullySupported | FullySupported |
+| Spring Boot | Supported | FullySupported | FullySupported | FullySupported | FullySupported |
+| Apache Tomcat | Supported | Supported | Supported | - | FullySupported |
+
+### .NET Ecosystem
+
+| Technology | App Service | AKS | Container Apps | Functions | VMs |
+|------------|-------------|-----|----------------|-----------|-----|
+| .NET Core | FullySupported | FullySupported | FullySupported | FullySupported | FullySupported |
+| .NET Framework | SupportedWithChanges | NotSupported | NotSupported | - | FullySupported |
+| ASP.NET Core | FullySupported | FullySupported | FullySupported | - | FullySupported |
+| ASP.NET | SupportedWithChanges | - | - | - | FullySupported |
+
+### Python Ecosystem
+
+| Technology | App Service | AKS | Container Apps | Functions | VMs |
+|------------|-------------|-----|----------------|-----------|-----|
+| Python | Supported | Supported | Supported | Supported | FullySupported |
+| Django | Supported | Supported | Supported | - | FullySupported |
+| Flask | Supported | Supported | Supported | SupportedWithChanges | FullySupported |
+| FastAPI | SupportedWithChanges | Supported | FullySupported | - | FullySupported |
+
+### Node.js Ecosystem
+
+| Technology | App Service | AKS | Container Apps | Functions | Static Web Apps | VMs |
+|------------|-------------|-----|----------------|-----------|-----------------|-----|
+| Node.js | FullySupported | Supported | Supported | FullySupported | SupportedWithChanges | FullySupported |
+| Express.js | Supported | Supported | Supported | - | - | FullySupported |
+| Next.js | SupportedWithChanges | - | Supported | - | Supported | FullySupported |
+
+### PHP Ecosystem
+
+| Technology | App Service | AKS | Container Apps | VMs |
+|------------|-------------|-----|----------------|-----|
+| PHP | Supported | Supported | Supported | FullySupported |
+| Laravel | Supported | Supported | Supported | FullySupported |
+| Symfony | Supported | Supported | Supported | FullySupported |
+| WordPress | Supported | SupportedWithChanges | - | FullySupported |
+| Drupal | Supported | SupportedWithChanges | - | FullySupported |
+| Magento | - | SupportedWithChanges | - | FullySupported |
+
+### Ruby Ecosystem
+
+| Technology | App Service | AKS | Container Apps | VMs |
+|------------|-------------|-----|----------------|-----|
+| Ruby | Supported | Supported | Supported | FullySupported |
+| Ruby on Rails | Supported | Supported | Supported | FullySupported |
+
+### Go & Rust
+
+| Technology | App Service | AKS | Container Apps | Functions | VMs |
+|------------|-------------|-----|----------------|-----------|-----|
+| Go | SupportedWithChanges | FullySupported | FullySupported | SupportedWithChanges | FullySupported |
+| Rust | - | Supported | Supported | - | FullySupported |
+
+### Web Servers
+
+| Technology | App Service | AKS | Container Apps | VMs |
+|------------|-------------|-----|----------------|-----|
+| NGINX | NotSupported | FullySupported | Supported | FullySupported |
+| Apache HTTP | NotSupported | Supported | Supported | FullySupported |
+| Microsoft IIS | Supported | - | - | FullySupported |
+
+### Middleware
+
+| Technology | App Service | AKS | VMs |
+|------------|-------------|-----|-----|
+| IBM WebSphere | - | SupportedWithChanges | FullySupported |
+| Oracle WebLogic | - | SupportedWithChanges | FullySupported |
+| JBoss/WildFly | SupportedWithChanges | Supported | FullySupported |
+
 ## Limitations
 
 When generating context files from Dr. Migrate data instead of App Cat scans:
