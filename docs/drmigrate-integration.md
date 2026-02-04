@@ -371,21 +371,25 @@ generator = DrMigrateContextGenerator(
 )
 ```
 
-### Custom Compatibility Mappings
+### Custom Modernization Pathway Mappings
 
-You can override the default inferred compatibility assessments:
+You can override the default Azure modernization pathway mappings:
 
 ```python
-custom_compatibility = {
+custom_pathways = {
     "MyCustomFramework": {
-        "azure_app_service": "Supported",
-        "azure_kubernetes_service": "FullySupported",
-        "azure_virtual_machines": "FullySupported",
+        "rehost": "Azure Virtual Machines",
+        "replatform": "Azure App Service",
+        "refactor": "Azure Container Apps",
+        "azure_equivalent": "Azure App Service",
+        "modernization_path": ["Azure VMs", "Azure App Service", "Azure Container Apps"],
+        "notes": "Custom framework guidance here",
+        "blockers": ["Known limitation 1"],
     },
 }
 
 generator = DrMigrateContextGenerator(
-    compatibility_mappings=custom_compatibility
+    compatibility_mappings=custom_pathways
 )
 ```
 
@@ -420,90 +424,108 @@ Generated App Mod results include warnings:
 }
 ```
 
-## Inferred Compatibility Mappings
+## Azure Modernization Pathways
 
-The following tables show the default compatibility mappings used when inferring platform support.
+The following tables show the Azure modernization pathways for each technology. These map on-premises technologies to their Azure equivalents and recommended migration paths.
 
-**Compatibility Levels:**
-- **FullySupported**: Technology runs natively without changes
-- **Supported**: Technology works with minimal configuration
-- **SupportedWithChanges**: Requires code/config modifications
-- **NotSupported**: Technology cannot run on this platform
+**Migration Strategy Targets:**
+- **Rehost**: Lift-and-shift target (minimal changes)
+- **Replatform**: PaaS target (some configuration changes)
+- **Refactor**: Cloud-native target (containerization/serverless)
+- **Azure Equivalent**: Direct Azure managed service equivalent
 
 ### Java Ecosystem
 
-| Technology | App Service | AKS | Container Apps | Spring Apps | VMs |
-|------------|-------------|-----|----------------|-------------|-----|
-| Java | SupportedWithChanges | Supported | Supported | FullySupported | FullySupported |
-| Spring Boot | Supported | FullySupported | FullySupported | FullySupported | FullySupported |
-| Apache Tomcat | Supported | Supported | Supported | - | FullySupported |
+| Technology | Rehost | Replatform | Refactor | Azure Equivalent |
+|------------|--------|------------|----------|------------------|
+| Java | Azure VMs | Azure App Service | Azure Kubernetes Service | Azure App Service (Java) |
+| Spring Boot | Azure VMs | Azure Spring Apps | Azure Kubernetes Service | Azure Spring Apps |
+| Apache Tomcat | Azure VMs | Azure App Service | Azure Container Apps | Azure App Service (Tomcat) |
+| JBoss/WildFly | Azure VMs | Azure Red Hat OpenShift | Azure Kubernetes Service | Azure Red Hat OpenShift |
 
 ### .NET Ecosystem
 
-| Technology | App Service | AKS | Container Apps | Functions | VMs |
-|------------|-------------|-----|----------------|-----------|-----|
-| .NET Core | FullySupported | FullySupported | FullySupported | FullySupported | FullySupported |
-| .NET Framework | SupportedWithChanges | NotSupported | NotSupported | - | FullySupported |
-| ASP.NET Core | FullySupported | FullySupported | FullySupported | - | FullySupported |
-| ASP.NET | SupportedWithChanges | - | - | - | FullySupported |
+| Technology | Rehost | Replatform | Refactor | Azure Equivalent |
+|------------|--------|------------|----------|------------------|
+| .NET Core | Azure VMs | Azure App Service | Azure Container Apps | Azure App Service |
+| .NET Framework | Azure VMs | Azure App Service (Windows) | Migrate to .NET 6+ | Azure Virtual Machines |
+| ASP.NET Core | Azure VMs | Azure App Service | Azure Container Apps | Azure App Service |
+| ASP.NET | Azure VMs | Azure App Service (Windows) | Migrate to ASP.NET Core | Azure App Service (Windows) |
 
 ### Python Ecosystem
 
-| Technology | App Service | AKS | Container Apps | Functions | VMs |
-|------------|-------------|-----|----------------|-----------|-----|
-| Python | Supported | Supported | Supported | Supported | FullySupported |
-| Django | Supported | Supported | Supported | - | FullySupported |
-| Flask | Supported | Supported | Supported | SupportedWithChanges | FullySupported |
-| FastAPI | SupportedWithChanges | Supported | FullySupported | - | FullySupported |
+| Technology | Rehost | Replatform | Refactor | Azure Equivalent |
+|------------|--------|------------|----------|------------------|
+| Python | Azure VMs | Azure App Service | Azure Functions | Azure App Service (Python) |
+| Django | Azure VMs | Azure App Service | Azure Container Apps | Azure App Service (Python) |
+| Flask | Azure VMs | Azure App Service | Azure Functions | Azure App Service (Python) |
+| FastAPI | Azure VMs | Azure Container Apps | Azure Container Apps | Azure Container Apps |
 
 ### Node.js Ecosystem
 
-| Technology | App Service | AKS | Container Apps | Functions | Static Web Apps | VMs |
-|------------|-------------|-----|----------------|-----------|-----------------|-----|
-| Node.js | FullySupported | Supported | Supported | FullySupported | SupportedWithChanges | FullySupported |
-| Express.js | Supported | Supported | Supported | - | - | FullySupported |
-| Next.js | SupportedWithChanges | - | Supported | - | Supported | FullySupported |
+| Technology | Rehost | Replatform | Refactor | Azure Equivalent |
+|------------|--------|------------|----------|------------------|
+| Node.js | Azure VMs | Azure App Service | Azure Functions | Azure App Service (Node) |
+| Express.js | Azure VMs | Azure App Service | Azure Container Apps | Azure App Service (Node) |
+| Next.js | Azure VMs | Azure Static Web Apps | Azure Static Web Apps | Azure Static Web Apps |
 
 ### PHP Ecosystem
 
-| Technology | App Service | AKS | Container Apps | VMs |
-|------------|-------------|-----|----------------|-----|
-| PHP | Supported | Supported | Supported | FullySupported |
-| Laravel | Supported | Supported | Supported | FullySupported |
-| Symfony | Supported | Supported | Supported | FullySupported |
-| WordPress | Supported | SupportedWithChanges | - | FullySupported |
-| Drupal | Supported | SupportedWithChanges | - | FullySupported |
-| Magento | - | SupportedWithChanges | - | FullySupported |
+| Technology | Rehost | Replatform | Refactor | Azure Equivalent |
+|------------|--------|------------|----------|------------------|
+| PHP | Azure VMs | Azure App Service | Azure Container Apps | Azure App Service (PHP) |
+| Laravel | Azure VMs | Azure App Service | Azure Container Apps | Azure App Service (PHP) |
+| Symfony | Azure VMs | Azure App Service | Azure Container Apps | Azure App Service (PHP) |
+| WordPress | Azure VMs | Azure App Service | Azure App Service + CDN | Azure App Service (WordPress) |
+| Drupal | Azure VMs | Azure App Service | Azure Container Apps | Azure App Service (PHP) |
+| Magento | Azure VMs | Azure Kubernetes Service | Azure Kubernetes Service | Azure Kubernetes Service |
 
 ### Ruby Ecosystem
 
-| Technology | App Service | AKS | Container Apps | VMs |
-|------------|-------------|-----|----------------|-----|
-| Ruby | Supported | Supported | Supported | FullySupported |
-| Ruby on Rails | Supported | Supported | Supported | FullySupported |
+| Technology | Rehost | Replatform | Refactor | Azure Equivalent |
+|------------|--------|------------|----------|------------------|
+| Ruby | Azure VMs | Azure App Service | Azure Container Apps | Azure App Service (Ruby) |
+| Ruby on Rails | Azure VMs | Azure App Service | Azure Container Apps | Azure App Service (Ruby) |
 
 ### Go & Rust
 
-| Technology | App Service | AKS | Container Apps | Functions | VMs |
-|------------|-------------|-----|----------------|-----------|-----|
-| Go | SupportedWithChanges | FullySupported | FullySupported | SupportedWithChanges | FullySupported |
-| Rust | - | Supported | Supported | - | FullySupported |
+| Technology | Rehost | Replatform | Refactor | Azure Equivalent |
+|------------|--------|------------|----------|------------------|
+| Go | Azure VMs | Azure Container Apps | Azure Container Apps | Azure Container Apps |
+| Rust | Azure VMs | Azure Container Apps | Azure Container Apps | Azure Container Apps |
 
 ### Web Servers
 
-| Technology | App Service | AKS | Container Apps | VMs |
-|------------|-------------|-----|----------------|-----|
-| NGINX | NotSupported | FullySupported | Supported | FullySupported |
-| Apache HTTP | NotSupported | Supported | Supported | FullySupported |
-| Microsoft IIS | Supported | - | - | FullySupported |
+| Technology | Rehost | Replatform | Refactor | Azure Equivalent |
+|------------|--------|------------|----------|------------------|
+| NGINX | Azure VMs | Azure Application Gateway | Azure Front Door | Azure Application Gateway / Front Door |
+| Apache HTTP | Azure VMs | Azure App Service | Azure Front Door + App Service | Azure App Service |
+| Microsoft IIS | Azure VMs | Azure App Service (Windows) | Azure App Service | Azure App Service (Windows) |
 
 ### Middleware
 
-| Technology | App Service | AKS | VMs |
-|------------|-------------|-----|-----|
-| IBM WebSphere | - | SupportedWithChanges | FullySupported |
-| Oracle WebLogic | - | SupportedWithChanges | FullySupported |
-| JBoss/WildFly | SupportedWithChanges | Supported | FullySupported |
+| Technology | Rehost | Replatform | Refactor | Azure Equivalent |
+|------------|--------|------------|----------|------------------|
+| IBM WebSphere | Azure VMs | Azure Red Hat OpenShift | Azure Kubernetes Service | Azure Red Hat OpenShift |
+| Oracle WebLogic | Azure VMs | WebLogic on AKS | Azure Kubernetes Service | Oracle WebLogic on AKS |
+| Microsoft BizTalk | Azure VMs | Azure Logic Apps | Azure Logic Apps + Functions | Azure Logic Apps |
+
+### Databases
+
+| Technology | Rehost | Replatform | Refactor | Azure Equivalent |
+|------------|--------|------------|----------|------------------|
+| SQL Server | SQL Server on Azure VMs | Azure SQL Managed Instance | Azure SQL Database | Azure SQL Database |
+| MySQL | MySQL on Azure VMs | Azure Database for MySQL | Azure Database for MySQL | Azure Database for MySQL |
+| PostgreSQL | PostgreSQL on Azure VMs | Azure Database for PostgreSQL | Azure Database for PostgreSQL | Azure Database for PostgreSQL |
+| MongoDB | MongoDB on Azure VMs | Azure Cosmos DB for MongoDB | Azure Cosmos DB for MongoDB | Azure Cosmos DB for MongoDB |
+| Oracle Database | Oracle on Azure VMs | Oracle Database@Azure | Oracle Database@Azure | Oracle Database@Azure |
+
+### Messaging
+
+| Technology | Rehost | Replatform | Refactor | Azure Equivalent |
+|------------|--------|------------|----------|------------------|
+| RabbitMQ | RabbitMQ on Azure VMs | Azure Service Bus | Azure Service Bus | Azure Service Bus |
+| Apache Kafka | Kafka on Azure VMs | Azure Event Hubs (Kafka API) | Azure Event Hubs | Azure Event Hubs for Apache Kafka |
 
 ## Limitations
 
