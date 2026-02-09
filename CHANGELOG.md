@@ -281,4 +281,4 @@ architecture-scorer score -c catalog.json -x context.json
 
 - [GitHub Repository](https://github.com/adamswbrown/azure-architecture-categoriser)
 - [Docker Image](https://ghcr.io/adamswbrown/azure-architecture-categoriser)
-- [Documentation](docs/)
+- [Documentation](https://adamswbrown.github.io/azure-architecture-categoriser/)
