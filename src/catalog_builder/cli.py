@@ -11,6 +11,8 @@ from rich.progress import Progress, SpinnerColumn, TextColumn
 from .catalog import build_catalog, CatalogBuilder, CatalogValidator
 from .config import load_config, save_default_config, find_config_file, reset_config, get_config
 from .schema import ArchitectureCatalog, ExtractionConfidence, GenerationSettings
+from .blob_upload import upload_catalog_to_blob
+from .catalog_download import download_catalog, CatalogDownloadError
 
 
 console = Console()
@@ -102,6 +104,13 @@ def main():
     envvar=['ANTHROPIC_API_KEY', 'OPENAI_API_KEY'],
     help='API key for LLM provider (or set ANTHROPIC_API_KEY/OPENAI_API_KEY env var)'
 )
+@click.option(
+    '--upload-url',
+    type=str,
+    envvar='CATALOG_BLOB_URL',
+    default=None,
+    help='Azure Blob Storage SAS URL to upload the catalog after building (or set CATALOG_BLOB_URL env var)'
+)
 def build_catalog_cmd(
     repo_path: Path,
     out: Path,
@@ -116,7 +125,8 @@ def build_catalog_cmd(
     extract_insights: bool,
     use_llm: bool,
     llm_provider: str,
-    api_key: str
+    api_key: str,
+    upload_url: str
 ):
     """Build the architecture catalog from source documentation.
 
@@ -246,6 +256,22 @@ def build_catalog_cmd(
             console.print(f"  ... and {len(issues) - 20} more")
 
     console.print(f"\n[green]✓[/green] Catalog saved to: {out}")
+
+    # Upload to Azure Blob Storage if requested
+    if upload_url:
+        try:
+            console.print(f"\n[bold blue]Uploading to Azure Blob Storage...[/bold blue]")
+            blob_url = upload_catalog_to_blob(out, blob_url=upload_url)
+            console.print(f"[green]✓[/green] Uploaded to: {blob_url}")
+        except ImportError as e:
+            console.print(f"\n[red]Error:[/red] {e}")
+            sys.exit(1)
+        except Exception as e:
+            console.print(f"\n[red]Upload failed:[/red] {e}")
+            if verbose:
+                import traceback
+                console.print(traceback.format_exc())
+            sys.exit(1)
 
 
 @main.command(name='init-config')
@@ -868,6 +894,217 @@ def _print_product_prefixes(products):
         table.add_row(prefix, str(count), ", ".join(examples))
 
     console.print(table)
+
+
+@main.command()
+@click.option(
+    '--catalog',
+    type=click.Path(exists=True, path_type=Path),
+    required=True,
+    help='Path to the catalog JSON file to upload'
+)
+@click.option(
+    '--blob-url',
+    type=str,
+    envvar='CATALOG_BLOB_URL',
+    default=None,
+    help='Full Azure Blob SAS URL (blob-level or container-level). Env: CATALOG_BLOB_URL'
+)
+@click.option(
+    '--connection-string',
+    type=str,
+    envvar='AZURE_STORAGE_CONNECTION_STRING',
+    default=None,
+    help='Azure Storage connection string. Env: AZURE_STORAGE_CONNECTION_STRING'
+)
+@click.option(
+    '--account-url',
+    type=str,
+    envvar='AZURE_STORAGE_ACCOUNT_URL',
+    default=None,
+    help='Storage account URL (uses DefaultAzureCredential). Env: AZURE_STORAGE_ACCOUNT_URL'
+)
+@click.option(
+    '--container-name',
+    type=str,
+    envvar='CATALOG_CONTAINER_NAME',
+    default='catalogs',
+    help='Blob container name (default: catalogs). Env: CATALOG_CONTAINER_NAME'
+)
+@click.option(
+    '--blob-name',
+    type=str,
+    default=None,
+    help='Blob name in the container (defaults to the catalog filename)'
+)
+@click.option(
+    '--overwrite/--no-overwrite',
+    default=True,
+    help='Whether to overwrite an existing blob (default: overwrite)'
+)
+@click.option(
+    '--verbose', '-v',
+    is_flag=True,
+    help='Show detailed output'
+)
+def upload(
+    catalog: Path,
+    blob_url: str,
+    connection_string: str,
+    account_url: str,
+    container_name: str,
+    blob_name: str,
+    overwrite: bool,
+    verbose: bool,
+):
+    """Upload a catalog JSON file to Azure Blob Storage.
+
+    Supports three authentication methods (in priority order):
+
+    \b
+    1. SAS URL (--blob-url): Full blob or container URL with SAS token.
+       Simplest option for CI/CD pipelines.
+    2. Connection string (--connection-string): Standard Azure Storage
+       connection string with --container-name.
+    3. DefaultAzureCredential (--account-url): Uses managed identity,
+       Azure CLI, or OIDC. Best for production with RBAC.
+
+    Examples:
+
+    \b
+        # Upload with a blob-level SAS URL
+        catalog-builder upload --catalog catalog.json \\
+          --blob-url "https://acct.blob.core.windows.net/catalogs/catalog.json?sv=..."
+
+    \b
+        # Upload with a connection string
+        catalog-builder upload --catalog catalog.json \\
+          --connection-string "DefaultEndpointsProtocol=https;..."
+
+    \b
+        # Upload with DefaultAzureCredential (managed identity / az login)
+        catalog-builder upload --catalog catalog.json \\
+          --account-url "https://acct.blob.core.windows.net"
+    """
+    if not blob_url and not connection_string and not account_url:
+        console.print(
+            "[red]Error:[/red] Provide one of --blob-url, --connection-string, or --account-url"
+        )
+        sys.exit(1)
+
+    # Determine auth method for display
+    if blob_url:
+        auth_method = "SAS URL"
+    elif connection_string:
+        auth_method = "Connection String"
+    else:
+        auth_method = "DefaultAzureCredential"
+
+    console.print(f"\n[bold blue]Azure Blob Storage Upload[/bold blue]")
+    console.print(f"Catalog: {catalog}")
+    console.print(f"Auth: {auth_method}")
+    console.print(f"Container: {container_name}")
+    console.print(f"Blob name: {blob_name or catalog.name}")
+    console.print(f"Overwrite: {overwrite}")
+    console.print()
+
+    try:
+        result_url = upload_catalog_to_blob(
+            catalog,
+            blob_url=blob_url,
+            connection_string=connection_string,
+            account_url=account_url,
+            container_name=container_name,
+            blob_name=blob_name,
+            overwrite=overwrite,
+        )
+        console.print(f"[green]✓[/green] Uploaded successfully to: {result_url}")
+    except ImportError as e:
+        console.print(f"\n[red]Error:[/red] {e}")
+        sys.exit(1)
+    except Exception as e:
+        console.print(f"\n[red]Upload failed:[/red] {e}")
+        if verbose:
+            import traceback
+            console.print(traceback.format_exc())
+        sys.exit(1)
+
+
+@main.command()
+@click.option(
+    '--url',
+    type=str,
+    required=True,
+    help='HTTPS URL to a catalog JSON file (e.g. Azure Blob Storage SAS URL)'
+)
+@click.option(
+    '--out', '-o',
+    type=click.Path(path_type=Path),
+    default='remote-catalog.json',
+    help='Output path for the downloaded catalog (default: remote-catalog.json)'
+)
+@click.option(
+    '--verbose', '-v',
+    is_flag=True,
+    help='Show detailed output'
+)
+def download(url: str, out: Path, verbose: bool):
+    """Download a catalog from a remote URL.
+
+    Fetches a catalog JSON file from an HTTPS URL with security
+    protections (domain allowlist, SSRF checks, size limits, and
+    full schema validation).
+
+    Supported domains include Azure Blob Storage, GitHub, and
+    Microsoft documentation sites.
+
+    \b
+    Examples:
+        # Download from Azure Blob Storage (SAS URL)
+        catalog-builder download \\
+          --url "https://acct.blob.core.windows.net/catalogs/catalog.json?sv=..."
+
+    \b
+        # Download from GitHub release
+        catalog-builder download \\
+          --url "https://raw.githubusercontent.com/org/repo/main/catalog.json" \\
+          --out architecture-catalog.json
+    """
+    console.print(f"\n[bold blue]Catalog Download[/bold blue]")
+    # Show URL without SAS token for cleaner output
+    display_url = url.split("?")[0]
+    console.print(f"URL: {display_url}")
+    console.print(f"Output: {out}")
+    console.print()
+
+    try:
+        with console.status("Downloading and validating catalog..."):
+            data, saved_path = download_catalog(url, output=out)
+
+        arch_count = len(data.get("architectures", []))
+        version = data.get("version", "unknown")
+        console.print(f"[green]✓[/green] Downloaded catalog v{version} with {arch_count} architectures")
+        console.print(f"[green]✓[/green] Saved to: {saved_path}")
+
+        if verbose and "generation_settings" in data and data["generation_settings"]:
+            gs = data["generation_settings"]
+            console.print(f"\n[bold]Generation Settings[/bold]")
+            if gs.get("allowed_topics"):
+                console.print(f"  Topics: {', '.join(gs['allowed_topics'])}")
+            if gs.get("allowed_products"):
+                console.print(f"  Products: {', '.join(gs['allowed_products'])}")
+            if gs.get("exclude_examples"):
+                console.print(f"  Examples: excluded")
+
+    except CatalogDownloadError as e:
+        console.print(f"\n[red]Download failed:[/red] {e}")
+        sys.exit(1)
+    except Exception as e:
+        console.print(f"\n[red]Error:[/red] {e}")
+        if verbose:
+            import traceback
+            console.print(traceback.format_exc())
+        sys.exit(1)
 
 
 if __name__ == '__main__':

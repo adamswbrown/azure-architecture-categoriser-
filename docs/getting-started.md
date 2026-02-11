@@ -155,6 +155,32 @@ See [Catalog Builder Guide](./catalog-builder.md) for details on:
 - Adjusting scoring weights
 - Validating catalog quality
 
+### Publishing the Catalog to Azure Blob Storage
+
+After building a catalog, you can publish it to Azure Blob Storage so it can be shared across environments or consumed by other services.
+
+**Install the Azure extras:**
+```bash
+pip install -e ".[azure]"
+```
+
+**Build and upload in one step:**
+```bash
+catalog-builder build-catalog \
+  --repo-path ./architecture-center \
+  --out catalog.json \
+  --upload-url "https://myaccount.blob.core.windows.net/catalogs/catalog.json?sv=..."
+```
+
+**Or upload an existing catalog separately:**
+```bash
+catalog-builder upload \
+  --catalog architecture-catalog.json \
+  --blob-url "$CATALOG_BLOB_SAS_URL"
+```
+
+Three authentication methods are supported: SAS URLs, connection strings, and DefaultAzureCredential (managed identity). See [Blob Storage Upload](./blob-storage-upload.md) for full details and CI/CD examples.
+
 ### Batch Processing
 
 Process multiple applications programmatically:
