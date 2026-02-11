@@ -1,0 +1,114 @@
+# ============================================================================
+# Dr.Migrate Assistant - Development Infrastructure Configuration
+# ============================================================================
+#
+# Domain: *.drmigrate.com.au
+# Deployed to: ra37-drmexp-dev-001.drmigrate.com.au
+#
+# This configuration is used for the Development infrastructure environment.
+# During deployment, SetupAssistant.ps1 copies this file to config.toml
+# when run with -Environment Development parameter.
+#
+# ============================================================================
+
+# ============================================================================
+# LLM Router Configuration
+# ============================================================================
+
+[agents]
+# MODE: "dev" or "prod"
+#   - "prod": Azure VM/hosted environment using Managed Identity (UMI) for auth (most infra deployments).
+#   - "dev": Local development only; uses CLI credentials (az login, gcloud auth, aws configure).
+# NOTE: Keep MODE="prod" for infra, even in non-prod environments, if running on Azure VM.
+MODE = "prod"
+
+# CLOUD_PROVIDER: Which cloud's LLM endpoints to use (set by llm_cloud_provider DB setting)
+#   Options: "AZURE" | "AWS" | "GCP"
+CLOUD_PROVIDER = "AZURE"
+
+# LLM_PROVIDER: Optional override. If omitted, the Assistant auto-selects the
+# provider from endpoints.json based on CLOUD_PROVIDER.
+#   Options: "openai" | "claude" | "gemini"
+# LLM_PROVIDER = "openai"
+
+# DEFAULT_TIER: Default model tier for agent creation
+#   Options: "light" | "heavy" | "reasoning"
+DEFAULT_TIER = "heavy"
+
+# Development Infrastructure: Azure Storage URL for endpoints.json
+ENDPOINTS_JSON_URL = "https://k4d1j7g8h2.blob.core.windows.net/llm-endpoints/endpoints.json"
+
+# The platform the customer is migrating to (Optional, Defaults to CLOUD_PROVIDER if unspecified)
+#   E.g.: "Azure" | "AWS" | "GCP"
+MIGRATION_TARGET = "Azure"
+
+# Architecture catalog URL (HTTPS URL to architecture-catalog.json on Azure Blob Storage)
+# Required for architecture recommendation scoring.
+# CATALOG_URL = "https://youraccount.blob.core.windows.net/catalog/architecture-catalog.json"
+
+[server]
+PORT = 8002
+
+# ============================================================================
+# Logging / Telemetry Configuration
+# ============================================================================
+# Application logging configuration
+[logging]
+# LOG_LEVEL: Minimum log level to output
+#   Options: "DEBUG" | "INFO" | "WARNING" | "ERROR" | "CRITICAL"
+LOG_LEVEL = "INFO"
+
+# Telemetry settings (usage.jsonl and optional otel_spans.jsonl)
+[telemetry]
+# Directory for telemetry output (usage logs, OTEL spans)
+TELEMETRY_DIR = "./telemetry"
+
+# ENABLE_OTEL_SPANS: Write OTEL spans to otel_spans.jsonl (default: false)
+ENABLE_OTEL_SPANS = false
+
+# Azure Blob Storage configuration for usage logs (optional)
+# If configured, usage logs will be written to both local file and Azure Blob Storage
+# Requires Azure CLI login (az login) or Managed Identity in production
+#
+# AZURE_STORAGE_ACCOUNT = "yourstorageaccount"
+# AZURE_CONTAINER_NAME = "llm"
+# AZURE_BLOB_NAME = "usage.jsonl"
+
+# ============================================================================
+# SQL Server Database Configuration
+# ============================================================================
+[db]
+# Database connection details (non-sensitive configuration)
+DB_HOST = "localhost\\SQLEXPRESS"
+DB_PORT = 1433
+DB_NAME = "Assessments"
+
+# Database credentials - Loaded with priority fallback:
+#   Priority 1: Vault (via AltraVault Get-VaultCredential -Name "assistant/database")
+#   Priority 2: Environment variables (DB_USERNAME, DB_PASSWORD)
+#   Priority 3: This config file (DB_USER, DB_PASSWORD - for development only!)
+#
+# Production: Credentials loaded from Vault on service startup
+# DB_USER and DB_PASSWORD are NOT set here - loaded from Vault
+
+# DB_TRUST_SERVER_CERTIFICATE: Whether to trust self-signed certificates
+#   - false (default): For Azure SQL Database (has valid certificates)
+#   - true: For SQL Express (uses self-signed certificates)
+DB_TRUST_SERVER_CERTIFICATE = true
+
+# ============================================================================
+# Postgres Database Configuration
+# ============================================================================
+[postgres]
+# Connection details (non-sensitive)
+PG_HOST = "localhost"
+PG_PORT = 5432
+PG_DATABASE = "drmigrate"
+
+# Credentials are loaded from Vault (secret/credentials/postgresql) in prod.
+# For development, override with env vars (PGUSER/PGPASSWORD) or set below if needed.
+# PG_USER = "dev_postgres_user"
+# PG_PASSWORD = "dev_postgres_password"
+
+# sslmode options: disable | allow | prefer | require | verify-ca | verify-full
+PG_SSL_MODE = "prefer"

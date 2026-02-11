@@ -1,0 +1,166 @@
+# ============================================================================
+# Dr.Migrate Assistant Configuration
+# ============================================================================
+#
+# Configuration vs Secrets:
+#   - This file: Non-sensitive configuration (safe to version control)
+#   - Vault: Secrets ONLY (database credentials)
+#   - Environment: Set by secrets-loader.ps1 from Vault
+#
+# Infrastructure Environment Configuration:
+#   This is a template file for local development. For infrastructure deployments:
+#   - config.infra-dev.toml  - Development infrastructure (*.drmigrate.com.au)
+#   - config.infra-prod.toml - Production infrastructure (*.drmigrate.com)
+#
+#   SetupAssistant.ps1 automatically copies the appropriate config file to
+#   config.toml based on the -Environment parameter (Development/Production).
+#
+# LLM Authentication (NO API KEYS NEEDED!):
+#   Development: Uses CLI authentication (az login, gcloud auth, aws configure)
+#   Production: Uses Azure User Managed Identity + Workload Identity Federation
+#
+#   The llm_router module handles authentication automatically:
+#   - MODE="dev": Reads from ~/.azure, ~/.config/gcloud, ~/.aws/credentials
+#   - MODE="prod": Uses Azure UMI → WIF → Temporary cloud credentials
+#
+#   You do NOT need to set:
+#   - AZURE_OPENAI_API_KEY ❌
+#   - AWS_ACCESS_KEY_ID ❌
+#   - AWS_SECRET_ACCESS_KEY ❌
+#   - GCP_PROJECT_ID (in Vault) ❌
+#
+# ============================================================================
+
+# ============================================================================
+# LLM Router Configuration
+# ============================================================================
+
+[agents]
+# MODE: "dev" or "prod"
+#   - "dev": Uses cloud CLI credentials (az login, gcloud auth, aws configure)
+#   - "prod": Uses Azure User Managed Identity + Azure Storage for endpoints.json
+MODE = "dev"
+
+# CLOUD_PROVIDER: Which cloud's LLM endpoints to use (set by llm_cloud_provider DB setting)
+#   Options: "AZURE" | "AWS" | "GCP"
+CLOUD_PROVIDER = "AZURE"
+
+# LLM_PROVIDER: Which LLM provider to use
+#   Options: "openai" | "claude" | "gemini"
+LLM_PROVIDER = "openai"
+
+# DEFAULT_TIER: Default model tier for agent creation
+#   Options: "light" | "heavy" | "reasoning"
+DEFAULT_TIER = "heavy"
+
+# Development mode: Path to local endpoints.json file
+ENDPOINTS_JSON_PATH = "./endpoints.json"
+
+# Production mode: Azure Storage URL for endpoints.json
+# ENDPOINTS_JSON_URL = "https://stgdrmigrate.blob.core.windows.net/config/endpoints.json"
+
+# The platform the customer is migrating to (Optional, Defaults to CLOUD_PROVIDER if unspecified)
+#   E.g.: "Azure" | "AWS" | "GCP"
+MIGRATION_TARGET = "Azure"
+
+# Architecture catalog URL (HTTPS URL to architecture-catalog.json on Azure Blob Storage)
+# Required for architecture recommendation scoring.
+# The catalog is downloaded once and cached locally on first use.
+# Allowed domains: *.blob.core.windows.net, github.com, githubusercontent.com, microsoft.com
+#   Example: "https://youraccount.blob.core.windows.net/catalog/architecture-catalog.json"
+# CATALOG_URL = "https://youraccount.blob.core.windows.net/catalog/architecture-catalog.json"
+
+[server]
+# Default port for the agents server
+PORT = 8002
+
+# Application logging configuration
+[logging]
+# LOG_LEVEL: Minimum log level to output
+#   Options: "DEBUG" | "INFO" | "WARNING" | "ERROR" | "CRITICAL"
+LOG_LEVEL = "INFO"
+
+# Telemetry settings (usage.jsonl and optional otel_spans.jsonl)
+[telemetry]
+# Directory for telemetry output (usage logs, OTEL spans)
+TELEMETRY_DIR = "./.telemetry"
+
+# ENABLE_OTEL_SPANS: Write OTEL spans to otel_spans.jsonl (default: false)
+ENABLE_OTEL_SPANS = false
+
+# Azure Blob Storage configuration for usage logs (optional)
+# If configured, usage logs will be written to both local file and Azure Blob Storage
+# Requires Azure CLI login (az login) or Managed Identity in production
+#
+# AZURE_STORAGE_ACCOUNT = "yourstorageaccount"
+# AZURE_CONTAINER_NAME = "usage-logs"
+# AZURE_BLOB_NAME = "usage.jsonl"
+
+# ============================================================================
+# Daily Usage Quota Configuration
+# ============================================================================
+[quota]
+# Daily limits use a 24-hour rolling window based on token usage.
+# 
+# Set DAILY_TOKEN_LIMIT to null (or omit) for unlimited usage.
+
+# DAILY_TOKEN_LIMIT: Maximum tokens allowed per 24-hour rolling window
+#   Example: 1000000 (1 million tokens)
+DAILY_TOKEN_LIMIT = 1000000
+
+# QUOTA_WINDOW_HOURS: Rolling window size in hours (default: 24)
+QUOTA_WINDOW_HOURS = 24
+
+# ENFORCE_QUOTA: Whether to enforce quotas
+ENFORCE_QUOTA = false
+
+# ============================================================================
+# SQL Server Database Configuration
+# ============================================================================
+[db]
+# Database connection details (non-sensitive configuration)
+DB_HOST = "localhost\\SQLEXPRESS"
+DB_PORT = 1433
+DB_NAME = "Assessments"
+
+# Database credentials - Loaded with priority fallback:
+#   Priority 1: Vault (via AltraVault Get-VaultCredential -Name "assistant/database")
+#               - AltraVault automatically starts/unseals Vault
+#               - Stored by SetupAssistant.ps1 or manually via Set-VaultCredential
+#   Priority 2: Environment variables (DB_USERNAME, DB_PASSWORD)
+#   Priority 3: This config file (DB_USER, DB_PASSWORD - for development only!)
+#
+# Production: Credentials loaded from Vault on service startup
+# Development: Set DB_USER and DB_PASSWORD below for local testing without Vault
+#
+# Manual Vault storage:
+#   Import-Module ../AltraVault/AltraVault.psm1
+#   Set-VaultCredential -Name "assistant/database" -Username "sa" -Password "yourpass"
+#
+# DB_USER = "your_username_here"
+# DB_PASSWORD = "your_password_here"
+
+# DB_TRUST_SERVER_CERTIFICATE: Whether to trust self-signed certificates
+#   - false (default): For Azure SQL Database (has valid certificates)
+#   - true: For SQL Express (uses self-signed certificates)
+DB_TRUST_SERVER_CERTIFICATE = true
+
+# ============================================================================
+# Postgres Database Configuration
+# ============================================================================
+[postgres]
+# Connection details (non-sensitive)
+PG_HOST = "localhost"
+PG_PORT = 5432
+PG_DATABASE = "altra"
+
+# Credentials fallback priority:
+#   1) Vault secret path: secret/credentials/postgresql
+#   2) Env vars: PGUSER/PGPASSWORD or POSTGRES_USER/POSTGRES_PASSWORD
+#   3) This config (for local dev only)
+#
+# PG_USER = "your_postgres_user"
+# PG_PASSWORD = "your_postgres_password"
+
+# sslmode options: disable | allow | prefer | require | verify-ca | verify-full
+PG_SSL_MODE = "prefer"
