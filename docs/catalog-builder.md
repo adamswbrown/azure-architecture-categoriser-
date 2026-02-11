@@ -62,6 +62,7 @@ catalog-builder build-catalog \
 | `--category` | Filter by Azure category (e.g., `containers`) |
 | `--product` | Filter by Azure product (supports prefix matching) |
 | `--require-yml` | Only include files with YamlMime:Architecture metadata |
+| `--upload-url` | Azure Blob Storage SAS URL to upload the catalog after building (env: `CATALOG_BLOB_URL`) |
 | `-v, --verbose` | Enable verbose output |
 
 ### list-filters
@@ -100,6 +101,30 @@ Display catalog statistics.
 ```bash
 catalog-builder stats --catalog architecture-catalog.json
 ```
+
+### upload
+
+Upload a catalog JSON file to Azure Blob Storage. Supports SAS URL, connection string, and DefaultAzureCredential authentication.
+
+```bash
+# Upload with SAS URL
+catalog-builder upload \
+  --catalog architecture-catalog.json \
+  --blob-url "https://acct.blob.core.windows.net/catalogs/catalog.json?sv=..."
+
+# Upload with connection string
+catalog-builder upload \
+  --catalog architecture-catalog.json \
+  --connection-string "DefaultEndpointsProtocol=https;..." \
+  --container-name catalogs
+
+# Upload with DefaultAzureCredential
+catalog-builder upload \
+  --catalog architecture-catalog.json \
+  --account-url "https://acct.blob.core.windows.net"
+```
+
+See [Blob Storage Upload](./blob-storage-upload.md) for full details, CI/CD examples, and troubleshooting.
 
 ### init-config
 

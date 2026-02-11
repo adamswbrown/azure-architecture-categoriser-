@@ -44,6 +44,8 @@ docker run -p 8501:8501 -p 8502:8502 azure-architecture-categoriser
 
 ```bash
 catalog-builder build-catalog --repo-path ./architecture-center --out catalog.json
+catalog-builder build-catalog --repo-path ./architecture-center --out catalog.json --upload-url "$CATALOG_BLOB_SAS_URL"
+catalog-builder upload --catalog catalog.json --blob-url "$CATALOG_BLOB_SAS_URL"
 catalog-builder stats --catalog catalog.json
 catalog-builder inspect --catalog catalog.json --family cloud_native
 
@@ -69,6 +71,7 @@ azure-architecture-categoriser/
 │   │   ├── extractor.py                 # Metadata extraction from architecture docs
 │   │   ├── detector.py                  # Architecture pattern detection heuristics
 │   │   ├── classifier.py                # AI-assisted classification
+│   │   ├── blob_upload.py               # Azure Blob Storage upload
 │   │   └── config.py                    # Configuration management (YAML)
 │   │
 │   ├── architecture_scorer/             # Scoring engine & CLI
@@ -271,6 +274,7 @@ docker compose down
 ### Optional Groups
 - `[recommendations-app]` - Streamlit, ReportLab, svglib, requests
 - `[gui]` - Streamlit
+- `[azure]` - azure-storage-blob, azure-identity (for blob upload)
 - `[dev]` - pytest, pytest-cov
 
 ## Important Files to Know
