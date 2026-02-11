@@ -177,6 +177,17 @@ catalog-builder build-catalog \
   --repo-path ./architecture-center \
   --out architecture-catalog.json
 
+# Build and upload catalog to Azure Blob Storage in one step
+catalog-builder build-catalog \
+  --repo-path ./architecture-center \
+  --out architecture-catalog.json \
+  --upload-url "$CATALOG_BLOB_SAS_URL"
+
+# Or upload an existing catalog separately
+catalog-builder upload \
+  --catalog architecture-catalog.json \
+  --blob-url "$CATALOG_BLOB_SAS_URL"
+
 # Score an application
 architecture-scorer score \
   --catalog architecture-catalog.json \
@@ -198,6 +209,9 @@ pip install -e ".[recommendations-app]"
 
 # With GUI catalog builder
 pip install -e ".[gui]"
+
+# With Azure Blob Storage upload support
+pip install -e ".[azure]"
 
 # Development
 pip install -e ".[dev]"
@@ -312,6 +326,7 @@ See [examples/context_files/README.md](examples/context_files/README.md) for the
 | [Architecture Scorer](https://adamswbrown.github.io/azure-architecture-categoriser/architecture-scorer.html) | Scoring engine details |
 | [Dr. Migrate Integration](https://adamswbrown.github.io/azure-architecture-categoriser/drmigrate-integration.html) | Get recommendations for ALL apps |
 | [Configuration](https://adamswbrown.github.io/azure-architecture-categoriser/configuration.html) | Full configuration reference |
+| [Blob Storage Upload](https://adamswbrown.github.io/azure-architecture-categoriser/blob-storage-upload.html) | Publish catalogs to Azure Blob Storage |
 | [Design Decisions](https://adamswbrown.github.io/azure-architecture-categoriser/design/) | Why does it work this way? |
 | [Azure Deployment](https://adamswbrown.github.io/azure-architecture-categoriser/azure-deployment.html) | Deploy to Azure Container Apps |
 

@@ -72,6 +72,7 @@ The core scoring engine that evaluates how well architectures match your applica
 - **[Architecture Scorer Documentation](./architecture-scorer.md)** - How the scoring algorithm works
 - **[Configuration Guide](./configuration.md)** - Customizing application behavior
 - **[Azure Deployment](./azure-deployment.md)** - Deploying to Azure
+- **[Blob Storage Upload](./blob-storage-upload.md)** - Publishing catalogs to Azure Blob Storage
 - **[Dr. Migrate Integration](./drmigrate-integration.md)** - Integrating with Dr. Migrate
 - **[Design Decisions](./design/)** - Technical design documentation
 
