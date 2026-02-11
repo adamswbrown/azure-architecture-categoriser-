@@ -22,6 +22,7 @@ from architecture_recommendations_app.utils.validation import (
     format_validation_error_with_prompt,
 )
 from architecture_recommendations_app.utils.sanitize import safe_html, secure_temp_file
+from architecture_recommendations_app.utils.catalog_loader import fetch_remote_catalog, CatalogLoadError
 from architecture_recommendations_app.components.upload_section import render_upload_section
 from architecture_recommendations_app.components.results_display import render_results, render_user_answers
 from architecture_recommendations_app.components.pdf_generator import generate_pdf_report
@@ -55,7 +56,7 @@ def _show_help_dialog():
     - **Catalog Builder** page - Custom filtering (can include examples, solution ideas)
 
     **Catalog Priority:**
-    1. Session state (from Catalog Builder)
+    1. Session state (from Catalog Builder or remote URL)
     2. `ARCHITECTURE_CATALOG_PATH` env var
     3. `./architecture-catalog.json`
     4. Bundled catalog
@@ -397,6 +398,14 @@ def get_catalog_path() -> str:
         set_state('catalog_path', resolved)
         return resolved
 
+    # 2b. Remote catalog (downloaded from URL in a previous session)
+    remote_path = project_root / "remote-catalog.json"
+    if remote_path.exists():
+        resolved = str(remote_path.resolve())
+        set_state('catalog_source', 'remote_url')
+        set_state('catalog_path', resolved)
+        return resolved
+
     # 3. Local file in current directory (fallback)
     local_path = Path("architecture-catalog.json")
     if local_path.exists():
@@ -639,7 +648,7 @@ def _render_sidebar() -> None:
 
             # Show current catalog info with stale warning if needed
             source = get_state('catalog_source', 'unknown')
-            source_label = {'catalog_builder': '(from Catalog Builder)', 'project_root': '', 'current_directory': '', 'environment': '(env)'}.get(source, '')
+            source_label = {'catalog_builder': '(from Catalog Builder)', 'remote_url': '(from URL)', 'project_root': '', 'current_directory': '', 'environment': '(env)'}.get(source, '')
 
             if age_days is not None and age_days > 30:
                 st.warning(f"**{info['architecture_count']}** architectures ({age_days} days old) {source_label}")
@@ -701,6 +710,22 @@ def _render_sidebar() -> None:
                 # Copyable path (collapsed by default via small font)
                 st.code(info['path'], language=None)
 
+            # Load from remote URL
+            with st.expander("Load Catalog from URL", expanded=False):
+                st.markdown("Download a catalog from Azure Blob Storage or another HTTPS URL.")
+                remote_url = st.text_input(
+                    "Catalog URL",
+                    value="",
+                    placeholder="https://account.blob.core.windows.net/catalogs/catalog.json?sv=...",
+                    key="remote_catalog_url_input",
+                    help="HTTPS URL to a catalog JSON file. Supports Azure Blob Storage (including SAS URLs), GitHub, and Microsoft domains.",
+                )
+                if st.button("Load Catalog", use_container_width=True, key="load_remote_catalog_btn"):
+                    if remote_url and remote_url.strip():
+                        _load_remote_catalog(remote_url.strip())
+                    else:
+                        st.warning("Please enter a URL.")
+
             # Refresh button with confirmation
             with st.expander("Refresh Catalog with Defaults", expanded=get_state('show_refresh_confirm', False)):
                 st.warning("This will replace your current catalog with default settings:")
@@ -727,9 +752,25 @@ def _render_sidebar() -> None:
         else:
             st.warning("No catalog found")
 
+            # Offer to load from a remote URL
+            with st.expander("Load Catalog from URL", expanded=False):
+                st.markdown("Download a catalog from Azure Blob Storage or another HTTPS URL.")
+                remote_url = st.text_input(
+                    "Catalog URL",
+                    value="",
+                    placeholder="https://account.blob.core.windows.net/catalogs/catalog.json?sv=...",
+                    key="remote_catalog_url_input_nocatalog",
+                    help="HTTPS URL to a catalog JSON file.",
+                )
+                if st.button("Load Catalog", use_container_width=True, key="load_remote_catalog_nocatalog_btn"):
+                    if remote_url and remote_url.strip():
+                        _load_remote_catalog(remote_url.strip())
+                    else:
+                        st.warning("Please enter a URL.")
+
             # Offer to generate a catalog when none exists
-            st.info("Click below to generate a catalog from the Azure Architecture Center.")
-            with st.expander("Generate Catalog with Defaults", expanded=True):
+            st.info("Or generate a catalog from the Azure Architecture Center.")
+            with st.expander("Generate Catalog with Defaults", expanded=False):
                 st.markdown("""
                 **Default settings:**
                 - **Topics:** Reference Architectures only (~51 patterns)
@@ -828,6 +869,24 @@ def _refresh_catalog() -> None:
 
         if st.button("Continue", type="primary"):
             st.rerun()
+
+
+def _load_remote_catalog(url: str) -> None:
+    """Download and validate a catalog from a remote URL."""
+    with st.spinner("Downloading catalog..."):
+        try:
+            catalog_data, saved_path = fetch_remote_catalog(url)
+            arch_count = len(catalog_data.get("architectures", []))
+
+            set_state('catalog_path', str(saved_path))
+            set_state('catalog_source', 'remote_url')
+            set_state('scoring_result', None)
+            set_state('questions', None)
+
+            st.success(f"Loaded **{arch_count}** architectures from remote catalog.")
+            st.rerun()
+        except CatalogLoadError as exc:
+            st.error(f"Failed to load catalog: {exc}")
 
 
 def _apply_custom_styles() -> None:
