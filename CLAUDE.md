@@ -321,4 +321,4 @@ docker compose down
 - [GitHub Repository](https://github.com/adamswbrown/azure-architecture-categoriser)
 - [Docker Image](https://ghcr.io/adamswbrown/azure-architecture-categoriser)
 - [Changelog](CHANGELOG.md)
-- [Detailed Documentation](docs/)
+- [Detailed Documentation](https://adamswbrown.github.io/azure-architecture-categoriser/)
