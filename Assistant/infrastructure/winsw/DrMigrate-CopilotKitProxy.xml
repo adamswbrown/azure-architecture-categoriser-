@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  WinSW Configuration for Dr.Migrate CopilotKit Proxy Server
+
+  This service runs the Node.js-based protocol translation proxy that provides:
+  - CopilotKit protocol translation to AG-UI format
+  - CORS handling for cross-origin requests
+  - Request/response observability
+  - Connection to Python agents backend
+
+  Port: 8001
+  Framework: Express.js + TypeScript
+  Entry Point: node dist/server.js
+-->
+<service>
+  <!-- Service Identity -->
+  <id>DrMigrate-CopilotKitProxy</id>
+  <name>Dr.Migrate CopilotKit Proxy</name>
+  <description>Dr.Migrate CopilotKit Protocol Translation Proxy - Express.js server for CopilotKit integration</description>
+
+  <!-- Executable Configuration -->
+  <executable>C:\Program Files\nodejs\node.exe</executable>
+  <arguments>.\dist\server.js</arguments>
+  <workingdirectory>C:\DrMigrate\Assistant\services\copilotkit-proxy</workingdirectory>
+
+  <!-- Startup Configuration -->
+  <startmode>Automatic</startmode>
+  <delayedAutoStart>true</delayedAutoStart>
+
+  <!-- Environment Variables - Configuration -->
+  <!-- All environment variables controlled by .env.production file in working directory -->
+
+  <!-- Log Configuration -->
+  <log mode="roll-by-time">
+    <pattern>ddMMyyyy</pattern>
+    <period>1</period>
+    <autoRollAtTime>00:00:00</autoRollAtTime>
+    <outFilePattern>_ddMMyyyy.log</outFilePattern>
+    <errFilePattern>_ddMMyyyy.log</errFilePattern>
+  </log>
+  <logpath>%ProgramData%\Dr.Migrate\llm</logpath>
+
+  <!-- Service Recovery -->
+  <onfailure action="restart" delay="60 sec"/>
+  <onfailure action="restart" delay="120 sec"/>
+  <onfailure action="restart" delay="240 sec"/>
+  <resetfailure>1 hour</resetfailure>
+
+  <!-- Process Termination -->
+  <stoptimeout>30 sec</stoptimeout>
+  <stopparentprocessfirst>true</stopparentprocessfirst>
+
+  <!-- Process Priority -->
+  <priority>Normal</priority>
+
+  <!-- Security Context (will be set during installation) -->
+  <!-- <serviceaccount>
+    <username>NT AUTHORITY\NetworkService</username>
+    <allowservicelogon>true</allowservicelogon>
+  </serviceaccount> -->
+</service>

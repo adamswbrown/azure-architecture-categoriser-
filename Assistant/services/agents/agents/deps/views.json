@@ -1,0 +1,115 @@
+[
+  {
+    "type": "view",
+    "name": "application_overview",
+    "description": "Provides overview information for each application. Data contains number of machines, number of environments, environment names, planned migration wave, complexity rating, migration scope, app function, app type, app owner, app sme, high availability, business critical, inherent risk, materiality, pii data, disaster recovery, number of unique operating systems, unique operating systems, number of machines with out of support OS, sql server count, non sql databases, their tech stack components, assigned migration strategies, suitable migration strategy options, detected conflict reason, detected app components, app component modernization options.",
+    "view": "[copilots].[Application_Overview]",
+    "params": {
+      "application": {"type": "string", "required": false}
+    }
+  },
+  {
+    "type": "view",
+    "name": "key_software_overview",
+    "description": "Provides comprehensive detection details about COTS key software applications running on servers, as well as the COTS category, and type. Key software was detected via InstalledApplications, ServerRoles, and Network data.",
+    "view": "[copilots].[Key_Software]",
+    "params": {
+      "key_software": {"type": "string", "required": false},
+      "key_software_category": {"type": "string", "required": false},
+      "machine": {"type": "string", "required": false}
+    }
+  },
+  {
+    "type": "view",
+    "name": "installed_applications_overview",
+    "description": "Provides information about individual software applications and packages installed on servers, including version and who the provider of the software is.",
+    "view": "[copilots].[InstalledApplications]",
+    "params": {
+      "software_installed": {"type": "string", "required": false},
+      "machine": {"type": "string", "required": false},
+      "software_provider": {"type": "string", "required": false}
+    }
+  },
+  {
+    "type": "view",
+    "name": "server_overview_current",
+    "description": "Provides a overview information for each server of its current specs. Data contains the application and environment the server is a part of,description, performance data and CPU and RAM specs, as well as network communication information.",
+    "view": "[copilots].[Server_Overview_Current]",
+    "params": {
+      "machine": {"type": "string", "required": false},
+      "application": {"type": "string", "required": false},
+      "select_columns":{"type": "array", "required": false}
+
+    }
+  },
+  {
+    "type": "view",
+    "name": "cloud_server_cost",
+    "description": "Annualized future cloud cost details per server and application including compute, storage, and total estimated cost components.",
+    "view": "[copilots].[Cloud_Server_Cost]",
+    "params": {
+      "machine": {"type": "string", "required": false},
+      "application": {"type": "string", "required": false},
+      "environment": {"type": "string", "required": false},
+      "cloud_workload": {"type": "string", "required": false}
+    }
+  },
+  {
+    "type": "view",
+    "name": "current_server_cost",
+    "description": "Annualized current on-premises cost details per server and application including hardware, software, and operational cost components.",
+    "view": "[copilots].[Current_Server_Cost]",
+    "params": {
+      "machine": {"type": "string", "required": false},
+      "application": {"type": "string", "required": false},
+      "environment": {"type": "string", "required": false}
+    }
+  },
+  {
+    "type": "view",
+    "name": "currency_information",
+    "description": "The currency symbol and code regarding financial data",
+    "view": "[copilots].[Currency_Information]",
+    "params": {}
+  },
+  {
+    "type": "view",
+    "name": "application_cost_comparison",
+    "description": "Contains annualized current on-premises details (including hardware, software, and operational cost components) as well as future cloud cost per application.",
+    "view": "[copilots].[Application_Cost_Comparison]",
+    "params": {
+      "application": {"type": "string", "required": false}
+    }
+  },
+  {
+    "type": "view",
+    "name": "app_modernization_candidates",
+    "description": "Applications identified as App Modernization candidates and their respective app modernization technologies and number of machines running said technologies.",
+    "view": "[copilots].[App_Modernization_Candidates]",
+    "params": {}
+  },
+  {
+    "type": "view",
+    "name": "network_server_overview",
+    "description": "Provides network server overview information from PostgreSQL database. Contains network-related data for servers including connectivity, traffic patterns, and network configurations.",
+    "view": "serving_network.network_server_overview",
+    "database": "postgres",
+    "params": {}
+  },
+  {
+    "type": "view",
+    "name": "network_application_overview",
+    "description": "Provides network application overview information from PostgreSQL database. Contains network-related data for applications including traffic flows, dependencies, and network requirements.",
+    "view": "serving_network.network_application_overview",
+    "database": "postgres",
+    "params": {}
+  },
+  {
+    "type": "view",
+    "name": "get_network_data_suggested_firewall_rules",
+    "description": "Provides a summary of firewall rule suggestions for a given applicatio, including ports, network process names and network process applications.",
+    "view": "get_network_data_suggested_firewall_rules",
+    "database": "postgres",
+    "application": {"type": "string", "required": true}
+  }
+]

@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  WinSW Configuration for Dr.Migrate Agents Server
+
+  This service runs the Python-based multi-agent backend server that provides:
+  - Multi-persona AI agents (Core, Costings, Migration Architect, Project Manager)
+  - AG-UI integration with streaming responses
+  - Virtual database with SQL Server views
+  - Multi-cloud LLM routing (Azure/AWS/GCP)
+
+  Port: 8002
+  Framework: Starlette (ASGI) + Uvicorn
+  Entry Point: uv run agents
+-->
+<service>
+  <!-- Service Identity -->
+  <id>DrMigrate-AgentsServer</id>
+  <name>Dr.Migrate Agents Server</name>
+  <description>Dr.Migrate AI Agents Backend - Multi-persona agent system with AG-UI integration</description>
+
+  <!-- Executable Configuration -->
+  <executable>C:\DrMigrate\Assistant\services\agents\.venv\Scripts\python.exe</executable>
+  <arguments>-m agents.server --port 8002</arguments>
+  <workingdirectory>C:\DrMigrate\Assistant\services\agents</workingdirectory>
+
+  <!-- Startup Configuration -->
+  <startmode>Automatic</startmode>
+  <delayedAutoStart>true</delayedAutoStart>
+
+  <!-- Environment Variables - Configuration -->
+  <!--
+    Configuration: Set via <env> tags below (MODE, Python settings, etc.)
+    LLM Secrets: NONE NEEDED - llm_router uses identity-based auth (az login/UMI)
+    DB Secrets: Loaded by Python agents on startup via AltraVault module
+                Get-VaultCredential -Name "assistant/database"
+                Priority: 1) Vault (auto-start/unseal), 2) Env vars, 3) config.toml
+                No secrets stored in this XML file - loaded fresh on each service start
+  -->
+  <env name="MODE" value="prod"/>
+  <env name="PYTHONUNBUFFERED" value="1"/>
+  <env name="PYTHONIOENCODING" value="utf-8"/>
+  <env name="UV_PYTHON" value="C:\DrMigrate\Assistant\services\agents\.venv\Scripts\python.exe"/>
+
+  <!-- Log Configuration -->
+  <log mode="roll-by-time">
+    <pattern>ddMMyyyy</pattern>
+    <period>1</period>
+    <autoRollAtTime>00:00:00</autoRollAtTime>
+    <outFilePattern>_ddMMyyyy.log</outFilePattern>
+    <errFilePattern>_ddMMyyyy.log</errFilePattern>
+  </log>
+  <logpath>%ProgramData%\Dr.Migrate\llm</logpath>
+
+  <!-- Service Recovery -->
+  <onfailure action="restart" delay="60 sec"/>
+  <onfailure action="restart" delay="120 sec"/>
+  <onfailure action="restart" delay="240 sec"/>
+  <resetfailure>1 hour</resetfailure>
+
+  <!-- Process Termination -->
+  <stoptimeout>30 sec</stoptimeout>
+  <stopparentprocessfirst>true</stopparentprocessfirst>
+
+  <!-- Service Dependencies -->
+  <depend>MSSQL$SQLEXPRESS</depend>
+  <depend>DrMigrate-VaultService</depend>
+
+  <!-- Process Priority -->
+  <priority>Normal</priority>
+
+  <!-- Security Context (will be set during installation) -->
+  <!-- <serviceaccount>
+    <username>NT AUTHORITY\NetworkService</username>
+    <allowservicelogon>true</allowservicelogon>
+  </serviceaccount> -->
+</service>

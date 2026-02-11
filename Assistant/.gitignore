@@ -1,0 +1,38 @@
+# Configuration files (secrets)
+config.toml
+
+# Environment files (local overrides only)
+.env.local
+.env*.local
+
+# Keep version-controlled env files:
+# - .env.development (dev defaults)
+# - .env.production (prod defaults)
+# - config.example.toml (template)
+
+# Python-generated files
+__pycache__/
+*.py[oc]
+build/
+dist/
+wheels/
+*.egg-info
+
+# Virtual environments
+.venv
+
+# Node.js
+node_modules/
+copilotkit-server/dist/
+copilotkit-server/node_modules/
+
+# Logs
+*.log
+logs/
+
+# Service logs
+services/*.log
+services/*.wrapper.log
+
+# Non-project files
+**/.DS_Store

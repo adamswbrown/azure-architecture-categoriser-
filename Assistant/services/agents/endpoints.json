@@ -1,0 +1,201 @@
+{
+  "version": "2.1.0",
+  "schema": "inference-config-with-routing/v2.1",
+
+  "routing": {
+    "geo_map": {
+      "australiaeast": "APAC",
+      "australiasoutheast": "APAC",
+      "canadacentral": "US",
+      "eastus": "US",
+      "eastus2": "US",
+      "southeastasia": "APAC",
+      "swedencentral": "EU",
+      "uksouth": "EU",
+      "westeurope": "EU"
+    },
+    "defaults": {
+      "tier": "light"
+    }
+  },
+
+  "clouds": {
+    "azure": {
+      "providers": {
+        "openai": {
+      "auth": {
+        "service": "openai",
+        "scope": "https://cognitiveservices.azure.com/.default"
+      },
+      "endpoints": [
+        {
+          "geo": "US",
+          "tier": "light",
+          "region": "eastus2",
+          "model": "gpt-5-mini",
+          "deployment": "gpt5-mini-us",
+          "api_version": "2024-12-01-preview",
+          "endpoint_url": "https://drm-openai-eastus2.openai.azure.com"
+        },
+        {
+          "geo": "US",
+          "tier": "heavy",
+          "region": "eastus2",
+          "model": "gpt-5",
+          "deployment": "gpt5-us",
+          "api_version": "2024-12-01-preview",
+          "endpoint_url": "https://drm-openai-eastus2.openai.azure.com"
+        },
+        {
+          "geo": "EU",
+          "tier": "light",
+          "region": "swedencentral",
+          "model": "gpt-5-mini",
+          "deployment": "gpt5-mini-eu",
+          "api_version": "2024-12-01-preview",
+          "endpoint_url": "https://drm-openai-swedencentral.openai.azure.com"
+        },
+        {
+          "geo": "EU",
+          "tier": "heavy",
+          "region": "swedencentral",
+          "model": "gpt-5",
+          "deployment": "gpt5-eu",
+          "api_version": "2024-12-01-preview",
+          "endpoint_url": "https://drm-openai-swedencentral.openai.azure.com"
+        },
+        {
+          "geo": "APAC",
+          "tier": "nano",
+          "region": "australiaeast",
+          "model": "gpt-5-nano",
+          "deployment": "gpt5-nano-apac",
+          "api_version": "2025-01-01-preview",
+          "endpoint_url": "https://drm-openai-australiaeast.openai.azure.com"
+        },
+        {
+          "geo": "APAC",
+          "tier": "light",
+          "region": "australiaeast",
+          "model": "gpt-5-mini",
+          "deployment": "gpt5-mini-apac",
+          "api_version": "2024-12-01-preview",
+          "endpoint_url": "https://drm-openai-australiaeast.openai.azure.com"
+        },
+        {
+          "geo": "APAC",
+          "tier": "heavy",
+          "region": "australiaeast",
+          "model": "gpt-5",
+          "deployment": "gpt5-apac",
+          "api_version": "2024-12-01-preview",
+          "endpoint_url": "https://drm-openai-australiaeast.openai.azure.com"
+        }
+      ]
+        }
+      }
+    },
+
+    "gcp": {
+      "providers": {
+        "gemini": {
+      "auth": {
+        "service": "vertexai",
+        "project_id": "slingshot-484522",
+        "audience": "//iam.googleapis.com/projects/605000633221/locations/global/workloadIdentityPools/azure-pool/providers/azure-provider",
+        "token_url": "https://sts.googleapis.com/v1/token",
+        "service_account": "gsa-vertex-prod@slingshot-484522.iam.gserviceaccount.com"
+      },
+      "endpoints": [
+        {
+          "geo": "US",
+          "tier": "light",
+          "region": "us-east1",
+          "model": "gemini-2.5-flash"
+        },
+        {
+          "geo": "US",
+          "tier": "heavy",
+          "region": "us-east1",
+          "model": "gemini-2.5-pro"
+        },
+        {
+          "geo": "EU",
+          "tier": "light",
+          "region": "europe-west1",
+          "model": "gemini-2.5-flash"
+        },
+        {
+          "geo": "EU",
+          "tier": "heavy",
+          "region": "europe-west1",
+          "model": "gemini-2.5-pro"
+        },
+        {
+          "geo": "APAC",
+          "tier": "light",
+          "region": "australia-southeast1",
+          "model": "gemini-2.5-flash"
+        },
+        {
+          "geo": "APAC",
+          "tier": "heavy",
+          "region": "global",
+          "model": "gemini-2.5-pro"
+        }
+      ]
+        }
+      }
+    },
+
+    "aws": {
+      "providers": {
+        "claude": {
+      "auth": {
+        "service": "bedrock",
+        "role_arn": "arn:aws:iam::139872254141:role/AzureWIFBedrockRole"
+      },
+      "endpoints": [
+        {
+          "geo": "US",
+          "tier": "light",
+          "region": "us-east-1",
+          "model_id": "us.anthropic.claude-haiku-4-5-20251001-v1:0"
+        },
+        {
+          "geo": "US",
+          "tier": "heavy",
+          "region": "us-east-1",
+          "model_id": "us.anthropic.claude-sonnet-4-5-20250929-v1:0"
+        },
+        {
+          "geo": "EU",
+          "tier": "light",
+          "region": "eu-west-1",
+          "model_id": "eu.anthropic.claude-haiku-4-5-20251001-v1:0"
+        },
+        {
+          "geo": "EU",
+          "tier": "heavy",
+          "region": "eu-west-1",
+          "model_id": "eu.anthropic.claude-sonnet-4-5-20250929-v1:0"
+        },
+        {
+          "geo": "APAC",
+          "tier": "light",
+          "region": "ap-southeast-2",
+          "model_id": "au.anthropic.claude-haiku-4-5-20251001-v1:0"
+        },
+        {
+          "geo": "APAC",
+          "tier": "heavy",
+          "region": "ap-southeast-2",
+          "model_id": "au.anthropic.claude-sonnet-4-5-20250929-v1:0"
+        }
+      ]
+        }
+      }
+    }
+  }
+}
+
