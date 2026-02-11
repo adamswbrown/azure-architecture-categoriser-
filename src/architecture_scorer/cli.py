@@ -18,6 +18,7 @@ from rich.tree import Tree
 from .engine import ScoringEngine, validate_catalog, validate_context
 from .schema import ScoringResult
 from .drmigrate_generator import DrMigrateContextGenerator
+from catalog_builder.catalog_download import download_catalog, CatalogDownloadError
 from .drmigrate_schema import (
     DrMigrateApplicationData,
     DrMigrateApplicationOverview,
@@ -30,6 +31,37 @@ from .drmigrate_schema import (
 )
 
 console = Console()
+
+
+def _resolve_catalog(
+    catalog: Optional[str],
+    catalog_url: Optional[str],
+    verbose: bool = False,
+) -> str:
+    """Resolve catalog path from --catalog or --catalog-url.
+
+    Returns a local file path. Downloads the catalog if a URL is given.
+    """
+    if catalog and catalog_url:
+        console.print("[yellow]Both --catalog and --catalog-url provided; using --catalog[/yellow]")
+        return catalog
+
+    if catalog:
+        return catalog
+
+    if catalog_url:
+        try:
+            display_url = catalog_url.split("?")[0]
+            console.print(f"Downloading catalog from {display_url}...")
+            _, saved_path = download_catalog(catalog_url)
+            console.print(f"[green]✓[/green] Catalog downloaded to: {saved_path}")
+            return str(saved_path)
+        except CatalogDownloadError as e:
+            console.print(f"[red]Download failed:[/red] {e}")
+            sys.exit(1)
+
+    console.print("[red]Error:[/red] Provide --catalog or --catalog-url")
+    sys.exit(1)
 
 
 @click.group()
@@ -46,9 +78,14 @@ def main():
 @main.command("score")
 @click.option(
     "--catalog", "-c",
-    required=True,
     type=click.Path(exists=True),
     help="Path to architecture-catalog.json"
+)
+@click.option(
+    "--catalog-url",
+    type=str,
+    envvar="CATALOG_URL",
+    help="HTTPS URL to a remote catalog (downloads and validates). Env: CATALOG_URL"
 )
 @click.option(
     "--context", "-x",
@@ -88,7 +125,8 @@ def main():
     help="Prompt for answers to clarification questions (default: interactive)"
 )
 def score_cmd(
-    catalog: str,
+    catalog: Optional[str],
+    catalog_url: Optional[str],
     context: str,
     out: Optional[str],
     max_recommendations: int,
@@ -99,11 +137,16 @@ def score_cmd(
 ):
     """Score an application against the architecture catalog.
 
+    Provide a catalog via --catalog (local path) or --catalog-url (remote URL).
+
     Examples:
         architecture-scorer score -c catalog.json -x context.json
-        architecture-scorer score -c catalog.json -x context.json -n 3 -v
+        architecture-scorer score --catalog-url "$CATALOG_URL" -x context.json
         architecture-scorer score -c catalog.json -x context.json -a treatment=replatform
     """
+    # Resolve catalog source
+    catalog_path = _resolve_catalog(catalog, catalog_url, verbose)
+
     # Parse user answers
     user_answers = {}
     for ans in answer:
@@ -113,10 +156,10 @@ def score_cmd(
 
     try:
         engine = ScoringEngine()
-        engine.load_catalog(catalog)
+        engine.load_catalog(catalog_path)
 
         console.print(f"\n[bold blue]Architecture Scoring Engine[/bold blue]")
-        console.print(f"Catalog: {catalog} ({engine.catalog.total_architectures} architectures)")
+        console.print(f"Catalog: {catalog_path} ({engine.catalog.total_architectures} architectures)")
         console.print(f"Context: {context}")
         if user_answers:
             console.print(f"Answers provided: {len(user_answers)}")
@@ -157,9 +200,14 @@ def score_cmd(
 @main.command("questions")
 @click.option(
     "--catalog", "-c",
-    required=True,
     type=click.Path(exists=True),
     help="Path to architecture-catalog.json"
+)
+@click.option(
+    "--catalog-url",
+    type=str,
+    envvar="CATALOG_URL",
+    help="HTTPS URL to a remote catalog. Env: CATALOG_URL"
 )
 @click.option(
     "--context", "-x",
@@ -167,14 +215,16 @@ def score_cmd(
     type=click.Path(exists=True),
     help="Path to application context JSON file"
 )
-def questions_cmd(catalog: str, context: str):
+def questions_cmd(catalog: Optional[str], catalog_url: Optional[str], context: str):
     """Show clarification questions for an application context.
 
     Use this to see what questions the engine would ask before scoring.
     """
+    catalog_path = _resolve_catalog(catalog, catalog_url)
+
     try:
         engine = ScoringEngine()
-        engine.load_catalog(catalog)
+        engine.load_catalog(catalog_path)
         questions = engine.get_questions(context)
 
         if not questions:

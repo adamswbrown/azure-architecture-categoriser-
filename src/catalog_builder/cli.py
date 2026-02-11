@@ -12,6 +12,7 @@ from .catalog import build_catalog, CatalogBuilder, CatalogValidator
 from .config import load_config, save_default_config, find_config_file, reset_config, get_config
 from .schema import ArchitectureCatalog, ExtractionConfidence, GenerationSettings
 from .blob_upload import upload_catalog_to_blob
+from .catalog_download import download_catalog, CatalogDownloadError
 
 
 console = Console()
@@ -1023,6 +1024,83 @@ def upload(
         sys.exit(1)
     except Exception as e:
         console.print(f"\n[red]Upload failed:[/red] {e}")
+        if verbose:
+            import traceback
+            console.print(traceback.format_exc())
+        sys.exit(1)
+
+
+@main.command()
+@click.option(
+    '--url',
+    type=str,
+    required=True,
+    help='HTTPS URL to a catalog JSON file (e.g. Azure Blob Storage SAS URL)'
+)
+@click.option(
+    '--out', '-o',
+    type=click.Path(path_type=Path),
+    default='remote-catalog.json',
+    help='Output path for the downloaded catalog (default: remote-catalog.json)'
+)
+@click.option(
+    '--verbose', '-v',
+    is_flag=True,
+    help='Show detailed output'
+)
+def download(url: str, out: Path, verbose: bool):
+    """Download a catalog from a remote URL.
+
+    Fetches a catalog JSON file from an HTTPS URL with security
+    protections (domain allowlist, SSRF checks, size limits, and
+    full schema validation).
+
+    Supported domains include Azure Blob Storage, GitHub, and
+    Microsoft documentation sites.
+
+    \b
+    Examples:
+        # Download from Azure Blob Storage (SAS URL)
+        catalog-builder download \\
+          --url "https://acct.blob.core.windows.net/catalogs/catalog.json?sv=..."
+
+    \b
+        # Download from GitHub release
+        catalog-builder download \\
+          --url "https://raw.githubusercontent.com/org/repo/main/catalog.json" \\
+          --out architecture-catalog.json
+    """
+    console.print(f"\n[bold blue]Catalog Download[/bold blue]")
+    # Show URL without SAS token for cleaner output
+    display_url = url.split("?")[0]
+    console.print(f"URL: {display_url}")
+    console.print(f"Output: {out}")
+    console.print()
+
+    try:
+        with console.status("Downloading and validating catalog..."):
+            data, saved_path = download_catalog(url, output=out)
+
+        arch_count = len(data.get("architectures", []))
+        version = data.get("version", "unknown")
+        console.print(f"[green]✓[/green] Downloaded catalog v{version} with {arch_count} architectures")
+        console.print(f"[green]✓[/green] Saved to: {saved_path}")
+
+        if verbose and "generation_settings" in data and data["generation_settings"]:
+            gs = data["generation_settings"]
+            console.print(f"\n[bold]Generation Settings[/bold]")
+            if gs.get("allowed_topics"):
+                console.print(f"  Topics: {', '.join(gs['allowed_topics'])}")
+            if gs.get("allowed_products"):
+                console.print(f"  Products: {', '.join(gs['allowed_products'])}")
+            if gs.get("exclude_examples"):
+                console.print(f"  Examples: excluded")
+
+    except CatalogDownloadError as e:
+        console.print(f"\n[red]Download failed:[/red] {e}")
+        sys.exit(1)
+    except Exception as e:
+        console.print(f"\n[red]Error:[/red] {e}")
         if verbose:
             import traceback
             console.print(traceback.format_exc())
